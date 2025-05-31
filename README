@@ -17,7 +17,7 @@ Cappu é uma plataforma de ensino online que conecta professores e alunos, ofere
 - Node.js
 - Express.js
 - EJS (Template Engine)
-- MySQL (Mysql2)
+- MySQL (Mysql2 - Clever Cloud)
 - Passport.js (Autenticação)
 - Multer (Upload de arquivos)
 - BCrypt (Criptografia de senhas)
