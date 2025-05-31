@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
+const fs = require("fs");
+const upload = require("../middleware/multer");
 
 // Middleware para verificar se o usuário é aluno
 const isAluno = (req, res, next) => {
@@ -24,6 +27,33 @@ router.get("/a-config", (req, res) => {
     user: req.user,
     title: "Configurações",
   });
+});
+
+// Upload da foto do perfil
+router.post("/upload-foto", upload.single("foto_perfil"), (req, res) => {
+  if (!req.file) {
+    req.flash('error_msg', 'Nenhum arquivo enviado!');
+    return res.redirect("/aluno/a-config");
+  }
+  // Atualize o campo da foto no banco de dados conforme seu ORM, aqui só atualiza no req.user
+  req.user.foto_perfil = `/uploads/alunos/${req.file.filename}`;
+  // TODO: Salvar caminho no banco de dados
+  res.redirect("/aluno/a-config");
+});
+
+// Excluir foto do perfil
+router.post("/excluir-foto", (req, res) => {
+  if (req.user.foto_perfil) {
+    const filePath = path.join(__dirname, '../../public', req.user.foto_perfil);
+    fs.unlink(filePath, (err) => {
+      // Ignora erro se arquivo não existir
+      req.user.foto_perfil = null;
+      // TODO: Remover caminho do banco de dados
+      res.redirect("/aluno/a-config");
+    });
+  } else {
+    res.redirect("/aluno/a-config");
+  }
 });
 
 router.get("/a-perfil", (req, res) => {
