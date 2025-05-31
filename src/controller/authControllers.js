@@ -93,6 +93,8 @@ module.exports = {
       redirectTo = req.session.returnTo;
     } else if (req.user.TIPO_USUARIO === 'aluno' || req.user.role === 'aluno') {
       redirectTo = '/aluno/a-perfil';
+    } else if (req.user.TIPO_USUARIO === 'professor' || req.user.role === 'professor') {
+      redirectTo = '/professor/p-professor';
     } else {
       redirectTo = `/${req.user.TIPO_USUARIO || req.user.role || ''}`;
     }
