@@ -1,3 +1,4 @@
+// Model para tabela COMPRA, compatível com Clever Cloud.
 class Compra {
     constructor({
         ID_COMPRA,

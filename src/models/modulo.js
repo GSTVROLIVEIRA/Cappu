@@ -1,3 +1,4 @@
+// Model para tabela MODULO, compatível com Clever Cloud.
 class Modulo {
     constructor({
         ID_MODULO,
@@ -13,5 +14,7 @@ class Modulo {
         this.ORDEM = ORDEM;
     }
 }
+
+module.exports = Modulo;
 
 module.exports = Modulo;

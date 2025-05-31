@@ -3,10 +3,10 @@ const router = express.Router();
 
 // Middleware para verificar se o usuário é aluno
 const isAluno = (req, res, next) => {
-  if (req.user && req.user.role === "aluno") {
+  if (req.user && (req.user.role === "aluno" || req.user.TIPO_USUARIO === "aluno")) {
     return next();
   }
-  res.redirect("/login");
+  res.redirect("/auth/cl-login");
 };
 
 router.use(isAluno);

@@ -1,3 +1,4 @@
+// Model para tabela CONFIG_PROF, compatível com Clever Cloud.
 class ConfigProf {
     constructor({
         ID_CONFIG_PROF,

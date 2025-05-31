@@ -1,16 +1,17 @@
+// Model para tabela PLANOS, compatível com Clever Cloud.
 class Planos {
     constructor({
         ID_PLANO,
+        NOME,
         DESCRICAO,
-        DURACAO,
-        PRECO,
-        NOME_PLANO
+        VALOR,
+        DURACAO_DIAS
     }) {
         this.ID_PLANO = ID_PLANO;
+        this.NOME = NOME;
         this.DESCRICAO = DESCRICAO;
-        this.DURACAO = DURACAO;
-        this.PRECO = PRECO;
-        this.NOME_PLANO = NOME_PLANO;
+        this.VALOR = VALOR;
+        this.DURACAO_DIAS = DURACAO_DIAS;
     }
 }
 

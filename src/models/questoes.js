@@ -1,3 +1,4 @@
+// Model para tabela QUESTOES, compatível com Clever Cloud.
 class Questoes {
     constructor({
         COD_QUESTAO,

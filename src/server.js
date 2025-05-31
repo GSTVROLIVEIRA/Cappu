@@ -6,7 +6,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 require("./controller/passport");
 const cookieParser = require("cookie-parser");
-const sequelize = require("./config/database");
+
 const app = express();
 
 // ======================
@@ -72,7 +72,7 @@ app.get("/institucional/:pagina", (req, res) => {
 });
 
 
-sequelize.sync({ force: false }) // Altere para true apenas em desenvolvimento
+
   .then(() => {
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {

@@ -1,3 +1,4 @@
+// Model para tabela ATIVIDADE, compatível com Clever Cloud.
 class Atividade {
     constructor({
         ID_ATIVIDADE,

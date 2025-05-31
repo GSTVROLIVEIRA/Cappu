@@ -1,45 +1,18 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-
-const Aula = sequelize.define("Aula", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  titulo: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  descricao: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  video: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  ordem: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  duracao: {
-    type: DataTypes.INTEGER, // em minutos
-    allowNull: true,
-  },
-  status: {
-    type: DataTypes.ENUM("ativo", "inativo"),
-    allowNull: false,
-    defaultValue: "ativo",
-  },
-  curso_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "Cursos",
-      key: "id",
-    },
-  },
-});
+// Model para tabela AULA, compatível com Clever Cloud.
+class Aula {
+    constructor({
+        ID_AULA,
+        ID_MODULO,
+        NOME,
+        DURACAO,
+        ORDEM
+    }) {
+        this.ID_AULA = ID_AULA;
+        this.ID_MODULO = ID_MODULO;
+        this.NOME = NOME;
+        this.DURACAO = DURACAO;
+        this.ORDEM = ORDEM;
+    }
+}
 
 module.exports = Aula;

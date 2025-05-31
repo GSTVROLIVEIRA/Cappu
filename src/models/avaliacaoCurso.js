@@ -1,3 +1,4 @@
+// Model para tabela AVALIACAO_CURSO, compatível com Clever Cloud.
 class AvaliacaoCurso {
     constructor({
         ID_AVALIACAO,

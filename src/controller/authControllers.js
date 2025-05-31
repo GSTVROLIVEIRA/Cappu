@@ -63,7 +63,7 @@ module.exports = {
       
       // Redirecionamento tradicional
       req.flash("success", "Cadastro realizado com sucesso!");
-      res.redirect("/auth/cl-login");
+      res.redirect("/aluno/a-perfil");
     } catch (error) {
       console.error('Erro no cadastro:', error);
       
@@ -88,7 +88,14 @@ module.exports = {
 
   login(req, res) {
     // Determinar para onde redirecionar com base no papel do usuário
-    const redirectTo = req.session.returnTo || `/${req.user.TIPO_USUARIO}`;
+    let redirectTo;
+    if (req.session.returnTo) {
+      redirectTo = req.session.returnTo;
+    } else if (req.user.TIPO_USUARIO === 'aluno' || req.user.role === 'aluno') {
+      redirectTo = '/aluno/a-perfil';
+    } else {
+      redirectTo = `/${req.user.TIPO_USUARIO || req.user.role || ''}`;
+    }
     delete req.session.returnTo;
     
     // Verificar se a solicitação é AJAX

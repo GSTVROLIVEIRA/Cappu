@@ -1,38 +1,34 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-
-const User = sequelize.define("User", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  role: {
-    type: DataTypes.ENUM("aluno", "professor", "admin"),
-    allowNull: false,
-    defaultValue: "aluno",
-  },
-  status: {
-    type: DataTypes.ENUM("active", "pending", "inactive"),
-    allowNull: false,
-    defaultValue: "active",
-  },
-}, {
-  tableName: "Users",
-  underscored: true,
-});
+// Model para tabela USUARIO, compatível com Clever Cloud.
+class User {
+    constructor({
+        ID_USUARIO,
+        DATA_CADASTRO,
+        TIPO_USUARIO,
+        ENDERECO,
+        DT_NASC,
+        EMAIL,
+        NOME_USU,
+        SENHA,
+        FOTO_PERFIL,
+        TELEFONE,
+        NUM_IDENTIFICACAO,
+        ID_STATUS,
+        COR_TELA
+    }) {
+        this.ID_USUARIO = ID_USUARIO;
+        this.DATA_CADASTRO = DATA_CADASTRO;
+        this.TIPO_USUARIO = TIPO_USUARIO;
+        this.ENDERECO = ENDERECO;
+        this.DT_NASC = DT_NASC;
+        this.EMAIL = EMAIL;
+        this.NOME_USU = NOME_USU;
+        this.SENHA = SENHA;
+        this.FOTO_PERFIL = FOTO_PERFIL;
+        this.TELEFONE = TELEFONE;
+        this.NUM_IDENTIFICACAO = NUM_IDENTIFICACAO;
+        this.ID_STATUS = ID_STATUS;
+        this.COR_TELA = COR_TELA;
+    }
+}
 
 module.exports = User;

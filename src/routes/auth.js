@@ -64,7 +64,11 @@ router.post("/cl-login",
     // Verificar se é uma requisição AJAX
     const isAjax = req.xhr || req.headers['x-requested-with'] === 'XMLHttpRequest';
     
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", {
+      successRedirect: "/dashboard/aluno/a-perfil",
+      failureRedirect: "/auth/cl-login",
+      failureFlash: true
+    }, (err, user, info) => {
       if (err) {
         console.error('Erro de autenticação:', err);
         if (isAjax) {

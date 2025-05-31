@@ -1,4 +1,4 @@
-const sequelize = require("../config/database");
+
 const bcrypt = require("bcryptjs");
 
 // Exportação dos models em classes simples (sem Sequelize)
@@ -65,7 +65,7 @@ async function seed() {
 }
 
 // Sincroniza e popula o banco (apenas em desenvolvimento/testes)
-sequelize
+
   .sync({ force: true }) // force: true só em desenvolvimento!
   .then(seed)
   .catch((err) => {
