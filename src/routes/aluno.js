@@ -334,4 +334,20 @@ router.get('/foto-perfil/:id', async (req, res) => {
   }
 });
 
+// Rota de logout para destruir a sessão do usuário
+router.get('/logout', (req, res, next) => {
+  if (req.logout) {
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      req.session.destroy(() => {
+        res.redirect('/');
+      });
+    });
+  } else {
+    req.session.destroy(() => {
+      res.redirect('/');
+    });
+  }
+});
+
 module.exports = router;
