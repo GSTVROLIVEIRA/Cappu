@@ -4,16 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Curso de Copywriting - Cappuensino</title>
-    <link rel="stylesheet" href="../../../public/css/c-copy.css" />
-    <link rel="shortcut icon" href="../../../public/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/c-copy.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <header class="header">
       <button onclick="history.back()" class="back-button">
-        <img src="../../../public/images/voltar.svg" alt="Voltar" />
+        <img src="/images/voltar.svg" alt="Voltar" />
       </button>
       <section>
-        <img src="../../../public/images/Logo (370 x 65 px).png" alt="logo" class="logo" />
+        <img src="/images/Logo (370 x 65 px).png" alt="logo" class="logo" />
       </section>
     </header>
 
@@ -55,7 +56,7 @@
 
       <section class="direita">
         <p class="estrelas">3 ★★★☆☆</p>
-        <img src="../../../public/Images/copy.svg" alt="Imagem ilustrativa do curso" />
+        <img src="/images/copy.svg" alt="Imagem ilustrativa do curso" />
         <section class="container">
           <section class="linha-info">
             <p class="bold">FEITO POR:</p>
@@ -69,9 +70,10 @@
             <p class="bold">VALOR:</p>
             <p class="reg">R$<%= curso.valor %></p>
           </section>
-          <a href="../pages/home/planos.ejs" class="matricula">MATRICULAR-SE</a>
+          <a href="/planos" class="matricula">MATRICULAR-SE</a>
         </section>
       </section>
     </main>
+  <%- include('../pages/partials/footer') %>
   </body>
 </html>
