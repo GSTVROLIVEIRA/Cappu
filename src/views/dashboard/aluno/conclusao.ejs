@@ -37,12 +37,16 @@
             
             <div class="vark-subtitle">Pontuação em cada estilo:</div>
             
+            <% if (resultado) { %>
             <ul class="vark-list">
-                <li><span>Visual:</span> <span>4</span></li>
-                <li><span>Auditivo:</span> <span>4</span></li>
-                <li><span>Leitura/Escrita:</span> <span>4</span></li>
-                <li><span>Cinestésico:</span> <span>4</span></li>
+                <li><span>Visual:</span> <span><%= resultado.RES_VISUAL %></span></li>
+                <li><span>Auditivo:</span> <span><%= resultado.RES_AUDITIVA %></span></li>
+                <li><span>Leitura/Escrita:</span> <span><%= resultado.RES_LER_ESCR %></span></li>
+                <li><span>Cinestésico:</span> <span><%= resultado.RES_SINESTESICO %></span></li>
             </ul>
+            <% } else { %>
+            <p>Você ainda não respondeu o questionário.</p>
+            <% } %>
         </div>
 
         <div class="image-container">

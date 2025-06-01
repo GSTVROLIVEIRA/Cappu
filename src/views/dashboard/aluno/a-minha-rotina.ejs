@@ -9,6 +9,12 @@
     <title>Minha Rotina</title>
 </head>
 <body>
+    <script>
+      // Limpa respostas do VARK ao acessar a página
+      for (let i = 1; i <= 16; i++) {
+        localStorage.removeItem('vark_q' + i);
+      }
+    </script>
     <header>
         <a href="/aluno/a-perfil"><img src="/images/voltar.svg" alt=""></a>
         <p>Minha Rotina</p>

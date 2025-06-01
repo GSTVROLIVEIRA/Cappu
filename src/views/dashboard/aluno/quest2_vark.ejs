@@ -136,6 +136,20 @@
                 <button type="button" class="botao-proximo" onclick="window.location.href='/aluno/quest3_vark'">PRÓXIMO</button>
             </div>
         </form>
+        <script>
+        // Salva no localStorage ao marcar
+        for (let i = 5; i <= 8; i++) {
+            let radios = document.getElementsByName('q' + i);
+            for (let r = 0; r < radios.length; r++) {
+                radios[r].addEventListener('change', function() {
+                    localStorage.setItem('vark_q' + i, this.value);
+                });
+                // Preenche se já marcado
+                let valor = localStorage.getItem('vark_q' + i);
+                if (valor && radios[r].value == valor) radios[r].checked = true;
+            }
+        }
+        </script>
     </main>
 
     <div class="container-progresso-geral">

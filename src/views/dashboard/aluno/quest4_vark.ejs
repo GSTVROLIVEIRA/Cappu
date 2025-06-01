@@ -128,14 +128,72 @@
 
             <div class="navegacao">
                 <button type="button" class="botao-anterior" onclick="window.location.href='/aluno/quest3_vark'">ANTERIOR</button>
+                <button type="button" class="botao-finalizar" id="finalizar-vark">FINALIZAR</button>
                 <div class="indicador-progresso">
                     <span class="pagina-atual">4</span>
                     <span class="separador">/</span>
                     <span class="total-paginas">4</span>
                 </div>
-                <button type="button" class="botao-proximo" onclick="window.location.href='/aluno/conclusao'">CONCLUIR</button>
             </div>
         </form>
+        <script>
+        document.getElementById('finalizar-vark').addEventListener('click', async function() {
+            // Coleta respostas das 16 questões das 4 telas (localStorage)
+            let respostas = [];
+            let faltando = false;
+            for (let i = 1; i <= 16; i++) {
+                let valor = localStorage.getItem('vark_q' + i);
+                // Conversão de letra para número
+                let map = { a: 1, b: 2, c: 3, d: 4 };
+                if (valor !== null && valor !== undefined && valor !== "") {
+                    let respostaNum = map[valor] !== undefined ? map[valor] : parseInt(valor);
+                    if (isNaN(respostaNum)) {
+                        faltando = true;
+                    } else {
+                        respostas.push({ cod_questao: i, resposta: respostaNum });
+                    }
+                } else {
+                    faltando = true;
+                }
+            }
+            if (faltando || respostas.length !== 16) {
+                alert('Responda todas as questões antes de finalizar.');
+                return;
+            }
+            // Envia via AJAX
+            try {
+                const resp = await fetch('/aluno/vark/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ respostas })
+                });
+                const data = await resp.json();
+                if (data.success && data.redirect) {
+                    for (let i = 1; i <= 16; i++) localStorage.removeItem('vark_q' + i);
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message || 'Erro ao salvar respostas. Tente novamente.');
+                }
+            } catch (e) {
+                alert('Erro ao enviar respostas. Tente novamente.');
+            }
+        });
+        // Ao marcar uma alternativa, salva no localStorage
+        for (let i = 13; i <= 16; i++) {
+            let radios = document.getElementsByName('q' + i);
+            for (let r = 0; r < radios.length; r++) {
+                radios[r].addEventListener('change', function() {
+                    localStorage.setItem('vark_q' + i, this.value);
+                });
+                // Preenche se já marcado
+                let valor = localStorage.getItem('vark_q' + i);
+                if (valor && radios[r].value == valor) radios[r].checked = true;
+            }
+        }
+        </script>
     </main>
 
     <div class="container-progresso-geral">

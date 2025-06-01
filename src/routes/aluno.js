@@ -250,13 +250,13 @@ router.get("/quest4_vark", (req,res) => {
   });
 });
 
-router.get("/conclusao", (req,res) => {
-  res.render("dashboard/aluno/conclusao", {
-    user : req.user,
-    timestamp: Date.now(),
-    title : "Questionario Vark",
-  });
-});
+const varkController = require("../controller/varkController");
+
+// Salvar respostas do questionário VARK
+router.post("/vark/save", varkController.salvarRespostasVark);
+
+// Mostrar o resultado VARK na tela de conclusão
+router.get("/conclusao", varkController.resultadoVark);
 
 router.get("/a-minha-rotina-2", (req,res) => {
   res.render("dashboard/aluno/a-minha-rotina-2", {
