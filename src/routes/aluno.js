@@ -26,32 +26,48 @@ router.get("/a-config", (req, res) => {
   res.render("dashboard/aluno/a-config", {
     user: req.user,
     title: "Configurações",
+    success: req.flash('success'),
+    error: req.flash('error')
   });
 });
 
 // Upload da foto do perfil
-router.post("/upload-foto", upload.single("foto_perfil"), (req, res) => {
+router.post("/upload-foto", upload.single("foto_perfil"), async (req, res) => {
   if (!req.file) {
-    req.flash('error_msg', 'Nenhum arquivo enviado!');
+    req.flash('error', 'Nenhum arquivo enviado!');
     return res.redirect("/aluno/a-config");
   }
-  // Atualize o campo da foto no banco de dados conforme seu ORM, aqui só atualiza no req.user
-  req.user.foto_perfil = `/uploads/alunos/${req.file.filename}`;
-  // TODO: Salvar caminho no banco de dados
-  res.redirect("/aluno/a-config");
+  const db = require('../config/database');
+  try {
+    // Salva a imagem no banco
+    await db.query(
+      'UPDATE USUARIO SET FOTO_PERFIL = ? WHERE ID_USUARIO = ?',
+      [req.file.buffer, req.user.ID_USUARIO]
+    );
+    // Recarrega o usuário atualizado do banco
+    const [rows] = await db.query('SELECT * FROM USUARIO WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    if (rows.length) {
+      // Atualiza req.user para refletir a nova foto
+      Object.assign(req.user, rows[0]);
+    }
+    req.flash('success', 'Foto de perfil adicionada com sucesso!');
+    res.redirect("/aluno/a-config");
+  } catch (err) {
+    req.flash('error', 'Erro ao salvar foto no banco!');
+    res.redirect("/aluno/a-config");
+  }
 });
 
 // Excluir foto do perfil
-router.post("/excluir-foto", (req, res) => {
-  if (req.user.foto_perfil) {
-    const filePath = path.join(__dirname, '../../public', req.user.foto_perfil);
-    fs.unlink(filePath, (err) => {
-      // Ignora erro se arquivo não existir
-      req.user.foto_perfil = null;
-      // TODO: Remover caminho do banco de dados
-      res.redirect("/aluno/a-config");
-    });
-  } else {
+router.post("/excluir-foto", async (req, res) => {
+  const db = require('../config/database');
+  try {
+    await db.query('UPDATE USUARIO SET FOTO_PERFIL = NULL WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    req.user.FOTO_PERFIL = null;
+    req.flash('success', 'Foto de perfil removida com sucesso!');
+    res.redirect("/aluno/a-config");
+  } catch (err) {
+    req.flash('error', 'Erro ao remover foto!');
     res.redirect("/aluno/a-config");
   }
 });
@@ -270,6 +286,21 @@ router.get("/tecnicas", (req, res) => {
     user: req.user,
     title: "Técnicas de Estudo",
   });
+});
+
+// Servir a imagem do banco como endpoint
+router.get('/foto-perfil/:id', async (req, res) => {
+  const db = require('../config/database');
+  try {
+    const [rows] = await db.query('SELECT FOTO_PERFIL FROM USUARIO WHERE ID_USUARIO = ?', [req.params.id]);
+    if (!rows.length || !rows[0].FOTO_PERFIL) {
+      return res.sendFile(path.join(__dirname, '../../public/images/perfil.svg'));
+    }
+    res.set('Content-Type', 'image/jpeg');
+    res.send(rows[0].FOTO_PERFIL);
+  } catch (err) {
+    res.sendFile(path.join(__dirname, '../../public/images/perfil.svg'));
+  }
 });
 
 module.exports = router;
