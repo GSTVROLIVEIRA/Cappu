@@ -27,7 +27,8 @@ router.get("/a-config", (req, res) => {
     user: req.user,
     title: "Configurações",
     success: req.flash('success'),
-    error: req.flash('error')
+    error: req.flash('error'),
+    timestamp: Date.now()
   });
 });
 
@@ -40,6 +41,9 @@ router.post("/upload-foto", upload.single("foto_perfil"), async (req, res) => {
   const db = require('../config/database');
   try {
     // Salva a imagem no banco
+    // Remove a foto antiga antes de salvar a nova
+    await db.query('UPDATE USUARIO SET FOTO_PERFIL = NULL WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    // Salva a nova foto
     await db.query(
       'UPDATE USUARIO SET FOTO_PERFIL = ? WHERE ID_USUARIO = ?',
       [req.file.buffer, req.user.ID_USUARIO]
@@ -76,6 +80,7 @@ router.get("/a-perfil", (req, res) => {
   res.render("dashboard/aluno/a-perfil", {
     user: req.user,
     title: "Perfil Aluno",
+    timestamp: Date.now()
   });
 });
 
@@ -84,6 +89,7 @@ router.get("/a-meuscursos", (req, res) => {
   res.render("dashboard/aluno/a-meuscursos", {
     user: req.user,
     title: "Meus Cursos",
+    timestamp: Date.now()
   });
 });
 
@@ -92,6 +98,7 @@ router.get("/a-minha-rotina", (req, res) => {
   res.render("dashboard/aluno/a-minha-rotina", {
     user: req.user,
     title: "Minha Rotina",
+    timestamp: Date.now()
   });
 });
 router.get("/a-pomodoro", (req, res) => {
@@ -104,6 +111,7 @@ router.get("/a-resumo", (req, res) => {
   res.render("dashboard/aluno/a-resumo", {
     user: req.user,
     title: "Resumo",
+    timestamp: Date.now()
   });
 });
 
@@ -111,6 +119,7 @@ router.get("/a-mnemonica", (req, res) => {
   res.render("dashboard/aluno/a-mnemonica", {
     user: req.user,
     title: "Mnemonica",
+    timestamp: Date.now()
   });
 });
 
@@ -118,24 +127,28 @@ router.get("/a-feynman", (req, res) => {
   res.render("dashboard/aluno/a-feynman", {
     user: req.user,
     title: "Feynman",
+    timestamp: Date.now()
   });
 });
 router.get("/a-bd_feynman", (req, res) => {
   res.render("dashboard/aluno/a-bd_feynman", {
     user: req.user,
     title: "Feynman",
+    timestamp: Date.now()
   });
 });
 router.get("/a-bd_mnemonicas", (req, res) => {
   res.render("dashboard/aluno/a-bd_mnemonicas", {
     user: req.user,
     title: "Mnemonica",
+    timestamp: Date.now()
   });
 });
 router.get("/a-bd_resumos", (req, res) => {
   res.render("dashboard/aluno/a-bd_resumos", {
     user: req.user,
     title: "Resumo",
+    timestamp: Date.now()
   });
 });
 
@@ -144,6 +157,7 @@ router.get("/a-meusmateriais", (req, res) => {
   res.render("dashboard/aluno/a-meusmateriais", {
     user: req.user,
     title: "Meus Materiais",
+    timestamp: Date.now()
   });
 });
 
@@ -151,6 +165,7 @@ router.get("/a-gerenciarplano", (req,res) =>{
   res.render("dashboard/aluno/a-gerenciarplano",{
     user: req.user,
     title: "Gerenciar Plano",
+    timestamp: Date.now()
   });
 });
 
@@ -159,6 +174,7 @@ router.get("/a-todososcursos", (req,res) => {
   res.render("dashboard/aluno/a-todososcursos", {
     user : req.user,
     title : "Cursos",
+    timestamp: Date.now()
   });
 });
 
@@ -166,6 +182,7 @@ router.get("/a-certificado", (req,res) => {
   res.render("dashboard/aluno/a-certificado", {
     user : req.user,
     title : "Certificados",
+    timestamp: Date.now()
   });
 });
 
@@ -173,6 +190,7 @@ router.get("/aula", (req,res) => {
   res.render("dashboard/aluno/aula", {
     user : req.user,
     title : "Aula",
+    timestamp: Date.now()
   });
 });
 
@@ -180,6 +198,7 @@ router.get("/aula-card", (req,res) => {
   res.render("dashboard/aluno/aula-card", {
     user : req.user,
     title : "Aula",
+    timestamp: Date.now()
   });
 });
 
@@ -187,6 +206,7 @@ router.get("/exercicio", (req,res) => {
   res.render("dashboard/aluno/exercicio", {
     user : req.user,
     title : "Exercicio",
+    timestamp: Date.now()
   });
 });
 
@@ -201,6 +221,7 @@ router.get("/quest1_vark", (req,res) => {
   res.render("dashboard/aluno/quest1_vark", {
     user : req.user,
     title : "Questionario Vark",
+    timestamp: Date.now()
   });
 });
 
@@ -208,6 +229,7 @@ router.get("/quest2_vark", (req,res) => {
   res.render("dashboard/aluno/quest2_vark", {
     user : req.user,
     title : "Questionario Vark",
+    timestamp: Date.now()
   });
 });
 
@@ -215,6 +237,7 @@ router.get("/quest3_vark", (req,res) => {
   res.render("dashboard/aluno/quest3_vark", {
     user : req.user,
     title : "Questionario Vark",
+    timestamp: Date.now()
   });
 });
 
@@ -222,12 +245,14 @@ router.get("/quest4_vark", (req,res) => {
   res.render("dashboard/aluno/quest4_vark", {
     user : req.user,
     title : "Questionario Vark",
+    timestamp: Date.now()
   });
 });
 
 router.get("/conclusao", (req,res) => {
   res.render("dashboard/aluno/conclusao", {
     user : req.user,
+    timestamp: Date.now(),
     title : "Questionario Vark",
   });
 });
@@ -235,6 +260,7 @@ router.get("/conclusao", (req,res) => {
 router.get("/a-minha-rotina-2", (req,res) => {
   res.render("dashboard/aluno/a-minha-rotina-2", {
     user : req.user,
+    timestamp: Date.now(),
     title : "Minha Rotina",
   });
 });
@@ -243,6 +269,7 @@ router.get("/a-bd_feynman", (req,res) => {
   res.render("dashboard/aluno/a-bd_feynman", {
     user : req.user,
     title : "Feynman",
+    timestamp: Date.now()
   });
 });
 
@@ -250,6 +277,7 @@ router.get("/a-bd_mnemonicas", (req,res) => {
   res.render("dashboard/aluno/a-bd_mnemonicas", {
     user : req.user,
     title : "Mnemonica",
+    timestamp: Date.now()
   });
 });
 
@@ -257,6 +285,7 @@ router.get("/a-bd_resumos", (req,res) => {
   res.render("dashboard/aluno/a-bd_resumos", {
     user : req.user,
     title : "Resumo",
+    timestamp: Date.now()
   });
 });
 
@@ -264,6 +293,7 @@ router.get("/pomodoro", (req,res) => {
   res.render("dashboard/aluno/pomodoro", {
     user : req.user,
     title : "Pomodoro",
+    timestamp: Date.now()
   });
 });
 

@@ -15,7 +15,7 @@
       <div>
         <p><%= user.NOME_USU || 'Aluno' %></p>
         <button class="user-icon" id="userIcon" aria-label="Abrir menu do usuário">
-            <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>" alt="imagem do perfil" style="width: 48px; height: 48px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
+            <img id="header-profile-img" src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="imagem do perfil" style="width: 48px; height: 48px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
             <div class="user-config" id="userConfig">
                 <ul>
                     <li><a href="/aluno/a-perfil">MENU</a></li>
@@ -43,11 +43,12 @@
         <a class="redefinir" href="#">REDEFINIR SENHA</a>
         <a class="redefinir" href="#">REDEFINIR E-MAIL</a>
         <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-          <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>" alt="Foto do perfil" style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
-          <form action="/aluno/upload-foto" method="POST" enctype="multipart/form-data" style="display:inline-block;">
-            <input type="file" name="foto_perfil" accept="image/*" required />
-            <button type="submit">Adicionar/Alterar Foto</button>
-          </form>
+          <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="Foto do perfil" style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
+          <form action="/aluno/upload-foto" method="POST" enctype="multipart/form-data" style="display:inline-block;" id="upload-foto-form">
+  <input type="file" name="foto_perfil" accept="image/*" required id="foto_perfil_input" />
+  <button type="submit">Adicionar/Alterar Foto</button>
+</form>
+<img id="preview-img" src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="Preview da nova foto" style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; display:none; margin-left:10px;" />
           <form action="/aluno/excluir-foto" method="POST" style="display:inline-block;">
             <button type="submit" onclick="return confirm('Tem certeza que deseja excluir a foto?')">Excluir Foto</button>
           </form>
@@ -67,9 +68,34 @@
         </section>
       </section>
     </main>
+    <% if (success && success.length) { %>
+      <div class="alert success"><%= success %></div>
+    <% } %>
+    <% if (error && error.length) { %>
+      <div class="alert error"><%= error %></div>
+    <% } %>
     <footer>
       <span>© 2024 Cappuensino. Todos os direitos reservados.</span>
     </footer>
     <script src="/js/icon-menu.js"></script>
+    <script>
+      // Preview instantâneo da imagem de perfil
+      const input = document.getElementById('foto_perfil_input');
+      const preview = document.getElementById('preview-img');
+      const headerImg = document.getElementById('header-profile-img');
+      input.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'inline-block';
+            // Atualiza o header também (só visual, não salva ainda)
+            if(headerImg) headerImg.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    </script>
   </body>
 </html>
