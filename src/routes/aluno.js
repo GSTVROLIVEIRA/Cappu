@@ -214,6 +214,7 @@ router.get("/a-avaliar", (req,res) => {
   res.render("dashboard/aluno/a-avaliar", {
     user : req.user,
     title : "Avaliar",
+    timestamp: Date.now()
   });
 });
 
