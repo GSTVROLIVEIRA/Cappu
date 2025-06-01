@@ -32,6 +32,42 @@ router.get("/a-config", (req, res) => {
   });
 });
 
+// Excluir conta do usuário
+router.post("/excluir-conta", async (req, res) => {
+  const db = require('../config/database');
+  try {
+    console.log('Tentando excluir usuário:', req.user && req.user.ID_USUARIO);
+    // Deleta dependências em QUEST_ANALISE
+    await db.query('DELETE FROM QUEST_ANALISE WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    // Deleta dependências em ANALISE_APRENDIZAGEM
+    await db.query('DELETE FROM ANALISE_APRENDIZAGEM WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    // Deleta o usuário do banco
+    const [result] = await db.query('DELETE FROM USUARIO WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    console.log('Resultado da exclusão:', result);
+    // Faz logout destruindo a sessão
+    if (req.logout) {
+      req.logout(function(err) {
+        if (err) { 
+          console.log('Erro no logout:', err);
+          req.flash('error', 'Erro ao fazer logout: ' + err.message);
+          return res.redirect('/aluno/a-config'); 
+        }
+        req.session.destroy(() => {
+          res.redirect('/');
+        });
+      });
+    } else {
+      req.session.destroy(() => {
+        res.redirect('/');
+      });
+    }
+  } catch (err) {
+    console.error('Erro ao excluir conta:', err);
+    req.flash('error', 'Erro ao excluir conta: ' + err.message);
+    res.redirect('/aluno/a-config');
+  }
+});
+
 // Upload da foto do perfil
 router.post("/upload-foto", upload.single("foto_perfil"), async (req, res) => {
   if (!req.file) {
