@@ -130,7 +130,22 @@ router.get("/a-meuscursos", (req, res) => {
 });
 
 
-router.get("/a-minha-rotina", (req, res) => {
+// Função utilitária para checar se o usuário já respondeu o VARK
+async function usuarioRespondeuVark(userId, query) {
+  const resultado = await query(
+    "SELECT 1 FROM ANALISE_APRENDIZAGEM WHERE ID_USUARIO = ? LIMIT 1",
+    [userId]
+  );
+  return resultado && resultado.length > 0;
+}
+
+router.get("/a-minha-rotina", async (req, res) => {
+  const query = require("../utils/db").query;
+  const userId = req.user.ID_USUARIO;
+  const respondeu = await usuarioRespondeuVark(userId, query);
+  if (respondeu) {
+    return res.redirect("/aluno/a-minha-rotina-2");
+  }
   res.render("dashboard/aluno/a-minha-rotina", {
     user: req.user,
     title: "Minha Rotina",
@@ -290,6 +305,21 @@ const varkController = require("../controller/varkController");
 
 // Salvar respostas do questionário VARK
 router.post("/vark/save", varkController.salvarRespostasVark);
+
+// Endpoint para checar se o usuário já respondeu o VARK
+router.get("/vark/respondido", async (req, res) => {
+  const query = require("../utils/db").query;
+  const userId = req.user.ID_USUARIO;
+  try {
+    const resultado = await query(
+      "SELECT 1 FROM ANALISE_APRENDIZAGEM WHERE ID_USUARIO = ? LIMIT 1",
+      [userId]
+    );
+    res.json({ respondido: resultado && resultado.length > 0 });
+  } catch (err) {
+    res.status(500).json({ respondido: false, error: err.message });
+  }
+});
 
 // Mostrar o resultado VARK na tela de conclusão
 router.get("/conclusao", varkController.resultadoVark);

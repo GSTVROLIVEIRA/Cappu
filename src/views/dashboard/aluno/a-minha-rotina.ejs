@@ -116,9 +116,23 @@
             
             <section class="start">
                 <h3>MEUS MÉTODOS</h3>
-                <a href="/aluno/quest1_vark">
-                    <button id="start">Começar Agora!</button>
-                </a>
+                <button id="start">Começar Agora!</button>
+<script>
+  document.getElementById('start').onclick = async function(e) {
+    e.preventDefault();
+    try {
+      const resp = await fetch('/aluno/vark/respondido', { headers: { 'Accept': 'application/json' } });
+      const data = await resp.json();
+      if (data && data.respondido) {
+        window.location.href = '/aluno/a-minha-rotina-2';
+      } else {
+        window.location.href = '/aluno/quest1_vark';
+      }
+    } catch (err) {
+      window.location.href = '/aluno/quest1_vark';
+    }
+  };
+</script>
                 
                 <p id="p-start">Faça um teste e desbloqueia as técnicas de estudo que mais combinam com você!</p>
                 
