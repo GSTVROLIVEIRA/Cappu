@@ -31,8 +31,8 @@ router.get("/p-config", (req, res) => {
   });
 });
 
-router.get("/p-minharotina", (req, res) => {
-  res.render("dashboard/professor/p-minharotina", {
+router.get("/p-minha-rotina", (req, res) => {
+  res.render("dashboard/professor/p-minha-rotina", {
     user: req.user,
     title: "Minha Rotina",
   });
@@ -46,7 +46,7 @@ router.get("/p_gere_curso", (req, res) => {
 });
 
 router.get("/p-curso_prof", (req, res) => {
-  res.render("dashboard/professor/p_curso_prof", {
+  res.render("dashboard/professor/p-curso_prof", {
     user: req.user,
     title: "Curso Professor",
   });
@@ -59,15 +59,15 @@ router.get("/p-criar_aula", (req, res) => {
   });
 });
 
-router.get("/p-criar_exer", (req, res) => {
-  res.render("dashboard/professor/p-criar_exer", {
+router.get("/p_criar_exer", (req, res) => {
+  res.render("dashboard/professor/p_criar_exer", {
     user: req.user,
     title: "Criar Exercício",
   });
 });
 
-router.get("/p-criar_curso", (req, res) => {
-  res.render("dashboard/professor/p-criar_curso", {
+router.get("/p_criar_curso", (req, res) => {
+  res.render("dashboard/professor/p_criar_curso", {
     user: req.user,
     title: "Criar Curso",
   });
@@ -79,43 +79,11 @@ router.get("/p_criar_mat", (req, res) => {
     title: "Criar Material",
   });
 });
-
-
-
-// Rotas de cursos
-router.get("/curso/new", (req, res) => {
-  res.render("dashboard/professor/p_criar_curso", {
+router.get("/p-modulo", (req, res) => {
+  res.render("dashboard/professor/p-modulo", {
     user: req.user,
-    title: "Criar Curso",
+    title: "Criar Modulo",
   });
-});
-
-router.post("/curso/save", upload.single("imagem"), (req, res) => {
-  // Lógica para salvar curso
-});
-
-// Rotas de aulas
-router.get("/aula/new", (req, res) => {
-  res.render("dashboard/professor/p-criar_aula", {
-    user: req.user,
-    title: "Criar Aula",
-  });
-});
-
-router.post("/aula/save", upload.single("video"), (req, res) => {
-  // Lógica para salvar aula
-});
-
-// Rotas de exercícios
-router.get("/exercicio/new", (req, res) => {
-  res.render("dashboard/professor/p_criar_exer", {
-    user: req.user,
-    title: "Criar Exercício",
-  });
-});
-
-router.post("/exercicio/save", (req, res) => {
-  // Lógica para salvar exercício
 });
 
 module.exports = router;

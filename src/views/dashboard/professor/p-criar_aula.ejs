@@ -10,7 +10,7 @@
   </head>
   <body>
     <header>
-      <a href="/dashboard/professor/curso/<%= curso.id %>"
+      <a href="/dashboard/professor/curso"
         ><img src="/images/voltar.svg" alt=""
       /></a>
       <p>CRIAR AULA</p>
@@ -34,8 +34,8 @@
     </header>
 
     <div class="container">
-      <form action="/dashboard/professor/aula/save" method="POST">
-        <input type="hidden" name="curso_id" value="<%= curso.id %>" />
+      <form action="/dashboard/professor/aula">
+        <input type="hidden" name="curso_id" />
 
         <div class="left">
           <h1>DETALHES DA AULA</h1>
@@ -46,26 +46,22 @@
               type="text"
               id="titulo"
               name="titulo"
-              value="<%= aula.titulo || '' %>"
               required
             />
           </div>
 
           <div class="form-group">
             <label for="descricao">DESCRIÇÃO</label>
-            <textarea id="descricao" name="descricao" required>
-<%= aula.descricao || '' %></textarea
+            <textarea id="descricao" name="descricao" required></textarea
             >
           </div>
 
           <div class="form-group">
             <label for="video">VÍDEO</label>
             <div class="video-preview">
-              <% if (aula.video) { %>
               <video src="<%= aula.video %>" controls></video>
-              <% } else { %>
               <img src="/images/video_placeholder.png" alt="Preview do vídeo" />
-              <% } %>
+              
               <input type="file" id="video" name="video" accept="video/*" />
             </div>
           </div>
@@ -74,26 +70,26 @@
         <div class="right">
           <h1>MATERIAIS</h1>
           <div class="materiais">
-            <% aula.materiais.forEach(function(material) { %>
+           
             <div class="material">
-              <h3><%= material.nome %></h3>
-              <p><%= material.tipo %></p>
+              <h3>material titulo</h3>
+              <p>material tipo</p>
               <div class="acoes">
-                <a href="<%= material.url %>" target="_blank">
+                <a href="material url" target="_blank">
                   <img src="/images/icon_pesquisa.png" alt="Visualizar" />
                 </a>
                 <a
-                  href="/dashboard/professor/material/<%= material.id %>/delete"
+                  href="/dashboard/professor/material"
                 >
                   <img src="/images/icon_delete.png" alt="Excluir" />
                 </a>
               </div>
             </div>
-            <% }); %>
+       
           </div>
           <div class="add-material">
             <a
-              href="/dashboard/professor/material/new?curso_id=<%= curso.id %>&aula_id=<%= aula.id %>"
+              href="/dashboard/professor/material/new"
             >
               <img src="/images/icon_mais.png" alt="Adicionar material" />
             </a>
