@@ -348,6 +348,30 @@ router.get("/a-bd_mnemonicas", (req,res) => {
   });
 });
 
+router.get("/a-resumos", (req, res) => {
+  res.render("dashboard/aluno/a-resumo", {
+    user: req.user,
+    title: "Resumos",
+    timestamp: Date.now()
+  });
+});
+
+router.get("/a-mnemonica", (req, res) => {
+  res.render("dashboard/aluno/a-mnemonica", {
+    user: req.user,
+    title: "Mnemônica",
+    timestamp: Date.now()
+  });
+});
+
+router.get("/a-comprar-curso", (req, res) => {
+  res.render("dashboard/aluno/a-comprar-curso", {
+    user: req.user,
+    title: "Todos os Cursos",
+    timestamp: Date.now()
+  });
+});
+
 router.get("/a-bd_resumos", (req,res) => {
   res.render("dashboard/aluno/a-bd_resumos", {
     user : req.user,
