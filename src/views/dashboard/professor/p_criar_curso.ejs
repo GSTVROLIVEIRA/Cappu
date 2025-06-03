@@ -10,7 +10,7 @@
   </head>
   <body>
     <header>
-      <a href="./p-professor"><img src="/images/voltar.svg" alt=""></a>
+      <a href="./p-curso_prof"><img src="/images/voltar.svg" alt=""></a>
       <p>CRIAR CURSO</p>
       <div>
         <p><%= user.name %></p>
@@ -31,58 +31,56 @@
       </div>
     </header>
 
-    <div class="container">
+    <main class="container">
       <form >
         <div class="left">
-          <h1>DETALHES DO CURSO</h1>
+          <h1>CRIAR CURSO</h1>
           
           <div class="form-group">
-            <label for="titulo">TÍTULO</label>
-            <input type="text" id="titulo" name="titulo">
+            <label for="titulo">NOME DO CURSO</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Adicione um nome...">
           </div>
 
           <div class="form-group">
             <label for="descricao">DESCRIÇÃO</label>
-            <textarea id="descricao" name="descricao"></textarea>
+            <textarea id="descricao" name="descricao" placeholder="Adicione uma descrição..."></textarea>
           </div>
 
           <div class="form-group">
             <label for="categoria">CATEGORIA</label>
-            <select id="categoria" name="categoria" required>
+            <select id="categoria" name="categoria" required placeholder="Adicione uma categoria...">
               <option value="">Selecione uma categoria</option>
-              <option v☻alue="">Selecione uma categoria</option>
+              <option value="">Selecione uma categoria</option>
             </select>
           </div>
         </div>
 
-        <div class="right">
-          <h1>AULAS</h1>
-          <div class="aulas">
-              <div class="aula">
-                <h3>aula 1</h3>
-                <p>aula 1</p>
-                <div class="acoes">
-                  <a href="/dashboard/professor/aula/aula">
-                    <img src="/images/icon_pesquisa.png" alt="Visualizar">
+        <section class="right">
+          <h1>ADICIONAR MÓDULOS</h1>
+          <section class="modulo">
+                <h3>modulo 1</h3>
+                <p>modulo 1</p>
+                <section class="acoes">
+                  <a href="./p-modulo">
+                    adicionar
                   </a>
-                  <a href="/dashboard/professor/aula/">
+                  <a href="./p-modulo">
                     <img src="/images/icon_delete.png" alt="Excluir">
                   </a>
-                </div>
-              </div>
-          </div>
-          <div class="add-aula">
+                </section>
+          </section>
+          <section class="add-aula">
             <a href="/dashboard/professor/aula">
               <img src="/images/icon_mais.png" alt="Adicionar aula">
             </a>
-          </div>
-        </div>
+          </section>
+        </section>
 
         <button type="submit" class="salvar">
-          SALVAR <img src="/images/save_gere.png" alt="Salvar">
+          SALVAR <img src="../../images/save_gere.png" alt="Salvar">
         </button>
       </form>
-    </div>
+    </main>
 
     <script src="/js/icon-menu.js"></script>
     <script src="/js/curso.js"></script>
