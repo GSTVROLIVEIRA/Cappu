@@ -348,13 +348,7 @@ router.get("/a-bd_mnemonicas", (req,res) => {
   });
 });
 
-router.get("/a-resumos", (req, res) => {
-  res.render("dashboard/aluno/a-resumo", {
-    user: req.user,
-    title: "Resumos",
-    timestamp: Date.now()
-  });
-});
+// ROTA DUPLICADA REMOVIDA para evitar conflito com a rota correta de criação de resumo
 
 router.get("/a-mnemonica", (req, res) => {
   res.render("dashboard/aluno/a-mnemonica", {
@@ -370,6 +364,70 @@ router.get("/a-comprar-curso", (req, res) => {
     title: "Todos os Cursos",
     timestamp: Date.now()
   });
+});
+
+// Listar todos os resumos do usuário
+router.get('/a-bd_resumos', async (req, res) => {
+  const db = require('../config/database');
+  const [resumos] = await db.query('SELECT * FROM RESUMOS WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+  res.render('dashboard/aluno/a-bd_resumos', {
+    user: req.user,
+    resumos,
+    title: 'Meus Resumos',
+    timestamp: Date.now()
+  });
+});
+
+// Formulário para criar novo resumo
+router.get('/a-resumos', (req, res) => {
+  res.render('dashboard/aluno/a-resumo', {
+    user: req.user,
+    resumo: null,
+    title: 'Novo Resumo',
+    timestamp: Date.now()
+  });
+});
+
+// Salvar novo resumo
+router.post('/a-resumos', async (req, res) => {
+  const db = require('../config/database');
+  const { titulo, categoria, texto_resumo } = req.body;
+  await db.query(
+    'INSERT INTO RESUMOS (ID_USUARIO, DATA_RESUMO, TEXTO_RESUMO, TITULO, CATEGORIA) VALUES (?, NOW(), ?, ?, ?)',
+    [req.user.ID_USUARIO, texto_resumo, titulo, categoria]
+  );
+  res.redirect('/aluno/a-bd_resumos');
+});
+
+// Formulário para editar resumo
+router.get('/a-resumos/:id', async (req, res) => {
+  const db = require('../config/database');
+  const [rows] = await db.query('SELECT * FROM RESUMOS WHERE COD_RESUMO = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+  if (rows.length === 0) return res.redirect('/aluno/a-bd_resumos');
+  res.render('dashboard/aluno/a-resumo', {
+    user: req.user,
+    resumo: rows[0],
+    title: 'Editar Resumo',
+    timestamp: Date.now()
+  });
+});
+
+// Atualizar resumo
+router.post('/a-resumos/:id', async (req, res) => {
+  const db = require('../config/database');
+  const { titulo, categoria, texto_resumo } = req.body;
+  await db.query(
+    'UPDATE RESUMOS SET TEXTO_RESUMO = ?, TITULO = ?, CATEGORIA = ?, DATA_RESUMO = NOW() WHERE COD_RESUMO = ? AND ID_USUARIO = ?',
+    [texto_resumo, titulo, categoria, req.params.id, req.user.ID_USUARIO]
+  );
+  res.redirect('/aluno/a-bd_resumos');
+});
+
+// Deletar resumo
+router.post('/a-resumos/:id/delete', async (req, res) => {
+  const db = require('../config/database');
+  await db.query('DELETE FROM RESUMOS WHERE COD_RESUMO = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+  res.redirect('/aluno/a-bd_resumos');
 });
 
 router.get("/a-bd_resumos", (req,res) => {
