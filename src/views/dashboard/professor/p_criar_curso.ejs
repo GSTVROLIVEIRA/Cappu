@@ -32,26 +32,40 @@
     </header>
 
     <main class="container">
-      <form >
+      <form action="/dashboard/professor/p_criar_curso" method="POST">
         <div class="left">
           <h1>CRIAR CURSO</h1>
           
           <div class="form-group">
             <label for="titulo">NOME DO CURSO</label>
-            <input type="text" id="titulo" name="titulo" placeholder="Adicione um nome...">
+            <input type="text" id="titulo" name="titulo" placeholder="Adicione um nome..." required>
           </div>
 
           <div class="form-group">
             <label for="descricao">DESCRIÇÃO</label>
-            <textarea id="descricao" name="descricao" placeholder="Adicione uma descrição..."></textarea>
+            <textarea id="descricao" name="descricao" placeholder="Adicione uma descrição..." required></textarea>
           </div>
 
           <div class="form-group">
             <label for="categoria">CATEGORIA</label>
-            <select id="categoria" name="categoria" required placeholder="Adicione uma categoria...">
-              <option value="">Selecione uma categoria</option>
-              <option value="">Selecione uma categoria</option>
+            <select id="categoria" name="categoria" required>
+              <option value="1">Teste</option>
             </select>
+          </div>
+
+          <div class="form-group">
+            <label for="preco">PREÇO</label>
+            <input type="number" id="preco" name="preco" step="0.01" min="0" placeholder="Ex: 99.90" required>
+          </div>
+
+          <div class="form-group">
+            <label for="duracao_total">DURAÇÃO TOTAL (horas)</label>
+            <input type="number" id="duracao_total" name="duracao_total" step="0.1" min="0" placeholder="Ex: 10.5" required>
+          </div>
+
+          <div class="form-group">
+            <label for="objetivos">OBJETIVOS</label>
+            <textarea id="objetivos" name="objetivos" placeholder="Descreva os objetivos do curso..." required></textarea>
           </div>
         </div>
 

@@ -45,12 +45,8 @@ router.get("/p_gere_curso", (req, res) => {
   });
 });
 
-router.get("/p-curso_prof", (req, res) => {
-  res.render("dashboard/professor/p-curso_prof", {
-    user: req.user,
-    title: "Curso Professor",
-  });
-});
+const professorController = require('../controller/professorController');
+router.get("/p-curso_prof", professorController.listarCursosProfessor);
 
 router.get("/p-criar_aula", (req, res) => {
   res.render("dashboard/professor/p-criar_aula", {
@@ -85,5 +81,9 @@ router.get("/p-modulo", (req, res) => {
     title: "Criar Modulo",
   });
 });
+
+router.post('/p_criar_curso', professorController.criarCurso);
+router.post('/p-modulo', professorController.criarModulo);
+router.post('/p-criar_aula', professorController.criarAula);
 
 module.exports = router;

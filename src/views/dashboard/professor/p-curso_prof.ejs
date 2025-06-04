@@ -32,14 +32,28 @@
         <h2>CATEGORIA</h2>
         <h2>AVALIAÇÃO</h2>
       </section>
-      <section class="cursos">
-        <p>Phyton do Zero ao Pro</p>
-        <section class="download-section">
-          <span>Developer</span>
-          <span class="avaliacao">5 ★ ★ ★ ★ ★</span>
-          <a href="./p_gere_curso"><img class="editar-curso" src="/images/editar-curso.png" alt=""></a>
+      <% if (cursos && cursos.length > 0) { %>
+        <% cursos.forEach(function(curso) { %>
+          <section class="cursos">
+            <p><%= curso.TITULO %></p>
+            <section class="download-section">
+              <span><%= curso.CATEGORIA || '-' %></span>
+              <span class="avaliacao">-</span> <!-- Aqui pode ser ajustado para mostrar avaliação real futuramente -->
+              <a href="/dashboard/professor/curso/<%= curso.ID_CURSO %>/editar" title="Editar"><img class="editar-curso" src="/images/editar-curso.png" alt="Editar"></a>
+              <a href="/dashboard/professor/curso/<%= curso.ID_CURSO %>" title="Visualizar"><img class="visualizar-curso" src="/images/visualizar.png" alt="Visualizar"></a>
+              <form action="/dashboard/professor/curso/<%= curso.ID_CURSO %>/excluir" method="POST" style="display:inline">
+                <button type="submit" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este curso?');" style="background:none;border:none;padding:0;cursor:pointer;">
+                  <img class="excluir-curso" src="/images/excluir-curso.png" alt="Excluir">
+                </button>
+              </form>
+            </section>
+          </section>
+        <% }); %>
+      <% } else { %>
+        <section class="cursos">
+          <p>Nenhum curso cadastrado.</p>
         </section>
-      </section>
+      <% } %>
       
       <section class="vermais">
         <a href="./p_criar_curso">ADICIONAR CURSO</a>
