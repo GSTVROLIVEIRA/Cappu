@@ -53,3 +53,59 @@ span {
     font-weight: 700;
     font-style: normal;
 }
+
+@media (max-width: 768px) {
+    header {
+        gap: 20%;
+        padding: 1% 3%;
+    }
+
+    main {
+        padding: 25% 10% 10% 10%; /* mais espaço no topo para o header fixo */
+    }
+
+    main > h1 {
+        font-size: 1.5em;
+    }
+
+    main > h2 {
+        font-size: 1.2em;
+    }
+
+    .back-button {
+        width: 40px;
+    }
+
+    .logo {
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 1rem 1rem;
+        align-items: flex-start;
+    }
+
+    main {
+        padding: 35% 5% 10% 5%;
+    }
+
+    main > h1 {
+        font-size: 1.3em;
+    }
+
+    main > h2 {
+        font-size: 1em;
+    }
+
+    .back-button {
+        width: 35px;
+    }
+
+    .logo {
+        height: 35px;
+    }
+}

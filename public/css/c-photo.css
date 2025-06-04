@@ -204,3 +204,422 @@ p.reg{
     color: #684A43;
 }
 
+/* Responsivo até 1024px */
+@media (max-width: 1024px) {
+    main {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+  
+    .esquerda,
+    .direita {
+      max-width: 100%;
+      width: 100%;
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 48px;
+      white-space: normal;
+      text-align: center;
+    }
+  
+    h3 {
+      margin-left: 0;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 28px;
+    }
+  
+    p.estrelas {
+      font-size: 36px;
+      margin-right: 0;
+      text-align: center;
+    }
+  
+    .matricula {
+      margin-left: 0;
+      margin-top: 60px;
+      font-size: 20px;
+      padding: 10px 20px;
+    }
+  
+    .direita img {
+      width: 100%;
+      height: auto;
+    }
+  
+    .linha-info {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-right: 0;
+      gap: 5px;
+    }
+  }
+  
+  /* Responsivo até 600px */
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 36px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    h3 {
+      font-size: 22px;
+    }
+  
+    p.curso,
+    p.estrelas,
+    p.cam,
+    p.rapha,
+    p.reg,
+    p.bold {
+      font-size: 16px;
+    }
+  
+    p.aprender {
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+  
+    .matricula {
+      font-size: 18px;
+      padding: 8px 20px;
+    }
+  
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+    }
+  
+    .logo {
+      position: static;
+      transform: none;
+      font-size: 1rem;
+      margin-top: 1rem;
+      text-align: left;
+    }
+  
+    .direita img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 4px 6px grey;
+    background-color: #fff;
+    width: 100%;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #664d3b;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+}
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #664d3b;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+body {
+    font-family: "Fira Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fdfbf9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    max-width: 1400px;
+    width: 95%;
+    margin: 40px auto;
+    gap: 80px;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.esquerda {
+    flex: 5;
+    text-align: left;
+    max-width: 55%;
+    padding: 30px;
+}
+
+.direita {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 45%;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 64px;
+    font-family: "Fira Sans", sans-serif;
+    color: #684A43;
+    margin-bottom: 20px;
+    word-break: keep-all;
+    white-space: nowrap;
+}
+
+h2 {
+    font-size: 24px;
+    font-family: "Fira Sans", sans-serif;
+    color: #684A43;
+    margin-bottom: 5px;
+    font-style: italic;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 32px;
+    font-family: "Fira Sans", sans-serif;
+    color: #684A43;
+    margin-bottom: 15px;
+    text-align: center;
+    margin-top: 80px;
+    margin-left: 220px;
+    font-style: italic;
+    font-weight: 700;
+}
+
+p.curso {
+    font-size: 20px;
+    margin-top: 55px;
+    opacity: 80%;
+    font-family: 'Fira Sans' sans-serif;
+    font-style: normal;
+    font-weight: 300;
+    word-break: keep-all;
+}
+
+p.estrelas {
+    font-size: 48px;
+    font-family: "Fira Sans", sans-serif;
+    color: #684A43;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-style: italic;
+    margin-right: 150px;
+}
+
+p.cam, p.rapha {
+    font-size: 16px;
+    font-family: "Fira Sans", sans-serif;
+    color: black; 
+    line-height: 1.6;
+    margin-top: 20px;
+    opacity: 70%; 
+    word-break: keep-all;
+    width: 100%;
+}
+
+.stars {
+    color: #684A43;
+    opacity: 1;
+}
+
+.nome {
+    color: #684A43; /* Marrom */
+    font-weight: bold;
+    opacity: 100%; /* Opacidade total */
+}
+
+p.aprender {
+    margin-top: 25px;
+    display: inline-block;
+    background-color: #684A43;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 20px;
+} 
+
+.matricula {
+    margin-top: 120px;
+    display: block;
+    padding: 5px 30px;
+    background-color: #684A43;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 30px;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    margin-left: 90px
+}
+
+.direita img {
+    width: 400px;
+    height: 260px;
+    margin-bottom: 30px;
+}
+
+p.bold{
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 24px;
+    color: #684A43;
+}
+
+.linha-info {
+  display: flex;
+  gap: 7px;
+  margin-top: 10px;
+  margin-right: 170px
+}
+
+p.reg{
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    color: #684A43;
+}
+
+/* Responsivo até 1024px */
+@media (max-width: 1024px) {
+    main {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+  
+    .esquerda,
+    .direita {
+      max-width: 100%;
+      width: 100%;
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 48px;
+      white-space: normal;
+      text-align: center;
+    }
+  
+    h3 {
+      margin-left: 0;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 28px;
+    }
+  
+    p.estrelas {
+      font-size: 36px;
+      margin-right: 0;
+      text-align: center;
+    }
+  
+    .matricula {
+      margin-left: 0;
+      margin-top: 60px;
+      font-size: 20px;
+      padding: 10px 20px;
+    }
+  
+    .direita img {
+      width: 100%;
+      height: auto;
+    }
+  
+    .linha-info {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-right: 0;
+      gap: 5px;
+    }
+  }
+  
+  /* Responsivo até 600px */
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 36px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    h3 {
+      font-size: 22px;
+    }
+  
+    p.curso,
+    p.estrelas,
+    p.cam,
+    p.rapha,
+    p.reg,
+    p.bold {
+      font-size: 16px;
+    }
+  
+    p.aprender {
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+  
+    .matricula {
+      font-size: 18px;
+      padding: 8px 20px;
+    }
+  
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+    }
+  
+    .logo {
+      position: static;
+      transform: none;
+      font-size: 1rem;
+      margin-top: 1rem;
+      text-align: left;
+    }
+  
+    .direita img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  
