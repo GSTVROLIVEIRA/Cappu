@@ -53,26 +53,13 @@
           placeholder="Escreva o seu resumo aqui..."
         ><%= resumo ? resumo.TEXTO_RESUMO : '' %></textarea>
     </section>
-    <section>
+    <section class="btns-salvar-deletar">
         <button type="submit" class="save-button">SALVAR <img src="/images/salvar.svg" alt=""></button>
         <% if (resumo) { %>
-            <button type="submit" formaction="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" formmethod="POST" class="delete-button">EXCLUIR <img src="/images/delete.svg" alt=""></button>
+            <button type="submit" formaction="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" formmethod="POST" class="delete-button"><img src="/images/delete.svg" alt=""></button>
         <% } %>
     </section>
 </form>
-        </section>
-        </section>
-        <section class="caixa-de-texto" >
-            <form action="/enviar-resumo" method="POST">
-                <textarea
-                  id="mensagem"
-                  name="mensagem"
-                  rows="15"
-                  cols="90"
-                  placeholder="Escreva o seu resumo aqui..."
-                ></textarea>
-              </form>
-        </section>
     </main>
     <script src="/js/icon-menu.js"></script>  
 </body>

@@ -141,6 +141,11 @@ textarea {
   padding: 1.25rem ;
 }
 
+.btns-salvar-deletar {
+    display: flex;
+    justify-content: space-between;
+}
+
 @media (max-width: 1600px) {
   .container {
     width: 95%;

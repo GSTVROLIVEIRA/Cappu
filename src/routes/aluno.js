@@ -195,12 +195,19 @@ router.get("/a-bd_mnemonicas", (req, res) => {
     timestamp: Date.now()
   });
 });
-router.get("/a-bd_resumos", (req, res) => {
-  res.render("dashboard/aluno/a-bd_resumos", {
-    user: req.user,
-    title: "Resumo",
-    timestamp: Date.now()
-  });
+const db = require("../utils/db");
+router.get("/a-bd_resumos", async (req, res) => {
+  try {
+    const resumos = await db.query("SELECT * FROM RESUMOS WHERE ID_USUARIO = ?", [req.user.ID_USUARIO]);
+    res.render("dashboard/aluno/a-bd_resumos", {
+      user: req.user,
+      title: "Resumo",
+      timestamp: Date.now(),
+      resumos: resumos || []
+    });
+  } catch (err) {
+    res.status(500).send("Erro ao buscar resumos");
+  }
 });
 
 
