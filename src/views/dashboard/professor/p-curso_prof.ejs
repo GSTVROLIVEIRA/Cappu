@@ -39,14 +39,10 @@
             <p><%= curso.TITULO %></p>
             <section class="download-section">
               <span><%= curso.CATEGORIA || '-' %></span>
-              <span class="avaliacao">-</span> <!-- Aqui pode ser ajustado para mostrar avaliação real futuramente -->
-              <a href="/dashboard/professor/curso/<%= curso.ID_CURSO %>/editar" title="Editar"><img class="editar-curso" src="/images/editar-curso.png" alt="Editar"></a>
-              <a href="/dashboard/professor/curso/<%= curso.ID_CURSO %>" title="Visualizar"><img class="visualizar-curso" src="/images/visualizar.png" alt="Visualizar"></a>
-              <form action="/dashboard/professor/curso/<%= curso.ID_CURSO %>/excluir" method="POST" style="display:inline">
-                <button type="submit" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este curso?');" style="background:none;border:none;padding:0;cursor:pointer;">
-                  <img class="excluir-curso" src="/images/excluir-curso.png" alt="Excluir">
-                </button>
-              </form>
+              <span class="avaliacao"><%= curso.AVALIACAO || '-' %></span>
+              <a href="/dashboard/professor/p_gere_curso/<%= curso.ID_CURSO %>" title="Editar">
+                <button type="button" class="btn-editar">Editar</button>
+              </a>
             </section>
           </section>
         <% }); %>

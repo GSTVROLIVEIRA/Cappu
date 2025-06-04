@@ -77,6 +77,55 @@ exports.criarAula = async (req, res) => {
   }
 };
 
+// Atualizar curso por ID
+exports.updateCursoById = async (req, res) => {
+  try {
+    const cursoId = req.params.id;
+    const { titulo, descricao, categoria, preco, duracao_total, objetivos } = req.body;
+    await db.query(
+      `UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, ID_CATEGORIA = ?, PRECO = ?, DURACAO_TOTAL = ?, OBJETIVOS = ? WHERE ID_CURSO = ?`,
+      [titulo, descricao, categoria, preco, duracao_total, objetivos, cursoId]
+    );
+    req.flash('success', 'Curso atualizado com sucesso!');
+    res.redirect('/dashboard/professor/p_gere_curso/' + cursoId);
+  } catch (err) {
+    console.error('Erro ao atualizar curso:', err);
+    req.flash('error', 'Erro ao atualizar curso!');
+    res.redirect('/dashboard/professor/p_gere_curso/' + req.params.id);
+  }
+};
+
+// Buscar curso por ID para edição
+exports.getCursoById = async (req, res) => {
+  try {
+    const cursoId = req.params.id;
+    const [rows] = await db.query(
+      `SELECT c.*, cat.NOME as CATEGORIA, c.ID_CATEGORIA FROM CURSOS c LEFT JOIN CATEGORIAS cat ON c.ID_CATEGORIA = cat.ID_CATEGORIA WHERE c.ID_CURSO = ?`,
+      [cursoId]
+    );
+    if (!rows || rows.length === 0) {
+      req.flash('error', 'Curso não encontrado!');
+      return res.redirect('/dashboard/professor/p-curso_prof');
+    }
+    const curso = rows[0];
+    // Buscar módulos do curso
+    const [modulos] = await db.query(
+      `SELECT * FROM MODULO WHERE ID_CURSO = ?`,
+      [cursoId]
+    );
+    res.render('dashboard/professor/p_gere_curso', {
+      user: req.user,
+      curso,
+      modulos: modulos || [],
+      title: 'Editar Curso'
+    });
+  } catch (err) {
+    console.error('Erro ao buscar curso:', err);
+    req.flash('error', 'Erro ao buscar curso!');
+    res.redirect('/dashboard/professor/p-curso_prof');
+  }
+};
+
 // Criação de módulo
 exports.criarModulo = async (req, res) => {
   try {

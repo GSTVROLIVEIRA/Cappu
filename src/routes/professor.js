@@ -46,6 +46,10 @@ router.get("/p_gere_curso", (req, res) => {
 });
 
 const professorController = require('../controller/professorController');
+// Rota para editar curso pelo ID
+router.get("/p_gere_curso/:id", professorController.getCursoById);
+// Rota para atualizar curso pelo ID
+router.post("/p_gere_curso/:id", professorController.updateCursoById);
 router.get("/p-curso_prof", professorController.listarCursosProfessor);
 
 router.get("/p-criar_aula", (req, res) => {
