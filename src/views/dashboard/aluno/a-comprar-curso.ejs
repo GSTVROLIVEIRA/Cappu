@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cursos</title>
+    <link rel="stylesheet" href="/css/a-comprar-curso.css" />
+    <link rel="stylesheet" href="/css/global_home.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link
+      rel="shortcut icon"
+      href="/Images/favicon.ico"
+      type="image/x-icon"
+    />
+  </head>
+
+  <header>
+    <a href="/aluno/a-perfil" class="back-button"><img src="/Images/voltar.svg" alt="Voltar" class="back-icon" /></a>
+    <form class="header-search" action="">
+      <input class="pesquisa" type="search" placeholder="Pesquise por cursos..." />
+    </form>
+    <div>
+      <p><%= user.NOME_USU || 'Aluno' %></p>
+      <button class="user-icon" id="userIcon" aria-label="Abrir menu do usuário">
+        <img src="/Images/perfil.svg" alt="imagem do perfil" class="user-avatar" />
+        <div class="user-config" id="userConfig">
+          <ul>
+            <li><a href="/aluno/a-perfil">MENU</a></li>
+            <li><a href="/aluno/a-config">CONFIGURAÇÕES</a></li>
+            <li><a href="/aluno/logout">SAIR</a></li>
+          </ul>
+        </div>
+      </button>
+    </div>
+  </header>
+
+  <body>
+
+    <section class="pg1-container">
+      <section class="pg1">
+        <h1>CONHEÇA NOSSOS</h1>
+        <h2>CURSOS</h2>
+        <h3>
+          É aqui que a mágica acontece, adquira <br />
+          habilidades novas e exercite seu intelectual.
+        </h3>
+      </section>
+      <img src="/Images/pg1-cursos.png" alt="" />
+    </section>
+    <section class="sesao">
+      <h1>MAIS COMPRADOS</h1>
+    </section>
+    <section class="cards-container">
+      <section class="cards">
+        <a href="/" class="h-ref">
+          <section>
+            <h1>Lógica de Programação</h1>
+            <h2>8 meses</h2>
+          </section>
+          <img src="/Images/card-1.png" alt="" />
+        </a>
+      </section>
+      <section class="cards" href="c-python.html">
+        <a href="/python" class="h-ref">
+          <section>
+            <h1>Python do Zero ao Pro</h1>
+            <h2>8 meses</h2>
+          </section>
+          <img src="/Images/card-2.png" alt="" />
+        </a>
+      </section>
+    </section>
+    <section class="sesao">
+      <h1>MELHORES OFERTAS</h1>
+    </section>
+    <section class="cards-container">
+      <section class="cards">
+        <a href="/design" class="h-ref">
+          <section>
+            <h1>Design Gráfico</h1>
+            <h2>5 meses</h2>
+          </section>
+          <img src="/Images/card-3.png" alt="" />
+        </a>
+      </section>
+      <section class="cards">
+        <a href="/photo" class="h-ref">
+          <section>
+            <h1>Photoshop Profissional</h1>
+            <h2>8 meses</h2>
+          </section>
+          <img src="/Images/card-4.png" alt="" />
+        </a>
+      </section>
+    </section>
+    <section class="cards-container">
+      <section class="cards">
+        <a href="/foto" class="h-ref">
+          <section>
+            <h1>Fotografia</h1>
+            <h2>8 meses</h2>
+          </section>
+          <img src="/Images/card-5.png" alt="" />
+        </a>
+      </section>
+      <section class="cards">
+        <a href="/copy" class="h-ref">
+          <section>
+            <h1>Copywriting</h1>
+            <h2>4 meses</h2>
+          </section>
+          <img src="/Images/card-6.png" alt="" />
+        </a>
+      </section>
+    </section>
+
+    <hr class="separador" />
+
+    <section class="sesao">
+      <h1>PRINCIPAIS CATEGORIAS</h1>
+    </section>
+
+    <section class="categorias">
+      <section>
+        <img src="/Images/developer.png" alt="" />
+        <h1>DEVELOPER</h1>
+      </section>
+      <section>
+        <img src="/Images/marketing.png" alt="" />
+        <h1>MARKETING</h1>
+      </section>
+      <section>
+        <img src="/Images/design.png" alt="" />
+        <h1>DESIGN</h1>
+      </section>
+      <section>
+        <img src="/Images/fotografia.png" alt="" />
+        <h1>FOTOGRAFIA</h1>
+      </section>
+      <section>
+        <img src="/Images/negocios.png" alt="" />
+        <h1>NEGÓCIOS</h1>
+      </section>
+      <section>
+        <img src="/Images/musica.png" alt="" />
+        <h1>MÚSICA</h1>
+      </section>
+    </section>
+    <footer>
+      <section class="organizacao">
+        <section class="caixa-das-sociais">
+          <p class="siga">NOS SIGA:</p>
+          <section class="sociais">
+            <a href=""
+              ><img
+                class="icons"
+                src="/Images/insta.svg"
+                alt="icone do instagram"
+            /></a>
+            <a href=""
+              ><img
+                class="icons"
+                src="/Images/facebook.svg"
+                alt="icone do facebook"
+            /></a>
+            <a href=""
+              ><img
+                class="icons"
+                src="/Images/discord.svg"
+                alt="icone do discord"
+            /></a>
+          </section>
+        </section>
+        <section class="footer-options">
+          <section class="servicos">
+            <p class="footerstrong">SERVIÇOS</p>
+            <a href="/">Home</a>
+            <a href="/cursos">Cursos</a>
+            <a href="/planos">Planos</a>
+            <a href="/quemsomos">Sobre</a>
+          </section>
+          <section class="servicos">
+            <p class="footerstrong">SERVIÇOS</p>
+            <a href="/cursos">Cursos</a>
+            <a href="/planos">Planos</a>
+          </section>
+          <section class="servicos">
+            <p class="footerstrong">Suporte</p>
+            <a href="/contato">Contato</a>
+          </section>
+        </section>
+      </section>
+      <p class="direitos"> 2024 Cappuensino. Todos os direitos reservados.</p>
+      <section class="termos">
+        <a href="/inst-seguranca.html">Segurança</a>
+        <a href="/inst-acessibilidade.html">Declaração de acessibilidade</a>
+        <a href="">Configurações de Cookie</a>
+        <a href="/inst-privacidade.html">Política de Privacidade</a>
+        <a href="/inst-termos-de-uso.html">Termos de Uso</a>
+      </section>
+    </footer>
+    <script src="/js/icon-menu.js"></script>
+  </body>
+</html>
