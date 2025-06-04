@@ -20,7 +20,7 @@ exports.listarCursosProfessor = async (req, res) => {
     console.error('Erro ao listar cursos:', err);
     req.flash('error', 'Erro ao buscar cursos!');
     res.render('dashboard/professor/p-curso_prof', {
-      user: req.user,
+      user: req.user || {},
       cursos: [],
       title: 'Curso Professor'
     });
