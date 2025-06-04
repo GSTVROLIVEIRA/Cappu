@@ -227,6 +227,15 @@ router.get("/a-gerenciarplano", (req,res) =>{
   });
 });
 
+// Nova rota para a-page-resumo
+router.get("/a-page-resumo", (req, res) => {
+  res.render("dashboard/aluno/a-page-resumo", {
+    user: req.user,
+    title: "Página de Resumo",
+    timestamp: Date.now()
+  });
+});
+
 
 router.get("/a-todososcursos", (req,res) => {
   res.render("dashboard/aluno/a-todososcursos", {
