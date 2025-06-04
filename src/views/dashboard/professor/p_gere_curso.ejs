@@ -14,12 +14,12 @@
   </head>
   <body>
     <header>
-      <a href="./p-professor"
-        ><img src="/images/voltar.svg" alt=""
-      /></a>
+      <a href="./p-curso_prof">
+        <img src="/images/voltar.svg" alt="Voltar"/>
+      </a>
       <p>GERENCIAR CURSO</p>
       <div>
-        <p><%= user.name %></p>
+        <p>user name</p>
         <button
           class="user-icon"
           id="userIcon"
@@ -30,7 +30,7 @@
             <ul>
               <li><a href="./p-professor">MENU</a></li>
               <li><a href="./p-config">CONFIGURAÇÕES</a></li>
-              <li><a href="/aluno/logout">SAIR</a></li>
+              <li><a href="/auth/logout">SAIR</a></li>
             </ul>
           </div>
         </button>
@@ -38,42 +38,41 @@
     </header>
 
     <div class="container">
-      <form action="/dashboard/professor/curso">
+      <form action="/dashboard/professor/curso" method="POST">
         <input type="hidden" name="curso_id">
         
         <div class="left">
           <h1>DETALHES DO CURSO</h1>
 
           <div class="form-group">
-            <label for="nome">NOME DO CURSO</label>
+            <label for="titulo">NOME DO CURSO</label>
             <input
               type="text"
-              id="nome"
-              name="nome"
+              id="titulo"
+              name="titulo"
               required
+              placeholder="Adicione um nome..."
             />
           </div>
 
+
           <div class="form-group">
             <label for="descricao">DESCRIÇÃO</label>
-            <textarea id="descricao" name="descricao" required></textarea
-            >
+            <textarea 
+              id="descricao" 
+              name="descricao" 
+              required
+              placeholder="Adicione uma descrição..."
+            ></textarea>
           </div>
 
           <div class="form-group">
             <label for="categoria">CATEGORIA</label>
             <select id="categoria" name="categoria" required>
-              <option value="">Selecione...</option>
-              <option value="">Selecione...</option>
-
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="nivel">NÍVEL</label>
-            <select id="nivel" name="nivel" required>
-              <option value="">Selecione...</option>
-              <option value="">Selecione...</option>
+              <option value="">Selecione uma categoria...</option>
+              <option value="1">Programação</option>
+              <option value="2">Design</option>
+              <option value="3">Fotografia</option>
             </select>
           </div>
 
@@ -84,33 +83,59 @@
               id="preco"
               name="preco"
               step="0.01"
+              min="0"
+              placeholder="Ex: 99.90"
               required
             />
           </div>
+
+          <div class="form-group">
+            <label for="duracao_total">DURAÇÃO TOTAL (horas)</label>
+            <input
+              type="number"
+              id="duracao_total"
+              name="duracao_total"
+              step="0.1"
+              min="0"
+              placeholder="Ex: 10.5"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="objetivos">OBJETIVOS</label>
+            <textarea 
+              id="objetivos" 
+              name="objetivos" 
+              required
+              placeholder="Descreva os objetivos do curso..."
+            ></textarea>
+          </div>
         </div>
 
-        <div class="right">
-          <h1>AULAS</h1>
-          <div class="aulas">
-            <div class="aula">
-              <h3>aula titulo</h3>
-              <p>aula descricao</p>
-              <div class="acoes">
-                <a href="/dashboard/professor/aula/edit">
-                  <img src="/images/icon_edit.png" alt="Editar" />
-                </a>
-                <a href="/dashboard/professor/aula/delete">
-                  <img src="/images/icon_delete.png" alt="Excluir" />
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="add-aula">
-            <a href="/dashboard/professor/aula/new">
-              <img src="/images/icon_mais.png" alt="Adicionar aula" />
+
+        <section class="right">
+          <h1>ADICIONAR MÓDULOS</h1>
+          <section class="modulo">
+            <h3>Módulo 1</h3>
+            <p>Descrição do módulo</p>
+            <section class="acoes">
+              <a href="/dashboard/professor/modulo/editar/1">
+                <img src="/images/icon_edit.png" alt="Editar" />
+              </a>
+              <a href="/dashboard/professor/modulo/excluir/1" onclick="return confirm('Tem certeza que deseja excluir este módulo?');">
+                <img src="/images/icon_delete.png" alt="Excluir" />
+              </a>
+            </section>
+          </section>
+
+          <section class="add-aula">
+            <a href="/dashboard/professor/modulo/novo">
+              <img src="/images/icon_mais.png" alt="Adicionar módulo" />
             </a>
-          </div>
-        </div>
+          </section>
+        </section>
+
 
         <button type="submit" class="salvar">
           SALVAR <img src="/images/save_gere.png" alt="Salvar" />
