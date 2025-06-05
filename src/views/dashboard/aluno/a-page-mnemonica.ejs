@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bd-telas.css">
+    <link rel="stylesheet" href="/css/header2.css">
+    <title>Visualizar Mnemônica</title>
+</head>
+<body>
+    <header>
+        <a href="/aluno/a-bd_mnemonicas"><img src="/images/voltar.svg" alt="Voltar"></a>
+        <p>MÉTODOS DE ESTUDO</p>
+        <div>
+          <p><%= user.NOME_USU || 'Aluno' %></p>
+          <button class="user-icon" id="userIcon" aria-label="Abrir menu do usuário">
+              <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="imagem do perfil" style="width: 48px; height: 48px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
+              <div class="user-config" id="userConfig">
+                  <ul>
+                      <li><a href="/aluno/a-perfil">MENU</a></li>
+                      <li><a href="/aluno/a-config">CONFIGURAÇÕES</a></li>
+                      <li><a href="/aluno/logout">SAIR</a></li>
+                  </ul>
+              </div>
+          </button>
+      </div>
+      </header>
+      <main>
+        <section class="caixa">
+            <h1><%= mnemonica ? mnemonica.TITULO : 'Mnemônica não encontrada' %></h1>
+            <% if (mnemonica) { %>
+                <div style="margin-bottom: 12px; color: #888; font-size: 1.1em;">
+                    <strong>Categoria:</strong> <%= mnemonica.CATEGORIA %> <br>
+                    <strong>Data:</strong> <%= mnemonica.DATA_MNEMONICA ? mnemonica.DATA_MNEMONICA.toLocaleString ? mnemonica.DATA_MNEMONICA.toLocaleString() : mnemonica.DATA_MNEMONICA : '' %>
+                </div>
+                <div class="texto-resumo" style="font-size: 1.2em; background: #fff; border-radius: 8px; padding: 20px; min-height: 120px;">
+                    <%= mnemonica.TEXTO_MNEMONICA %>
+                </div>
+            <% } else { %>
+                <p>Mnemônica não encontrada.</p>
+            <% } %>
+        </section>
+    </main>
+    <script src="/js/icon-menu.js"></script>
+</body>
+</html>

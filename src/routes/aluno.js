@@ -166,11 +166,66 @@ router.get("/a-resumo", (req, res) => {
   });
 });
 
-router.get("/a-mnemonica", (req, res) => {
-  res.render("dashboard/aluno/a-mnemonica", {
+router.get('/a-mnemonica', (req, res) => {
+  res.render('dashboard/aluno/a-mnemonica', {
     user: req.user,
-    title: "Mnemonica",
+    mnemonica: null,
+    title: 'Nova Mnemônica',
     timestamp: Date.now()
+  });
+});
+
+// Salvar nova mnemônica
+router.post('/a-mnemonica', async (req, res) => {
+  const db = require('../config/database');
+  const { titulo, categoria, texto_mnemonica } = req.body;
+  const [result] = await db.query(
+    'INSERT INTO MNEMONICAS (ID_USUARIO, DATA_MNEMONICA, TEXTO_MNEMONICA, TITULO, CATEGORIA) VALUES (?, NOW(), ?, ?, ?)',
+    [req.user.ID_USUARIO, texto_mnemonica, titulo, categoria]
+  );
+  res.redirect(`/aluno/a-page-mnemonica/${result.insertId}`);
+});
+
+// Formulário para editar mnemônica
+router.get('/a-mnemonica/:id', async (req, res) => {
+  const db = require('../config/database');
+  const [rows] = await db.query('SELECT * FROM MNEMONICAS WHERE COD_MNEMONICA = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+  if (rows.length === 0) return res.redirect('/aluno/a-bd_mnemonicas');
+  res.render('dashboard/aluno/a-mnemonica', {
+    user: req.user,
+    mnemonica: rows[0],
+    title: 'Editar Mnemônica',
+    timestamp: Date.now()
+  });
+});
+
+// Atualizar mnemônica
+router.post('/a-mnemonica/:id', async (req, res) => {
+  const db = require('../config/database');
+  const { titulo, categoria, texto_mnemonica } = req.body;
+  await db.query(
+    'UPDATE MNEMONICAS SET TEXTO_MNEMONICA = ?, TITULO = ?, CATEGORIA = ?, DATA_MNEMONICA = NOW() WHERE COD_MNEMONICA = ? AND ID_USUARIO = ?',
+    [texto_mnemonica, titulo, categoria, req.params.id, req.user.ID_USUARIO]
+  );
+  res.redirect('/aluno/a-bd_mnemonicas');
+});
+
+// Deletar mnemônica
+router.post('/a-mnemonica/:id/delete', async (req, res) => {
+  const db = require('../config/database');
+  await db.query('DELETE FROM MNEMONICAS WHERE COD_MNEMONICA = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+  res.redirect('/aluno/a-bd_mnemonicas');
+});
+
+// Visualizar mnemônica específica
+router.get('/a-page-mnemonica/:id', async (req, res) => {
+  const db = require('../config/database');
+  const [rows] = await db.query('SELECT * FROM MNEMONICAS WHERE COD_MNEMONICA = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+  res.render('dashboard/aluno/a-page-mnemonica', {
+    user: req.user,
+    title: 'Página da Mnemônica',
+    timestamp: Date.now(),
+    mnemonica: rows[0] || null
   });
 });
 
@@ -188,10 +243,14 @@ router.get("/a-bd_feynman", (req, res) => {
     timestamp: Date.now()
   });
 });
-router.get("/a-bd_mnemonicas", (req, res) => {
-  res.render("dashboard/aluno/a-bd_mnemonicas", {
+// Listar todas as mnemônicas do usuário
+router.get('/a-bd_mnemonicas', async (req, res) => {
+  const db = require('../config/database');
+  const [mnemonicas] = await db.query('SELECT * FROM MNEMONICAS WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+  res.render('dashboard/aluno/a-bd_mnemonicas', {
     user: req.user,
-    title: "Mnemonica",
+    mnemonicas,
+    title: 'Minhas Mnemônicas',
     timestamp: Date.now()
   });
 });
@@ -227,12 +286,23 @@ router.get("/a-gerenciarplano", (req,res) =>{
   });
 });
 
-// Nova rota para a-page-resumo
+// Rota fallback para a-page-resumo sem ID
 router.get("/a-page-resumo", (req, res) => {
+  res.redirect("/aluno/a-bd_resumos");
+});
+
+// Nova rota para a-page-resumo
+router.get("/a-page-resumo/:id", async (req, res) => {
+  const db = require('../config/database');
+  const [rows] = await db.query(
+    'SELECT * FROM RESUMOS WHERE COD_RESUMO = ? AND ID_USUARIO = ?',
+    [req.params.id, req.user.ID_USUARIO]
+  );
   res.render("dashboard/aluno/a-page-resumo", {
     user: req.user,
     title: "Página de Resumo",
-    timestamp: Date.now()
+    timestamp: Date.now(),
+    resumo: rows[0] || null
   });
 });
 
@@ -356,28 +426,14 @@ router.get("/a-bd_feynman", (req,res) => {
   });
 });
 
-router.get("/a-bd_mnemonicas", (req,res) => {
-  res.render("dashboard/aluno/a-bd_mnemonicas", {
-    user : req.user,
-    title : "Mnemonica",
-    timestamp: Date.now()
-  });
-});
-
-// ROTA DUPLICADA REMOVIDA para evitar conflito com a rota correta de criação de resumo
-
-router.get("/a-mnemonica", (req, res) => {
-  res.render("dashboard/aluno/a-mnemonica", {
+// Listar todas as mnemônicas do usuário
+router.get('/a-bd_mnemonicas', async (req, res) => {
+  const db = require('../config/database');
+  const [mnemonicas] = await db.query('SELECT * FROM MNEMONICAS WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+  res.render('dashboard/aluno/a-bd_mnemonicas', {
     user: req.user,
-    title: "Mnemônica",
-    timestamp: Date.now()
-  });
-});
-
-router.get("/a-comprar-curso", (req, res) => {
-  res.render("dashboard/aluno/a-comprar-curso", {
-    user: req.user,
-    title: "Todos os Cursos",
+    mnemonicas,
+    title: 'Minhas Mnemônicas',
     timestamp: Date.now()
   });
 });
@@ -408,11 +464,11 @@ router.get('/a-resumos', (req, res) => {
 router.post('/a-resumos', async (req, res) => {
   const db = require('../config/database');
   const { titulo, categoria, texto_resumo } = req.body;
-  await db.query(
+  const [result] = await db.query(
     'INSERT INTO RESUMOS (ID_USUARIO, DATA_RESUMO, TEXTO_RESUMO, TITULO, CATEGORIA) VALUES (?, NOW(), ?, ?, ?)',
     [req.user.ID_USUARIO, texto_resumo, titulo, categoria]
   );
-  res.redirect('/aluno/a-bd_resumos');
+  res.redirect(`/aluno/a-page-resumo/${result.insertId}`);
 });
 
 // Formulário para editar resumo
