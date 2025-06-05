@@ -75,7 +75,7 @@ nav img {
     border-radius: 20px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 920px) {
     header nav ul a {
         font-size: 0.8rem;
     }
@@ -91,12 +91,21 @@ nav img {
 
     .pesquisa {
         font-size: 0.5em;
-        padding: 10px 5px;
+        padding: 5px 5px;
     }
 
     header nav {
         margin-right: 2rem;
         margin-left: 2rem;
+    }
+
+    .login-cadastro {
+        gap: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .pesquisa::placeholder {
+        font-size: 0.9em;
     }
 }
 
@@ -117,14 +126,23 @@ nav img {
 
     .pesquisa {
         font-size: 0.4em;
-        padding: 6px 2px;
+        padding: 3px 2px;
+    }
+
+    .login-cadastro {
+        gap: 1rem;
+        font-size: 0.6em;
+    }
+
+    .pesquisa::placeholder {
+        font-size: 0.6em;
     }
 }
 
 @media (max-width: 480px) {
 
     header nav ul a {
-        font-size: 0.5rem;
+        font-size: 0.7rem;
     }
 
     header nav ul {
@@ -148,6 +166,53 @@ nav img {
 
     header {
         padding: 0.8rem;
+    }
+
+    header nav ul {
+        display: grid;
+        grid-template-columns: 2fr 2fr;
+        gap: 5px;
+        margin: 0px 1em;
+    }
+
+    header nav ul li {
+        text-align: center;
+        border: 1px solid #684A43;
+        padding: 0.2em 0.5em;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-cadastro {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        font-size: 0.7rem;
+    }
+
+    #cadastro {
+        padding: 5px 10px;
+    }
+
+    .pesquisa::placeholder {
+        color: transparent;
+    }
+
+    .pesquisa {
+        width: 30px;
+        height: 30px;
+        background-image: url('../Images/lupa2.svg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 3em;
+    }
+
+    header nav section img {
+        width: 40px;
+        height: 40px;
     }
 }
 

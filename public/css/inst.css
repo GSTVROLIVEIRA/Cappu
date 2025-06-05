@@ -61,7 +61,11 @@ span {
     }
 
     main {
-        padding: 25% 10% 10% 10%; /* mais espaço no topo para o header fixo */
+        padding: 30% 10% 10% 10%; /* mais espaço no topo para o header fixo */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     main > h1 {
@@ -78,6 +82,18 @@ span {
 
     .logo {
         height: 40px;
+    }
+
+    p, li{
+        max-width: 80%;
+        text-align: justify;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 }
 
