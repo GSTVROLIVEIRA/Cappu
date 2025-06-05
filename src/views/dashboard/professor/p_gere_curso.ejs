@@ -124,6 +124,19 @@
         <div class="botoes-edicao">
           <button type="button" id="btnEditar">Editar</button>
           <button type="submit" id="btnSalvar" style="display:none;">Salvar</button>
+          <button type="button" id="btnExcluirCurso" style="background:#e74c3c;color:#fff;">Excluir Curso</button>
+        </div>
+
+        <!-- Modal de confirmação -->
+        <div id="modalConfirm" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center;">
+          <div style="background:#fff;padding:2em;border-radius:8px;max-width:90vw;box-shadow:0 2px 16px #0002;text-align:center;">
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita.</p>
+            <form id="formExcluirCurso" method="POST" action="/dashboard/professor/excluir_curso/<%= curso.ID_CURSO %>" style="margin-top:1em;">
+              <button type="submit" style="background:#e74c3c;color:#fff;padding:0.5em 1.5em;margin-right:1em;">Excluir</button>
+              <button type="button" id="btnCancelarExclusao" style="background:#bbb;padding:0.5em 1.5em;">Cancelar</button>
+            </form>
+          </div>
         </div>
 
         <script>
@@ -176,5 +189,15 @@
 
     <script src="/js/icon-menu.js"></script>
     <script src="/js/curso.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify/dist/simple-notify.min.js"></script>
+    <script>
+      // Modal exclusão
+      document.getElementById('btnExcluirCurso').onclick = function() {
+        document.getElementById('modalConfirm').style.display = 'flex';
+      };
+      document.getElementById('btnCancelarExclusao').onclick = function() {
+        document.getElementById('modalConfirm').style.display = 'none';
+      };
+    </script>
   </body>
 </html>

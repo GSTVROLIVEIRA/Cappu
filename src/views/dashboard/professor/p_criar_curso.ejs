@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/criar_curso.css"/>
     <link rel="stylesheet" href="/css/header2.css"/>
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify/dist/simple-notify.min.css" />
   </head>
   <body>
     <header>
@@ -32,7 +33,7 @@
     </header>
 
     <main class="container">
-      <form action="/dashboard/professor/p_criar_curso" method="POST">
+      <form id="formCriarCurso" action="/dashboard/professor/p_criar_curso" method="POST">
         <div class="left">
           <h1>CRIAR CURSO</h1>
           
@@ -49,7 +50,14 @@
           <div class="form-group">
             <label for="categoria">CATEGORIA</label>
             <select id="categoria" name="categoria" required>
-              <option value="1">Teste</option>
+              <option value="" disabled selected>Selecione uma categoria</option>
+              <% if (categorias && categorias.length > 0) { %>
+                <% categorias.forEach(function(cat) { %>
+                  <option value="<%= cat.ID_CATEGORIA %>"><%= cat.NOME %></option>
+                <% }); %>
+              <% } else { %>
+                <option value="">Nenhuma categoria cadastrada</option>
+              <% } %>
             </select>
           </div>
 
@@ -73,24 +81,10 @@
 
         <section class="right">
           <h1>ADICIONAR MÓDULOS</h1>
-          <section class="modulo">
-                <h3>modulo 1</h3>
-                <p>modulo 1</p>
-                <section class="acoes">
-                  <a href="./p-modulo">
-                    adicionar
-                  </a>
-                  <a href="./p-modulo">
-                    <img src="/images/icon_delete.png" alt="Excluir">
-                  </a>
-                </section>
-          </section>
-          <section class="add-aula">
-            <a href="/dashboard/professor/aula">
-              <img src="/images/icon_mais.png" alt="Adicionar aula">
-            </a>
-          </section>
+          <div id="modulosContainer"></div>
+          <button type="button" id="addModuloBtn" style="margin-top:10px">Adicionar módulo</button>
         </section>
+        <input type="hidden" name="modulos" id="modulosInput" />
 
 
         <button type="submit" class="salvar">
@@ -102,5 +96,6 @@
 
     <script src="/js/icon-menu.js"></script>
     <script src="/js/curso.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-notify/dist/simple-notify.min.js"></script>
   </body>
 </html>

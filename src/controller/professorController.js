@@ -1,5 +1,29 @@
 const db = require('../config/database');
 
+// Página de criação de curso: busca categorias e renderiza
+exports.getCriarCursoPage = async (req, res) => {
+  try {
+    const [categorias] = await db.query('SELECT * FROM CATEGORIAS ORDER BY NOME');
+    res.render('dashboard/professor/p_criar_curso', {
+      user: req.user,
+      categorias,
+      title: 'Criar Curso',
+      success: req.flash('success'),
+      error: req.flash('error')
+    });
+  } catch (err) {
+    console.error('Erro ao buscar categorias:', err);
+    req.flash('error', 'Erro ao carregar categorias!');
+    res.render('dashboard/professor/p_criar_curso', {
+      user: req.user,
+      categorias: [],
+      title: 'Criar Curso',
+      success: req.flash('success'),
+      error: req.flash('error')
+    });
+  }
+};
+
 // Listar todos os cursos do professor
 exports.listarCursosProfessor = async (req, res) => {
   try {
@@ -14,7 +38,8 @@ exports.listarCursosProfessor = async (req, res) => {
     res.render('dashboard/professor/p-curso_prof', {
       user: req.user,
       cursos,
-      title: 'Curso Professor'
+      title: 'Curso Professor',
+      success: req.flash('success')
     });
   } catch (err) {
     console.error('Erro ao listar cursos:', err);
@@ -30,7 +55,7 @@ exports.listarCursosProfessor = async (req, res) => {
 // Criação de curso
 exports.criarCurso = async (req, res) => {
   try {
-    const { titulo, descricao, categoria, preco, duracao_total, objetivos } = req.body;
+    const { titulo, descricao, categoria, preco, duracao_total, objetivos, modulos } = req.body;
     const professorId = req.user.ID_USUARIO || req.user.id; // compatível com diferentes auths
     if (!titulo || !descricao || !categoria || !preco || !duracao_total || !objetivos) {
       req.flash('error', 'Preencha todos os campos obrigatórios!');
@@ -43,6 +68,33 @@ exports.criarCurso = async (req, res) => {
       'INSERT INTO CURSOS (ID_CURSO, TITULO, DESCRICAO, ID_CATEGORIA, ID_USUARIO, PRECO, DURACAO_TOTAL, OBJETIVOS, DATA_CRIACAO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())',
       [nextId, titulo, descricao, categoria, professorId, preco, duracao_total, objetivos]
     );
+
+    // Se houver módulos enviados
+    let modulosArr = [];
+    try {
+      if (modulos) {
+        modulosArr = JSON.parse(modulos);
+      }
+    } catch (e) {
+      modulosArr = [];
+    }
+    for (const modulo of modulosArr) {
+      // Cria módulo
+      const [moduloResult] = await db.query(
+        'INSERT INTO MODULO (TITULO, DESCRICAO, ID_CURSO) VALUES (?, ?, ?)',
+        [modulo.titulo, modulo.descricao, nextId]
+      );
+      const moduloId = moduloResult.insertId;
+      // Cria aulas deste módulo
+      if (modulo.aulas && Array.isArray(modulo.aulas)) {
+        for (const aula of modulo.aulas) {
+          await db.query(
+            'INSERT INTO AULA (TITULO, DESCRICAO, ID_MODULO) VALUES (?, ?, ?)',
+            [aula.titulo, aula.descricao, moduloId]
+          );
+        }
+      }
+    }
     req.flash('success', 'Curso criado com sucesso!');
     res.redirect('/dashboard/professor/p-curso_prof');
   } catch (err) {
@@ -123,6 +175,25 @@ exports.getCursoById = async (req, res) => {
     console.error('Erro ao buscar curso:', err);
     req.flash('error', 'Erro ao buscar curso!');
     res.redirect('/dashboard/professor/p-curso_prof');
+  }
+};
+
+// Exclusão de curso
+exports.excluirCurso = async (req, res) => {
+  try {
+    const cursoId = req.params.id;
+    // Remove todas as aulas dos módulos deste curso
+    await db.query('DELETE FROM AULA WHERE ID_MODULO IN (SELECT ID_MODULO FROM MODULO WHERE ID_CURSO = ?)', [cursoId]);
+    // Remove todos os módulos do curso
+    await db.query('DELETE FROM MODULO WHERE ID_CURSO = ?', [cursoId]);
+    // Remove o curso
+    await db.query('DELETE FROM CURSOS WHERE ID_CURSO = ?', [cursoId]);
+    req.flash('success', 'Curso excluído com sucesso!');
+    res.redirect('/dashboard/professor/p-curso_prof');
+  } catch (err) {
+    console.error('Erro ao excluir curso:', err);
+    req.flash('error', 'Erro ao excluir curso!');
+    res.redirect('/dashboard/professor/p_gere_curso/' + req.params.id);
   }
 };
 

@@ -66,12 +66,7 @@ router.get("/p_criar_exer", (req, res) => {
   });
 });
 
-router.get("/p_criar_curso", (req, res) => {
-  res.render("dashboard/professor/p_criar_curso", {
-    user: req.user,
-    title: "Criar Curso",
-  });
-});
+router.get('/p_criar_curso', professorController.getCriarCursoPage);
 
 router.get("/p_criar_mat", (req, res) => {
   res.render("dashboard/professor/p_criar_mat", {
@@ -89,5 +84,8 @@ router.get("/p-modulo", (req, res) => {
 router.post('/p_criar_curso', professorController.criarCurso);
 router.post('/p-modulo', professorController.criarModulo);
 router.post('/p-criar_aula', professorController.criarAula);
+
+// Rota para exclusão de curso
+router.post('/excluir_curso/:id', professorController.excluirCurso);
 
 module.exports = router;
