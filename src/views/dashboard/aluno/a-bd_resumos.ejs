@@ -50,30 +50,26 @@
       <td><%= resumo.TITULO %></td>
       <td><%= resumo.CATEGORIA %></td>
       <td>
-        <button onclick="window.location.href='/aluno/a-resumos/<%= resumo.COD_RESUMO %>'" title="Editar">
-          <img src="/images/border color.svg" alt="Editar">
-        </button>
-      </td>
-      <td>
-        <form action="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" method="POST" style="display:inline;">
-          <button type="submit" title="Excluir" style="background:none;border:none;padding:0;">
-            <img src="/images/delete.svg" alt="Lixeira">
-          </button>
-        </form>
-      </td>
+  <div class="action-buttons" style="display: flex; gap: 28px; align-items: center;">
+    <button onclick="window.location.href='/aluno/a-resumos/<%= resumo.COD_RESUMO %>'" title="Editar" style="background:none;border:none;padding:0;">
+      <img src="/images/border color.svg" alt="Editar">
+    </button>
+    <form action="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" method="POST" style="display:inline; margin:0;">
+      <button type="submit" title="Excluir" style="background:none;border:none;padding:0;">
+        <img src="/images/delete.svg" alt="Lixeira">
+      </button>
+    </form>
+    <a href="/aluno/a-page-resumo/<%= resumo.COD_RESUMO %>" title="Ver resumo" target="_blank" style="display:inline-block;">
+      <img src="/images/find_in_page.svg" alt="Infos">
+    </a>
+  </div>
+</td>
     </tr>
   <% }); %>
 <% } else { %>
   <tr><td colspan="4">Nenhum resumo cadastrado.</td></tr>
 <% } %>
 </tbody>
-                            <td>
-                                <a href="/aluno/a-page-resumo" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </section>
         </section>

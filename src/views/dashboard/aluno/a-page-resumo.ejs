@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <a href="/aluno/a-minha-rotina-2"><img src="/images/voltar.svg" alt=""></a>
+        <a href="/aluno/a-bd_resumos"><img src="/images/voltar.svg" alt=""></a>
         <p>MÉTODOS DE ESTUDO</p>
         <div>
             <p><%= user.NOME_USU || 'Aluno' %></p>
@@ -29,13 +29,12 @@
     </header>
     
     <main>
-        <h1>Título do Resumo</h1>
-        <h2>Categoria</h2>
+        <h1><%= resumo ? resumo.TITULO : 'Resumo não encontrado' %></h1>
+        <h2><%= resumo ? resumo.CATEGORIA : '' %></h2>
         <section class="blank-box">
-            <p>   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-
-                It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
-            </p>
+            <p><%= resumo ? resumo.TEXTO_RESUMO : 'Nenhum conteúdo disponível.' %></p>
+            <% if (resumo && resumo.DATA_RESUMO) { %>
+            <% } %>
         </section>
     </main>
     <script src="/js/icon-menu.js"></script>

@@ -227,12 +227,23 @@ router.get("/a-gerenciarplano", (req,res) =>{
   });
 });
 
-// Nova rota para a-page-resumo
+// Rota fallback para a-page-resumo sem ID
 router.get("/a-page-resumo", (req, res) => {
+  res.redirect("/aluno/a-bd_resumos");
+});
+
+// Nova rota para a-page-resumo
+router.get("/a-page-resumo/:id", async (req, res) => {
+  const db = require('../config/database');
+  const [rows] = await db.query(
+    'SELECT * FROM RESUMOS WHERE COD_RESUMO = ? AND ID_USUARIO = ?',
+    [req.params.id, req.user.ID_USUARIO]
+  );
   res.render("dashboard/aluno/a-page-resumo", {
     user: req.user,
     title: "Página de Resumo",
-    timestamp: Date.now()
+    timestamp: Date.now(),
+    resumo: rows[0] || null
   });
 });
 
@@ -408,11 +419,11 @@ router.get('/a-resumos', (req, res) => {
 router.post('/a-resumos', async (req, res) => {
   const db = require('../config/database');
   const { titulo, categoria, texto_resumo } = req.body;
-  await db.query(
+  const [result] = await db.query(
     'INSERT INTO RESUMOS (ID_USUARIO, DATA_RESUMO, TEXTO_RESUMO, TITULO, CATEGORIA) VALUES (?, NOW(), ?, ?, ?)',
     [req.user.ID_USUARIO, texto_resumo, titulo, categoria]
   );
-  res.redirect('/aluno/a-bd_resumos');
+  res.redirect(`/aluno/a-page-resumo/${result.insertId}`);
 });
 
 // Formulário para editar resumo
