@@ -1,6 +1,6 @@
 :root {
     --primary-color: #684A43;
-    --secondary-color: #7a4202;
+    --secondary-color: #BFAC95;
     --accent-color: #684A43;
     --text-color: #2b2d42;
     --light-gray: #f8f9fa;
@@ -192,26 +192,6 @@ body {
     height: auto;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
     animation: float 6s ease-in-out infinite;
-}
-
-/* Footer fixo */
-.site-footer {
-    background-color: var(--accent-color);
-    color: var(--white);
-    text-align: center;
-    padding: 1.5rem;
-    font-weight: 500;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.site-footer p {
-    margin: 0;
-    letter-spacing: 0.5px;
 }
 
 /* Animação */
