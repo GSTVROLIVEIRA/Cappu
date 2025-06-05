@@ -44,77 +44,30 @@
                         </tr>
                     </thead> 
                     <tbody>
-                        <tr>
-                            <td>CELULAS EUCARIONTES</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>CELULAS PROCARIONTES</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>MESOPOTÂMIA</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1º QUERRA MUNDIAL</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1º REVOLUÇÃO INDUSTRIAL</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
+                        <% if (mnemonicas && mnemonicas.length > 0) { mnemonicas.forEach(function(mnemonica) { %>
+                            <tr>
+                                <td><%= mnemonica.TITULO %></td>
+                                <td>
+                                    <a href="/aluno/a-page-mnemonica/<%= mnemonica.COD_MNEMONICA %>">
+                                        <img src="/images/find_in_page.svg" alt="Visualizar">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/aluno/a-mnemonica/<%= mnemonica.COD_MNEMONICA %>">
+                                        <img src="/images/border color.svg" alt="Editar">
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="/aluno/a-mnemonica/<%= mnemonica.COD_MNEMONICA %>/delete" method="POST" style="display:inline;">
+                                        <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
+                                            <img src="/images/delete.svg" alt="Lixeira">
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) } else { %>
+                            <tr><td colspan="4">Nenhuma mnemônica encontrada.</td></tr>
+                        <% } %>
                     </tbody>
                 </table>
             </section>
