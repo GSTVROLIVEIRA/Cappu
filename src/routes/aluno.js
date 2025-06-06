@@ -129,6 +129,14 @@ router.get("/a-meuscursos", (req, res) => {
   });
 });
 
+router.get("/a-comprar-curso", (req, res) => {
+  res.render("dashboard/aluno/a-comprar-curso", {
+    user: req.user,
+    title: "Todos os Cursos",
+    timestamp: Date.now()
+  });
+});
+
 
 // Função utilitária para checar se o usuário já respondeu o VARK
 async function usuarioRespondeuVark(userId, query) {
