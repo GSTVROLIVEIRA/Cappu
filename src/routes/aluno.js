@@ -447,6 +447,16 @@ router.get("/a-meusmateriais", (req, res) => {
   });
 });
 
+router.get("/a-meusmateriais2", (req, res) => {
+  // Lógica para buscar materiais se necessário
+  res.render("dashboard/aluno/a-meusmateriais2", {
+    user: req.user,
+    title: "Meus Materiais",
+    timestamp: Date.now()
+    // Passar dados dos materiais aqui, ex: materiais: resultadosDoBanco
+  });
+});
+
 // Rota para Gerenciar Plano
 router.get("/a-gerenciarplano", (req,res) =>{
   res.render("dashboard/aluno/a-gerenciarplano",{
