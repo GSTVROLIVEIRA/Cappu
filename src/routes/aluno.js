@@ -193,6 +193,7 @@ router.get("/a-pomodoro", (req, res) => {
   res.render("dashboard/aluno/a-pomodoro", {
     user: req.user,
     title: "Pomodoro",
+    timestamp: Date.now()
   });
 });
 
