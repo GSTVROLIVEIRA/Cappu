@@ -67,6 +67,16 @@
     width: 100%;
 }
 
+.pesquisa {
+    border: none; /* Removes all borders */
+    border-bottom: 1px solid #000; /* Adds a bottom border */
+    background-color: transparent; /* Makes the background transparent */
+    /* Add any other styling you want to keep, like padding, width, etc. */
+    padding: 5px 0; /* Example padding */
+    width: 200px; /* Example width */
+}
+
+
 h1 {
         width: calc(80% + 1rem);
     }

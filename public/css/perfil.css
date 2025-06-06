@@ -27,7 +27,7 @@ main {
   display: inline-flex;
   justify-content: space-between;
   width: 100%;
-  padding-top: 2.875em;
+  padding-top: 1em;
 }
 
 .container {
@@ -44,20 +44,22 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2em;
+  gap: 1em;
 }
 
 .profile img {
-  width: 18.75em;
+  width: 15em;
+  border-radius: 10rem;
   height: auto;
+  border: 2px solid var(--primary-color);
 }
 
 .nome {
   font-family: Fira Sans;
   font-weight: 900;
   font-style: italic;
-  font-size: 4em;
-  line-height: 1.2em;
+  font-size: 2.5em;
+  line-height: 1em;
   letter-spacing: 0%;
   color: var(--primary-color);
 }
@@ -66,7 +68,7 @@ main {
   font-family: Fira Sans;
   font-weight: 300;
   font-style: italic;
-  font-size: 2.5em;
+  font-size: 2em;
   line-height: 0.75em;
   letter-spacing: 0%;
   color: #000000;
@@ -76,28 +78,37 @@ main {
   display: flex;
   flex-direction: column;
   height: auto;
-  gap: 5.125em;
-  padding-top: 10.69em;
+  gap: 2em;
+  padding-top: 5em;
 }
 
 .botao {
   font-family: Fira Sans;
   font-weight: 900;
   font-style: italic;
-  font-size: 2.25em;
+  font-size: 1.5em;
   line-height: 0.675em;
   letter-spacing: 0%;
   text-align: center;
   color: var(--primary-color);
   text-decoration: none;
   border: 1px solid #000000;
-  width: 38rem;
-  height: 5.875rem;
+  width: 25rem;
+  height: 5rem;
   border-width: 1px;
   border-radius: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.botao:hover {
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: white;
+  transition: all 0.1s ease-in-out;
+  transform: scale(0.9) translateY(-5px);
+
 }
 
 @media (max-width: 800px) {
@@ -118,11 +129,11 @@ main {
   }
 
   .nome {
-    font-size: 2.5em;
+    font-size: 2em;
   }
 
   .alunoid {
-    font-size: 1.5em;
+    font-size: 1em;
   }
 
   .opcoes {

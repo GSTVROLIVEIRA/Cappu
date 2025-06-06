@@ -1,135 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/header2.css">
-    <link rel="stylesheet" href="/css/todososcursos.css" />
-    <link rel="shortcut icon" href="../../Images/favicon.ico" type="image/x-icon">
-    <title>Todos os Cursos</title>
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/todososcursos.css">
+    <link rel="stylesheet" href="/css/header2.css"> 
+</head>
+<body>
     <header>
-      <a href="/aluno/a-meuscursos"><img src="/images/voltar.svg" alt=""></a>
-      <p>TODOS OS CURSOS</p>
-      <div>
-        <p><%= user.NOME_USU || 'Aluno' %></p>
-        <button class="user-icon" id="userIcon" aria-label="Abrir menu do usuário">
-            <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="imagem do perfil" style="width: 48px; height: 48px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
-            <div class="user-config" id="userConfig">
-                <ul>
-                    <li><a href="/aluno/a-perfil">MENU</a></li>
-                    <li><a href="/aluno/a-config">CONFIGURAÇÕES</a></li>
-                    <li><a href="/aluno/logout">SAIR</a></li>
-                </ul>
-            </div>
-        </button>
-    </div>
-    </header>
-    <main class="container">
-        <h2>Continuar</h2>
-      <section class="card">
-        <section class="dias">
-          <p>
-            <span class="numero">2º</span><br /><span class="primeira-letra"
-              >D</span
-            >IA
-          </p>
-          <p>
-            <span class="numero">5</span><br /><span class="primeira-letra"
-              >R</span
-            >ESTANTES
-          </p>
-        </section>
-        <section class="descricao">
-          <spam class="subtitulo">CATEGORIA</spam>
-          <span>Developer</span>
-          <spam class="subtitulo">AVALIAÇÃO</spam>
-          <span>A avaliar</span>
-          <spam class="subtitulo">Nº EXERCÍCIO</spam>
-          <span>10/12</span>
-          <spam class="subtitulo">Nº AULA</spam>
-          <span>3/17</span>
-        </section>
-        <section class="info-aula">
-          <h1>LÓGICA DE PROGRAMAÇÃO</h1>
+        <a href="/aluno/a-perfil"><img src="/images/logo+nome.svg" class="logo-cappu" alt=""></a>
+        <div>
+          <p><%= user.NOME_USU || 'Aluno' %></p>
+          <button class="user-icon" id="userIcon" aria-label="Abrir menu do usuário">
+              <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="imagem do perfil" style="width: 48px; height: 48px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
+              <div class="user-config" id="userConfig">
+                  <ul>
+                      <li><a href="/aluno/a-perfil">MENU</a></li>
+                      <li><a href="/aluno/a-config">CONFIGURAÇÕES</a></li>
+                      <li><a href="/aluno/logout">SAIR</a></li>
+                  </ul>
+              </div>
+          </button>
+        </div>
+      </header>
 
-          <section class="aula-progresso">
-            <p>
-              <span class="aula-number">AULA 1</span> Introdução a algoritmos
-            </p>
-            <span class="conclusao-porcentagem">100%</span>
-          </section>
-          <section class="aula-progresso">
-            <p>
-              <span class="aula-number">AULA 2</span> Primeiro algoritmo e ...
-            </p>
-            <span class="conclusao-porcentagem">100%</span>
-          </section>
-          <section class="aula-progresso">
-            <p>
-              <span class="aula-number">AULA 3</span> Comando de entrada ...
-            </p>
-            <span class="conclusao-porcentagem">100%</span>
-          </section>
-          <section class="aula-progresso">
-            <p>
-              <span class="aula-number">AULA 4</span> Operadores lógicos e ...
-            </p>
-            <span class="conclusao-porcentagem">12%</span>
-          </section>
-          <section class="continuar-aula">
-            <a href="/aluno/aula">Continuar</a>
-          </section>
-        </section>
-      </section>
-      <section class="meus-cursos">
-        <h2>MEUS CURSOS</h2>
-        <section class="info-cursos">
-            <p>
-                <div class="nome-curso">
-                <span>Photoshop profissional</span>
-                <span>Design</span>
-                </div>
-                <div class="curso-progresso">
-                    <span class="porcentagem">2%</span>
-                    <a href="/aluno/aula"><img src="/images/seta-frente.svg" alt="icone de uma seta apontando para a direita"></a>
-                </div>
-            </p>
-        </section>
-        <section class="info-cursos">
-            <p>
-                <section class="nome-curso">
-                <span>I.A Para Negócios</span>
-                <span>Negócios</span>
-                </section>
-                <section class="curso-progresso">
-                    <span class="porcentagem">30%</span>
-                    <a href="/aluno/aula"><img src="/images/seta-frente.svg" alt="icnoe de uma seta apontando para a direita"></a>
-                </section>
-            </p>
-        </section>
-      </section>
-    
-      <section class="concluidos">
-        <h2>CONCLUÍDOS</h2>
-        <section class="complete-title">
-                <p>NOME</p>
-                <p class="nota-gambiarra">NOTA</p>
-                <section class="certificado">
-                <img src="/images/certificado.svg" alt="icone de uma medalha ilustrando um certificado">
-                <span>CERTIFICADOS</span> 
-                </section>
-                <span></span>
-        </section>
-        <section class="complete-info">
-                <p>Phyton do Zero ao Pro</p>
-                <p >98%</p>
-                <a href="/aluno/a-certificado" id="acessar">Acessar</a> 
-                <a href="/aluno/a-avaliar"><img src="/images/like.svg" alt="icone de uma mao dando um like"></a>
-        </section>
-      </section>
+    <main class="container">
+        <h2>Todos os Cursos Disponíveis</h2>
+
+        <% if (cursos && cursos.length > 0) { %>
+            <div class="cursos-container">
+                <% cursos.forEach(curso => { %>
+                    <div class="card">
+                        <div class="descricao">
+                            <span class="subtitulo"><%= curso.TITULO %></span>
+                            <p><span>Professor:</span> <%= curso.NOME_PROFESSOR %></p>
+                            <p><span>Descrição:</span> <%= curso.DESCRICAO %></p>
+                            <a href="/curso/<%= curso.ID_CURSO %>" class="continuar-aula">Ver Curso</a>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p>Nenhum curso encontrado no momento.</p>
+        <% } %>
+
     </main>
     <script src="/js/icon-menu.js"></script>
-  </body>
+
+</body>
 </html>
