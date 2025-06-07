@@ -25,7 +25,7 @@
               </div>
           </button>
       </div>
-      </header>
+    </header>
     <h1>RESUMOS</h1>
     <main class="container">
         <section class="resumo">
@@ -37,7 +37,7 @@
                             type="text" 
                             name="titulo" 
                             class="descricao" 
-                            placeholder="Escreva o título do seu resumo aqui"
+                            placeholder="Escreva o título..."
                             value="<%= resumo ? resumo.TITULO : '' %>"
                         >
                     </section>
@@ -47,15 +47,15 @@
                             type="text" 
                             name="categoria" 
                             class="descricao" 
-                            placeholder="Categoria do resumo" 
+                            placeholder="Escreva o nome da categoria..." 
                             value="<%= resumo ? resumo.CATEGORIA : '' %>"
                         >
-                        <section class="btns-salvar-deletar">
-                            <button type="submit" class="save-button">SALVAR <img src="/images/salvar.svg" alt=""></button>
-                            <% if (resumo) { %>
-                                <button type="submit" formaction="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" formmethod="POST" class="delete-button"><img src="/images/delete.svg" alt=""></button>
-                            <% } %>
-                        </section>
+                    </section>
+                    <section class="btns-salvar-deletar">
+                        <button type="submit" class="save-button">SALVAR <img src="/images/salvar.svg" alt=""></button>
+                        <% if (resumo) { %>
+                            <button type="submit" formaction="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" formmethod="POST" class="delete-button"><img src="/images/delete.svg" alt=""></button>
+                        <% } %>
                     </section>
                 </section>
                 <section class="caixa-de-texto">
