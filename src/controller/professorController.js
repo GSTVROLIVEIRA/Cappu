@@ -1,25 +1,27 @@
-const db = require('../config/database');
+const db = require("../config/database");
 
 // Página de criação de curso: busca categorias e renderiza
 exports.getCriarCursoPage = async (req, res) => {
   try {
-    const [categorias] = await db.query('SELECT * FROM CATEGORIAS ORDER BY NOME');
-    res.render('dashboard/professor/p_criar_curso', {
+    const [categorias] = await db.query(
+      "SELECT * FROM CATEGORIAS ORDER BY NOME"
+    );
+    res.render("dashboard/professor/p_criar_curso", {
       user: req.user,
       categorias,
-      title: 'Criar Curso',
-      success: req.flash('success'),
-      error: req.flash('error')
+      title: "Criar Curso",
+      success: req.flash("success"),
+      error: req.flash("error"),
     });
   } catch (err) {
-    console.error('Erro ao buscar categorias:', err);
-    req.flash('error', 'Erro ao carregar categorias!');
-    res.render('dashboard/professor/p_criar_curso', {
+    console.error("Erro ao buscar categorias:", err);
+    req.flash("error", "Erro ao carregar categorias!");
+    res.render("dashboard/professor/p_criar_curso", {
       user: req.user,
       categorias: [],
-      title: 'Criar Curso',
-      success: req.flash('success'),
-      error: req.flash('error')
+      title: "Criar Curso",
+      success: req.flash("success"),
+      error: req.flash("error"),
     });
   }
 };
@@ -35,19 +37,19 @@ exports.listarCursosProfessor = async (req, res) => {
        WHERE c.ID_USUARIO = ?`,
       [professorId]
     );
-    res.render('dashboard/professor/p-curso_prof', {
+    res.render("dashboard/professor/p-curso_prof", {
       user: req.user,
       cursos,
-      title: 'Curso Professor',
-      success: req.flash('success')
+      title: "Curso Professor",
+      success: req.flash("success"),
     });
   } catch (err) {
-    console.error('Erro ao listar cursos:', err);
-    req.flash('error', 'Erro ao buscar cursos!');
-    res.render('dashboard/professor/p-curso_prof', {
+    console.error("Erro ao listar cursos:", err);
+    req.flash("error", "Erro ao buscar cursos!");
+    res.render("dashboard/professor/p-curso_prof", {
       user: req.user || {},
       cursos: [],
-      title: 'Curso Professor'
+      title: "Curso Professor",
     });
   }
 };
@@ -55,18 +57,42 @@ exports.listarCursosProfessor = async (req, res) => {
 // Criação de curso
 exports.criarCurso = async (req, res) => {
   try {
-    const { titulo, descricao, categoria, preco, duracao_total, objetivos, modulos } = req.body;
+    const {
+      titulo,
+      descricao,
+      categoria,
+      preco,
+      duracao_total,
+      objetivos,
+      modulos,
+    } = req.body;
     const professorId = req.user.ID_USUARIO || req.user.id; // compatível com diferentes auths
-    if (!titulo || !descricao || !categoria || !preco || !duracao_total || !objetivos) {
-      req.flash('error', 'Preencha todos os campos obrigatórios!');
-      return res.redirect('/dashboard/professor/p_criar_curso');
+    if (
+      !titulo ||
+      !descricao ||
+      !categoria ||
+      !preco ||
+      !duracao_total ||
+      !objetivos
+    ) {
+      req.flash("error", "Preencha todos os campos obrigatórios!");
+      return res.redirect("/dashboard/professor/p_criar_curso");
     }
     // Busca o próximo ID_CURSO manualmente
-    const [rows] = await db.query('SELECT MAX(ID_CURSO) as maxId FROM CURSOS');
+    const [rows] = await db.query("SELECT MAX(ID_CURSO) as maxId FROM CURSOS");
     const nextId = (rows[0].maxId || 0) + 1;
     await db.query(
-      'INSERT INTO CURSOS (ID_CURSO, TITULO, DESCRICAO, ID_CATEGORIA, ID_USUARIO, PRECO, DURACAO_TOTAL, OBJETIVOS, DATA_CRIACAO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())',
-      [nextId, titulo, descricao, categoria, professorId, preco, duracao_total, objetivos]
+      "INSERT INTO CURSOS (ID_CURSO, TITULO, DESCRICAO, ID_CATEGORIA, ID_USUARIO, PRECO, DURACAO_TOTAL, OBJETIVOS, DATA_CRIACAO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())",
+      [
+        nextId,
+        titulo,
+        descricao,
+        categoria,
+        professorId,
+        preco,
+        duracao_total,
+        objetivos,
+      ]
     );
 
     // Se houver módulos enviados
@@ -81,7 +107,7 @@ exports.criarCurso = async (req, res) => {
     for (const modulo of modulosArr) {
       // Cria módulo
       const [moduloResult] = await db.query(
-        'INSERT INTO MODULO (TITULO, DESCRICAO, ID_CURSO) VALUES (?, ?, ?)',
+        "INSERT INTO MODULO (TITULO, DESCRICAO, ID_CURSO) VALUES (?, ?, ?)",
         [modulo.titulo, modulo.descricao, nextId]
       );
       const moduloId = moduloResult.insertId;
@@ -89,18 +115,40 @@ exports.criarCurso = async (req, res) => {
       if (modulo.aulas && Array.isArray(modulo.aulas)) {
         for (const aula of modulo.aulas) {
           await db.query(
-            'INSERT INTO AULA (TITULO, DESCRICAO, ID_MODULO) VALUES (?, ?, ?)',
-            [aula.titulo, aula.descricao, moduloId]
+            `INSERT INTO AULA (
+              ID_MODULO,
+              TITULO,
+              DESCRICAO,
+              DURACAO,
+              ORDEM,
+              TIPO_CONTEUDO,
+              VIDEO_URL,
+              ARQUIVO,
+              TAMANHO_ARQUIVO,
+              TIPO_ARQUIVO
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              moduloId,
+              aula.titulo || "",
+              aula.descricao || "",
+              aula.duracao || "00:00:00",
+              aula.ordem || 1,
+              aula.tipo_conteudo || "video",
+              aula.video_url || "",
+              aula.ARQUIVO || null,
+              aula.TAMANHO_ARQUIVO || null,
+              aula.TIPO_ARQUIVO || null,
+            ]
           );
         }
       }
     }
-    req.flash('success', 'Curso criado com sucesso!');
-    res.redirect('/dashboard/professor/p-curso_prof');
+    req.flash("success", "Curso criado com sucesso!");
+    res.redirect("/dashboard/professor/p-curso_prof");
   } catch (err) {
-    console.error('Erro ao criar curso:', err);
-    req.flash('error', 'Erro ao criar curso!');
-    res.redirect('/dashboard/professor/p_criar_curso');
+    console.error("Erro ao criar curso:", err);
+    req.flash("error", "Erro ao criar curso!");
+    res.redirect("/dashboard/professor/p_criar_curso");
   }
 };
 
@@ -113,19 +161,19 @@ exports.criarAula = async (req, res) => {
       videoPath = req.file.filename; // ou req.file.path, conforme config do multer
     }
     if (!titulo || !descricao || !modulo_id) {
-      req.flash('error', 'Preencha todos os campos obrigatórios!');
-      return res.redirect('/dashboard/professor/p-criar_aula');
+      req.flash("error", "Preencha todos os campos obrigatórios!");
+      return res.redirect("/dashboard/professor/p-criar_aula");
     }
     await db.query(
-      'INSERT INTO AULA (TITULO, DESCRICAO, ID_MODULO, VIDEO) VALUES (?, ?, ?, ?)',
+      "INSERT INTO AULA (TITULO, DESCRICAO, ID_MODULO, VIDEO) VALUES (?, ?, ?, ?)",
       [titulo, descricao, modulo_id, videoPath]
     );
-    req.flash('success', 'Aula criada com sucesso!');
-    res.redirect('/dashboard/professor/p-modulo?moduloId=' + modulo_id);
+    req.flash("success", "Aula criada com sucesso!");
+    res.redirect("/dashboard/professor/p-modulo?moduloId=" + modulo_id);
   } catch (err) {
-    console.error('Erro ao criar aula:', err);
-    req.flash('error', 'Erro ao criar aula!');
-    res.redirect('/dashboard/professor/p-criar_aula');
+    console.error("Erro ao criar aula:", err);
+    req.flash("error", "Erro ao criar aula!");
+    res.redirect("/dashboard/professor/p-criar_aula");
   }
 };
 
@@ -133,17 +181,18 @@ exports.criarAula = async (req, res) => {
 exports.updateCursoById = async (req, res) => {
   try {
     const cursoId = req.params.id;
-    const { titulo, descricao, categoria, preco, duracao_total, objetivos } = req.body;
+    const { titulo, descricao, categoria, preco, duracao_total, objetivos } =
+      req.body;
     await db.query(
       `UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, ID_CATEGORIA = ?, PRECO = ?, DURACAO_TOTAL = ?, OBJETIVOS = ? WHERE ID_CURSO = ?`,
       [titulo, descricao, categoria, preco, duracao_total, objetivos, cursoId]
     );
-    req.flash('success', 'Curso atualizado com sucesso!');
-    res.redirect('/dashboard/professor/p_gere_curso/' + cursoId);
+    req.flash("success", "Curso atualizado com sucesso!");
+    res.redirect("/dashboard/professor/p_gere_curso/" + cursoId);
   } catch (err) {
-    console.error('Erro ao atualizar curso:', err);
-    req.flash('error', 'Erro ao atualizar curso!');
-    res.redirect('/dashboard/professor/p_gere_curso/' + req.params.id);
+    console.error("Erro ao atualizar curso:", err);
+    req.flash("error", "Erro ao atualizar curso!");
+    res.redirect("/dashboard/professor/p_gere_curso/" + req.params.id);
   }
 };
 
@@ -159,43 +208,42 @@ exports.getCursoById = async (req, res) => {
       [cursoId]
     );
     if (!rows || rows.length === 0) {
-      req.flash('error', 'Curso não encontrado!');
-      return res.redirect('/dashboard/professor/p-curso_prof');
+      req.flash("error", "Curso não encontrado!");
+      return res.redirect("/dashboard/professor/p-curso_prof");
     }
-    
+
     const curso = rows[0];
-    
+
     // Busca todas as categorias disponíveis
     const [categorias] = await db.query(
-      'SELECT * FROM CATEGORIAS ORDER BY NOME'
+      "SELECT * FROM CATEGORIAS ORDER BY NOME"
     );
-    
+
     // Buscar módulos do curso
     const [modulos] = await db.query(
       `SELECT * FROM MODULO WHERE ID_CURSO = ?`,
       [cursoId]
     );
-    
+
     // Buscar aulas de cada módulo
     for (let modulo of modulos) {
-      const [aulas] = await db.query(
-        `SELECT * FROM AULA WHERE ID_MODULO = ?`,
-        [modulo.ID_MODULO]
-      );
+      const [aulas] = await db.query(`SELECT * FROM AULA WHERE ID_MODULO = ?`, [
+        modulo.ID_MODULO,
+      ]);
       modulo.aulas = aulas;
     }
-    
-    res.render('dashboard/professor/p_gere_curso', {
+
+    res.render("dashboard/professor/p_gere_curso", {
       user: req.user,
       curso,
       categorias,
       modulos: modulos || [],
-      title: 'Editar Curso'
+      title: "Editar Curso",
     });
   } catch (err) {
-    console.error('Erro ao buscar curso:', err);
-    req.flash('error', 'Erro ao buscar curso!');
-    res.redirect('/dashboard/professor/p-curso_prof');
+    console.error("Erro ao buscar curso:", err);
+    req.flash("error", "Erro ao buscar curso!");
+    res.redirect("/dashboard/professor/p-curso_prof");
   }
 };
 
@@ -204,17 +252,20 @@ exports.excluirCurso = async (req, res) => {
   try {
     const cursoId = req.params.id;
     // Remove todas as aulas dos módulos deste curso
-    await db.query('DELETE FROM AULA WHERE ID_MODULO IN (SELECT ID_MODULO FROM MODULO WHERE ID_CURSO = ?)', [cursoId]);
+    await db.query(
+      "DELETE FROM AULA WHERE ID_MODULO IN (SELECT ID_MODULO FROM MODULO WHERE ID_CURSO = ?)",
+      [cursoId]
+    );
     // Remove todos os módulos do curso
-    await db.query('DELETE FROM MODULO WHERE ID_CURSO = ?', [cursoId]);
+    await db.query("DELETE FROM MODULO WHERE ID_CURSO = ?", [cursoId]);
     // Remove o curso
-    await db.query('DELETE FROM CURSOS WHERE ID_CURSO = ?', [cursoId]);
-    req.flash('success', 'Curso excluído com sucesso!');
-    res.redirect('/dashboard/professor/p-curso_prof');
+    await db.query("DELETE FROM CURSOS WHERE ID_CURSO = ?", [cursoId]);
+    req.flash("success", "Curso excluído com sucesso!");
+    res.redirect("/dashboard/professor/p-curso_prof");
   } catch (err) {
-    console.error('Erro ao excluir curso:', err);
-    req.flash('error', 'Erro ao excluir curso!');
-    res.redirect('/dashboard/professor/p_gere_curso/' + req.params.id);
+    console.error("Erro ao excluir curso:", err);
+    req.flash("error", "Erro ao excluir curso!");
+    res.redirect("/dashboard/professor/p_gere_curso/" + req.params.id);
   }
 };
 
@@ -225,24 +276,24 @@ exports.criarModulo = async (req, res) => {
     // ID_CURSO pode vir via query ou session, ajuste conforme fluxo real
     const cursoId = req.query.cursoId || req.body.cursoId;
     if (!titulo || !descricao) {
-      req.flash('error', 'Preencha todos os campos obrigatórios!');
-      return res.redirect('/dashboard/professor/p-modulo');
+      req.flash("error", "Preencha todos os campos obrigatórios!");
+      return res.redirect("/dashboard/professor/p-modulo");
     }
     if (!cursoId) {
-      req.flash('error', 'Curso não identificado!');
-      return res.redirect('/dashboard/professor/p-curso_prof');
+      req.flash("error", "Curso não identificado!");
+      return res.redirect("/dashboard/professor/p-curso_prof");
     }
     const [result] = await db.query(
-      'INSERT INTO MODULO (TITULO, DESCRICAO, ID_CURSO) VALUES (?, ?, ?)',
+      "INSERT INTO MODULO (TITULO, DESCRICAO, ID_CURSO) VALUES (?, ?, ?)",
       [titulo, descricao, cursoId]
     );
     const moduloId = result.insertId;
-    req.flash('success', 'Módulo criado com sucesso!');
+    req.flash("success", "Módulo criado com sucesso!");
     res.redirect(`/dashboard/professor/p-criar_aula?moduloId=${moduloId}`);
   } catch (err) {
-    console.error('Erro ao criar módulo:', err);
-    req.flash('error', 'Erro ao criar módulo!');
-    res.redirect('/dashboard/professor/p-modulo');
+    console.error("Erro ao criar módulo:", err);
+    req.flash("error", "Erro ao criar módulo!");
+    res.redirect("/dashboard/professor/p-modulo");
   }
 };
 // Atualização completa de curso, módulos e aulas, incluindo exclusão
@@ -250,18 +301,22 @@ exports.atualizarCursoCompleto = async (req, res) => {
   const idCurso = req.params.id;
   // Parse dos campos recebidos do form (recomendado)
   let curso = req.body.curso;
-  if (typeof curso === 'string') {
-    try { curso = JSON.parse(curso); } catch(e) { curso = {}; }
+  if (typeof curso === "string") {
+    try {
+      curso = JSON.parse(curso);
+    } catch (e) {
+      curso = {};
+    }
   }
   let modulos = [];
   let modulosExcluidos = [];
   let aulasExcluidas = [];
   try {
-    modulos = JSON.parse(req.body.modulos || '[]');
-    modulosExcluidos = JSON.parse(req.body.modulosExcluidos || '[]');
-    aulasExcluidas = JSON.parse(req.body.aulasExcluidas || '[]');
+    modulos = JSON.parse(req.body.modulos || "[]");
+    modulosExcluidos = JSON.parse(req.body.modulosExcluidos || "[]");
+    aulasExcluidas = JSON.parse(req.body.aulasExcluidas || "[]");
   } catch (e) {
-    return res.status(400).send('Erro ao processar dados do formulário');
+    return res.status(400).send("Erro ao processar dados do formulário");
   }
   const conn = db;
   const connection = await conn.getConnection();
@@ -269,24 +324,30 @@ exports.atualizarCursoCompleto = async (req, res) => {
     await connection.beginTransaction();
     // Atualiza curso
     await connection.query(
-      'UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, PRECO = ?, OBJETIVOS = ? WHERE ID_CURSO = ?',
+      "UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, PRECO = ?, OBJETIVOS = ? WHERE ID_CURSO = ?",
       [curso.TITULO, curso.DESCRICAO, curso.PRECO, curso.OBJETIVOS, idCurso]
     );
     // Exclui aulas
     if (aulasExcluidas.length > 0) {
       await connection.query(
-        `DELETE FROM AULA WHERE ID_AULA IN (${aulasExcluidas.map(() => '?').join(',')})`,
+        `DELETE FROM AULA WHERE ID_AULA IN (${aulasExcluidas
+          .map(() => "?")
+          .join(",")})`,
         aulasExcluidas
       );
     }
     // Exclui módulos e suas aulas
     if (modulosExcluidos.length > 0) {
       await connection.query(
-        `DELETE FROM AULA WHERE ID_MODULO IN (${modulosExcluidos.map(() => '?').join(',')})`,
+        `DELETE FROM AULA WHERE ID_MODULO IN (${modulosExcluidos
+          .map(() => "?")
+          .join(",")})`,
         modulosExcluidos
       );
       await connection.query(
-        `DELETE FROM MODULO WHERE ID_MODULO IN (${modulosExcluidos.map(() => '?').join(',')})`,
+        `DELETE FROM MODULO WHERE ID_MODULO IN (${modulosExcluidos
+          .map(() => "?")
+          .join(",")})`,
         modulosExcluidos
       );
     }
@@ -294,17 +355,17 @@ exports.atualizarCursoCompleto = async (req, res) => {
     for (const modulo of modulos) {
       if (modulo.ID_MODULO) {
         await connection.query(
-          'UPDATE MODULO SET TITULO = ?, DESCRICAO = ?, ORDEM = ? WHERE ID_MODULO = ?',
+          "UPDATE MODULO SET TITULO = ?, DESCRICAO = ?, ORDEM = ? WHERE ID_MODULO = ?",
           [modulo.TITULO, modulo.DESCRICAO, modulo.ORDEM, modulo.ID_MODULO]
         );
       } else {
         const [result] = await connection.query(
-          'INSERT INTO MODULO (ID_CURSO, TITULO, DESCRICAO, ORDEM) VALUES (?, ?, ?, ?)',
+          "INSERT INTO MODULO (ID_CURSO, TITULO, DESCRICAO, ORDEM) VALUES (?, ?, ?, ?)",
           [idCurso, modulo.TITULO, modulo.DESCRICAO, modulo.ORDEM]
         );
         modulo.ID_MODULO = result.insertId;
       }
-      for (const aula of (modulo.aulas || [])) {
+      for (const aula of modulo.aulas || []) {
         if (aula.ID_AULA) {
           await connection.query(
             `UPDATE AULA SET 
@@ -314,21 +375,21 @@ exports.atualizarCursoCompleto = async (req, res) => {
               ORDEM = ?,
               TIPO_CONTEUDO = ?,
               VIDEO_URL = ?
-              ${aula.ARQUIVO ? ', ARQUIVO = ?' : ''}
-              ${aula.TAMANHO_ARQUIVO ? ', TAMANHO_ARQUIVO = ?' : ''}
-              ${aula.TIPO_ARQUIVO ? ', TIPO_ARQUIVO = ?' : ''}
+              ${aula.ARQUIVO ? ", ARQUIVO = ?" : ""}
+              ${aula.TAMANHO_ARQUIVO ? ", TAMANHO_ARQUIVO = ?" : ""}
+              ${aula.TIPO_ARQUIVO ? ", TIPO_ARQUIVO = ?" : ""}
               WHERE ID_AULA = ?`,
             [
-              aula.titulo || aula.TITULO || '',
-              aula.descricao || aula.DESCRICAO || '',
-              aula.duracao || aula.DURACAO || '00:00:00',
+              aula.titulo || aula.TITULO || "",
+              aula.descricao || aula.DESCRICAO || "",
+              aula.duracao || aula.DURACAO || "00:00:00",
               aula.ordem || aula.ORDEM || 1,
-              aula.tipo_conteudo || 'video',
-              aula.video_url || '',
+              aula.tipo_conteudo || "video",
+              aula.video_url || "",
               ...(aula.ARQUIVO ? [aula.ARQUIVO] : []),
               ...(aula.TAMANHO_ARQUIVO ? [aula.TAMANHO_ARQUIVO] : []),
               ...(aula.TIPO_ARQUIVO ? [aula.TIPO_ARQUIVO] : []),
-              aula.ID_AULA
+              aula.ID_AULA,
             ].filter(Boolean)
           );
         } else {
@@ -341,25 +402,25 @@ exports.atualizarCursoCompleto = async (req, res) => {
               ORDEM,
               TIPO_CONTEUDO,
               VIDEO_URL
-              ${aula.ARQUIVO ? ', ARQUIVO' : ''}
-              ${aula.TAMANHO_ARQUIVO ? ', TAMANHO_ARQUIVO' : ''}
-              ${aula.TIPO_ARQUIVO ? ', TIPO_ARQUIVO' : ''}
+              ${aula.ARQUIVO ? ", ARQUIVO" : ""}
+              ${aula.TAMANHO_ARQUIVO ? ", TAMANHO_ARQUIVO" : ""}
+              ${aula.TIPO_ARQUIVO ? ", TIPO_ARQUIVO" : ""}
             ) VALUES (?, ?, ?, ?, ?, ?, ?
-              ${aula.ARQUIVO ? ', ?' : ''}
-              ${aula.TAMANHO_ARQUIVO ? ', ?' : ''}
-              ${aula.TIPO_ARQUIVO ? ', ?' : ''}
+              ${aula.ARQUIVO ? ", ?" : ""}
+              ${aula.TAMANHO_ARQUIVO ? ", ?" : ""}
+              ${aula.TIPO_ARQUIVO ? ", ?" : ""}
             )`,
             [
               modulo.ID_MODULO,
-              aula.titulo || '',
-              aula.descricao || '',
-              aula.duracao || '00:00:00',
+              aula.titulo || "",
+              aula.descricao || "",
+              aula.duracao || "00:00:00",
               aula.ordem || 1,
-              aula.tipo_conteudo || 'video',
-              aula.video_url || '',
+              aula.tipo_conteudo || "video",
+              aula.video_url || "",
               ...(aula.ARQUIVO ? [aula.ARQUIVO] : []),
               ...(aula.TAMANHO_ARQUIVO ? [aula.TAMANHO_ARQUIVO] : []),
-              ...(aula.TIPO_ARQUIVO ? [aula.TIPO_ARQUIVO] : [])
+              ...(aula.TIPO_ARQUIVO ? [aula.TIPO_ARQUIVO] : []),
             ].filter(Boolean)
           );
           aula.ID_AULA = result.insertId;
@@ -367,13 +428,13 @@ exports.atualizarCursoCompleto = async (req, res) => {
       }
     }
     await connection.commit();
-    req.flash('success', 'Curso atualizado com sucesso!');
-    res.redirect('/dashboard/professor/p_gere_curso/' + idCurso);
+    req.flash("success", "Curso atualizado com sucesso!");
+    res.redirect("/dashboard/professor/p_gere_curso/" + idCurso);
   } catch (err) {
     await connection.rollback();
     console.error(err);
-    req.flash('error', 'Erro ao atualizar curso!');
-    res.redirect('/dashboard/professor/p_gere_curso/' + idCurso);
+    req.flash("error", "Erro ao atualizar curso!");
+    res.redirect("/dashboard/professor/p_gere_curso/" + idCurso);
   } finally {
     connection.release();
   }

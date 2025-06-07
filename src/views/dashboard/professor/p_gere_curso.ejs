@@ -411,7 +411,7 @@
             <h5 class="modal-title" id="aulaModalLabel">Nova Aula</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
           </div>
-          <form id="aulaForm" onsubmit="event.preventDefault(); CursoManager.saveAulaFromModal();">
+          <form id="aulaForm" onsubmit="CursoManager.saveAulaFromModal(event);">
             <div class="modal-body">
               <div class="mb-3">
                 <label for="titulo" class="form-label">Título da Aula <span class="text-danger">*</span></label>

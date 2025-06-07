@@ -21,14 +21,14 @@ const CursoManager = {
       moduloDiv.className = 'modulo-bloco';
       moduloDiv.innerHTML = `
         <div class="modulo-header">
-          <h3>Módulo ${i + 1}: ${modulo.titulo || 'Sem título'}</h3>
+          <h3>Módulo ${i + 1}: ${modulo.TITULO || modulo.titulo || 'Sem título'}</h3>
           <div class="modulo-actions">
             <button type="button" class="btn btn-sm btn-outline-primary" 
-                    onclick="CursoManager.openAulaModal(${i})">
+                    onclick="event.stopPropagation(); CursoManager.addAula(${i}, event)">
               <i class="fas fa-plus"></i> Adicionar Aula
             </button>
             <button type="button" class="btn btn-sm btn-outline-danger" 
-                    onclick="CursoManager.removeModulo(${i})">
+                    onclick="event.stopPropagation(); CursoManager.removeModulo(${i})">
               <i class="fas fa-trash"></i> Remover
             </button>
           </div>
@@ -38,7 +38,7 @@ const CursoManager = {
             <label for="modulo-titulo-${i}">Título do Módulo</label>
             <input id="modulo-titulo-${i}" type="text" class="form-control" 
                    placeholder="Título do módulo" 
-                   value="${modulo.titulo || ''}" 
+                   value="${modulo.TITULO || modulo.titulo || ''}" 
                    onchange="CursoManager.updateModuloTitulo(${i}, this.value)" required />
           </div>
           <div class="form-group">
@@ -46,7 +46,7 @@ const CursoManager = {
             <textarea id="modulo-desc-${i}" class="form-control" 
                       placeholder="Descrição do módulo" 
                       onchange="CursoManager.updateModuloDescricao(${i}, this.value)" 
-                      rows="3">${modulo.descricao || ''}</textarea>
+                      rows="3">${modulo.DESCRICAO || modulo.descricao || ''}</textarea>
           </div>
           
           <div class="aulas">
@@ -54,25 +54,30 @@ const CursoManager = {
             ${(modulo.aulas || []).length > 0 ? `
               <div class="list-group">
                 ${(modulo.aulas || []).map((aula, j) => `
-                  <div class="list-group-item">
+                  <div class="list-group-item" onclick="CursoManager.openAulaModal(${i}, ${j})">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">${aula.TITULO || aula.titulo || 'Aula sem título'}</h6>
+                      <small>${aula.DURACAO || aula.duracao || '00:10:00'}</small>
+                    </div>
+                    <p class="mb-1">${aula.DESCRICAO || aula.descricao || 'Sem descrição'}</p>
                     <div class="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h6 class="mb-1">${aula.titulo || 'Aula sem título'}</h6>
-                        <small class="text-muted">
-                          ${aula.tipo_conteudo === 'video' ? '🎥 Vídeo' : '📝 Texto'} 
-                          ${aula.duracao ? `• ${aula.duracao}` : ''}
-                        </small>
-                      </div>
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-outline-primary" 
-                                onclick="CursoManager.openAulaModal(${i}, ${j}); event.stopPropagation();">
-                          <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-danger" 
-                                onclick="CursoManager.removeAula(${i}, ${j}); event.stopPropagation();">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
+                      <small class="text-muted">
+                        ${aula.TIPO_CONTEUDO === 'video' ? 
+                          (aula.VIDEO_URL ? 
+                            '<i class="fas fa-link"></i> Vídeo externo' : 
+                            (aula.ARQUIVO ? 
+                              '<i class="fas fa-file-video"></i> ' + aula.ARQUIVO : 
+                              '<i class="fas fa-video"></i> Sem mídia'
+                            )
+                          ) : 
+                          '<i class="fas fa-file-alt"></i> Texto'
+                        }
+                      </small>
+                      <button type="button" class="btn btn-sm btn-outline-danger" 
+                              onclick="event.stopPropagation(); CursoManager.removeAula(${i}, ${j})">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
                     </div>
                   </div>
                 `).join('')}
@@ -121,93 +126,120 @@ const CursoManager = {
     }
   },
   
-  addAula(moduloIndex) {
-    if (this.modulos[moduloIndex]) {
-      this.modulos[moduloIndex].aulas = this.modulos[moduloIndex].aulas || [];
-      this.modulos[moduloIndex].aulas.push({
-        titulo: '',
-        descricao: '',
-        tipo_conteudo: 'video',
-        video_url: '',
-        duracao: '00:10:00',
-        ordem: (this.modulos[moduloIndex].aulas.length + 1),
-        ID_AULA: null
-      });
-      this.renderModulos();
-      this.showNotify('success', 'Aula adicionada!');
-    }
+  addAula(moduloIndex, event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.openAulaModal(moduloIndex, null, event);
   },
   
   // Abre o modal de adicionar/editar aula
-  openAulaModal(moduloIndex, aulaIndex = null) {
-    const modal = document.getElementById('aulaModal');
+  openAulaModal(moduloIndex, aulaIndex = null, event = null) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    const modalElement = document.getElementById('aulaModal');
+    if (!modalElement) {
+      console.error('Elemento do modal não encontrado');
+      return;
+    }
+    
     const form = document.getElementById('aulaForm');
-    const modalTitle = document.getElementById('aulaModalLabel');
+    if (!form) {
+      console.error('Formulário não encontrado');
+      return;
+    }
+    
+    // Inicializa o modal do Bootstrap
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Limpa o formulário
+    form.reset();
+    
+    // Define o índice do módulo no formulário
+    form.dataset.moduloIndex = moduloIndex;
     
     // Se for edição, preenche os campos
     if (aulaIndex !== null && this.modulos[moduloIndex]?.aulas?.[aulaIndex]) {
       const aula = this.modulos[moduloIndex].aulas[aulaIndex];
-      modalTitle.textContent = 'Editar Aula';
-      form.elements['titulo'].value = aula.titulo || '';
-      form.elements['descricao'].value = aula.descricao || '';
-      form.elements['tipo_conteudo'].value = aula.tipo_conteudo || 'video';
-      form.elements['video_url'].value = aula.video_url || '';
-      form.elements['duracao'].value = aula.duracao || '00:10:00';
-      form.elements['ordem'].value = aula.ordem || (this.modulos[moduloIndex].aulas.length + 1);
-      form.dataset.moduloIndex = moduloIndex;
       form.dataset.aulaIndex = aulaIndex;
       
-      // Atualiza a visualização do tipo de conteúdo
+      // Preenche os campos do formulário (suporta tanto maiúsculas quanto minúsculas)
+      form.querySelector('[name="titulo"]').value = aula.TITULO || aula.titulo || '';
+      form.querySelector('[name="descricao"]').value = aula.DESCRICAO || aula.descricao || '';
+      
+      const tipoConteudo = aula.TIPO_CONTEUDO || aula.tipo_conteudo || 'video';
+      form.querySelector('[name="tipo_conteudo"]').value = tipoConteudo;
+      
+      form.querySelector('[name="video_url"]').value = aula.VIDEO_URL || aula.video_url || '';
+      form.querySelector('[name="duracao"]').value = aula.DURACAO || aula.duracao || '00:10:00';
+      
+      // Define a ordem, garantindo que seja um número válido
+      const ordem = aula.ORDEM || aula.ordem || (this.modulos[moduloIndex].aulas ? this.modulos[moduloIndex].aulas.length + 1 : 1);
+      form.querySelector('[name="ordem"]').value = ordem;
+      
+      // Atualiza a visibilidade dos campos de vídeo
       this.toggleVideoFields();
     } else {
       // Nova aula
-      modalTitle.textContent = 'Nova Aula';
-      form.reset();
-      form.elements['tipo_conteudo'].value = 'video';
-      form.elements['duracao'].value = '00:10:00';
-      form.elements['ordem'].value = this.modulos[moduloIndex]?.aulas?.length + 1 || 1;
-      form.dataset.moduloIndex = moduloIndex;
       form.dataset.aulaIndex = '';
       
-      // Atualiza a visualização do tipo de conteúdo
+      // Define a ordem como próxima disponível
+      const ordem = this.modulos[moduloIndex]?.aulas ? this.modulos[moduloIndex].aulas.length + 1 : 1;
+      form.querySelector('[name="ordem"]').value = ordem;
+      
+      // Define valores padrão para novas aulas
+      form.querySelector('[name="tipo_conteudo"]').value = 'video';
+      form.querySelector('[name="duracao"]').value = '00:10:00';
+      
+      // Atualiza a visibilidade dos campos de vídeo
       this.toggleVideoFields();
     }
     
-    // Mostra o modal
-    new bootstrap.Modal(modal).show();
+    // Exibe o modal
+    modal.show();
   },
   
   // Salva os dados da aula do modal
-  saveAulaFromModal() {
+  saveAulaFromModal(event) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+    
     const form = document.getElementById('aulaForm');
+    if (!form) {
+      console.error('Formulário não encontrado');
+      return false;
+    }
+    
     const moduloIndex = parseInt(form.dataset.moduloIndex);
     const aulaIndex = form.dataset.aulaIndex !== '' ? parseInt(form.dataset.aulaIndex) : null;
     const fileInput = document.getElementById('video_arquivo');
     
-    if (moduloIndex === undefined || isNaN(moduloIndex)) {
+    if (isNaN(moduloIndex) || moduloIndex < 0) {
       this.showNotify('error', 'Erro ao identificar o módulo da aula.');
-      return;
+      return false;
     }
     
     const formData = new FormData(form);
     const aulaData = {
-      titulo: formData.get('titulo') || '',
-      descricao: formData.get('descricao') || '',
-      tipo_conteudo: formData.get('tipo_conteudo') || 'video',
-      video_url: formData.get('video_url') || '',
-      duracao: formData.get('duracao') || '00:10:00',
-      ordem: parseInt(formData.get('ordem')) || 1,
+      TITULO: formData.get('titulo') || '',
+      DESCRICAO: formData.get('descricao') || '',
+      TIPO_CONTEUDO: formData.get('tipo_conteudo') || 'video',
+      VIDEO_URL: formData.get('video_url') || '',
+      DURACAO: formData.get('duracao') || '00:10:00',
+      ORDEM: parseInt(formData.get('ordem')) || 1,
       ID_AULA: null
     };
     
     // Validação básica
-    if (!aulaData.titulo) {
+    if (!aulaData.TITULO) {
       this.showNotify('error', 'O título da aula é obrigatório.');
+      this.highlightInvalidField('#titulo');
       return false;
     }
     
     // Verifica se há um arquivo para upload
-    if (fileInput.files.length > 0) {
+    if (fileInput && fileInput.files.length > 0) {
       const file = fileInput.files[0];
       if (file.size > 500 * 1024 * 1024) { // 500MB
         this.showNotify('error', 'O arquivo é muito grande. O tamanho máximo permitido é 500MB.');
@@ -219,8 +251,7 @@ const CursoManager = {
       aulaData.TAMANHO_ARQUIVO = file.size;
       aulaData.TIPO_ARQUIVO = file.type;
       
-      // Aqui você pode adicionar o upload do arquivo para o servidor
-      // Por enquanto, apenas simulamos que o arquivo foi salvo
+      // Mostra mensagem de upload
       this.showNotify('info', 'Fazendo upload do arquivo...');
       
       // Simulando upload (substitua por chamada real para o servidor)
@@ -229,7 +260,7 @@ const CursoManager = {
       }, 1000);
       
       return true;
-    } else if (aulaData.tipo_conteudo === 'video' && !aulaData.video_url) {
+    } else if (aulaData.TIPO_CONTEUDO === 'video' && !aulaData.VIDEO_URL) {
       this.showNotify('error', 'Para conteúdo de vídeo, é necessário informar uma URL ou enviar um arquivo.');
       return false;
     } else {
@@ -240,41 +271,77 @@ const CursoManager = {
   
   // Finaliza o salvamento da aula após o upload do arquivo (se houver)
   finalizarSalvamentoAula(moduloIndex, aulaIndex, aulaData) {
-    // Atualiza ou adiciona a aula
-    if (aulaIndex !== null && !isNaN(aulaIndex) && this.modulos[moduloIndex]?.aulas?.[aulaIndex]) {
-      // Mantém o ID se estiver editando
-      aulaData.ID_AULA = this.modulos[moduloIndex].aulas[aulaIndex].ID_AULA;
-      this.modulos[moduloIndex].aulas[aulaIndex] = { ...this.modulos[moduloIndex].aulas[aulaIndex], ...aulaData };
-    } else {
-      // Adiciona nova aula
-      this.modulos[moduloIndex].aulas = this.modulos[moduloIndex].aulas || [];
-      this.modulos[moduloIndex].aulas.push(aulaData);
+    try {
+      // Garante que o módulo existe
+      if (!this.modulos[moduloIndex]) {
+        console.error('Módulo não encontrado no índice:', moduloIndex);
+        this.showNotify('error', 'Erro ao salvar a aula: módulo não encontrado.');
+        return false;
+      }
+      
+      // Inicializa o array de aulas se não existir
+      if (!Array.isArray(this.modulos[moduloIndex].aulas)) {
+        this.modulos[moduloIndex].aulas = [];
+      }
+      
+      // Atualiza ou adiciona a aula
+      if (aulaIndex !== null && !isNaN(aulaIndex) && this.modulos[moduloIndex].aulas[aulaIndex]) {
+        // Mantém o ID se estiver editando
+        aulaData.ID_AULA = this.modulos[moduloIndex].aulas[aulaIndex].ID_AULA;
+        this.modulos[moduloIndex].aulas[aulaIndex] = { 
+          ...this.modulos[moduloIndex].aulas[aulaIndex], 
+          ...aulaData 
+        };
+        this.showNotify('success', 'Aula atualizada com sucesso!');
+      } else {
+        // Adiciona uma nova aula
+        const newAula = {
+          ...aulaData,
+          ID_AULA: 'aula-' + Date.now() // ID temporário
+        };
+        this.modulos[moduloIndex].aulas.push(newAula);
+        this.showNotify('success', 'Aula adicionada com sucesso!');
+      }
+      
+      // Ordena as aulas pela ordem
+      this.modulos[moduloIndex].aulas.sort((a, b) => (a.ORDEM || 0) - (b.ORDEM || 0));
+      
+      // Atualiza a exibição dos módulos
+      this.renderModulos();
+      
+      // Fecha o modal
+      const modalElement = document.getElementById('aulaModal');
+      if (modalElement) {
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+          modal.hide();
+        }
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Erro ao salvar aula:', error);
+      this.showNotify('error', 'Ocorreu um erro ao salvar a aula. Por favor, tente novamente.');
+      return false;
     }
-    
-    // Reorganiza as aulas pela ordem
-    this.modulos[moduloIndex].aulas.sort((a, b) => a.ordem - b.ordem);
-    
-    // Atualiza a interface
-    this.renderModulos();
-    
-    // Fecha o modal
-    const modal = bootstrap.Modal.getInstance(document.getElementById('aulaModal'));
-    if (modal) modal.hide();
-    
-    this.showNotify('success', 'Aula salva com sucesso!');
-    return true;
   },
   
   // Alterna a visibilidade dos campos de vídeo
   toggleVideoFields() {
-    const tipoConteudo = document.querySelector('#aulaForm select[name="tipo_conteudo"]');
-    const videoUrlGroup = document.querySelector('#videoUrlGroup');
+    const form = document.getElementById('aulaForm');
+    if (!form) return;
     
-    if (tipoConteudo && videoUrlGroup) {
+    const tipoConteudo = form.querySelector('select[name="tipo_conteudo"]');
+    const videoUrlGroup = form.querySelector('#videoUrlGroup');
+    const videoArquivoGroup = form.querySelector('#videoArquivoGroup');
+    
+    if (tipoConteudo && videoUrlGroup && videoArquivoGroup) {
       if (tipoConteudo.value === 'video') {
         videoUrlGroup.style.display = 'block';
+        videoArquivoGroup.style.display = 'block';
       } else {
         videoUrlGroup.style.display = 'none';
+        videoArquivoGroup.style.display = 'none';
       }
     }
   },
@@ -354,22 +421,47 @@ const CursoManager = {
   },
   
   initForm() {
+    // Inicializa os tooltips do Bootstrap
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Adiciona evento de submit ao formulário
     const form = document.querySelector('form');
     if (form) {
       form.onsubmit = (e) => {
-        e.preventDefault();
+        // Converte os módulos para JSON e define no campo oculto
+        const modulosParaEnviar = this.modulos.map(modulo => ({
+          ...modulo,
+          // Garante que as aulas tenham todos os campos necessários
+          aulas: (modulo.aulas || []).map(aula => ({
+            ID_AULA: aula.ID_AULA || null,
+            titulo: aula.titulo || '',
+            descricao: aula.descricao || '',
+            tipo_conteudo: aula.tipo_conteudo || 'video',
+            video_url: aula.video_url || '',
+            duracao: aula.duracao || '00:10:00',
+            ordem: aula.ordem || 1,
+            ARQUIVO: aula.ARQUIVO || null,
+            TAMANHO_ARQUIVO: aula.TAMANHO_ARQUIVO || null,
+            TIPO_ARQUIVO: aula.TIPO_ARQUIVO || null
+          }))
+        }));
         
+        document.getElementById('modulos-json').value = JSON.stringify(modulosParaEnviar);
+        
+        // Adiciona os IDs dos módulos e aulas excluídos
+        document.getElementById('modulosExcluidos-json').value = JSON.stringify(window.modulosExcluidos || []);
+        document.getElementById('aulasExcluidas-json').value = JSON.stringify(window.aulasExcluidas || []);
+        
+        // Validação do formulário
         if (!this.validateForm()) {
-          this.showNotify('error', 'Preencha todos os campos obrigatórios de módulos e aulas!');
+          e.preventDefault();
           return false;
         }
         
-        const modulosInput = document.createElement('input');
-        modulosInput.type = 'hidden';
-        modulosInput.name = 'modulos';
-        modulosInput.value = JSON.stringify(this.modulos);
-        form.appendChild(modulosInput);
-        form.submit();
+        return true;
       };
     }
   }
