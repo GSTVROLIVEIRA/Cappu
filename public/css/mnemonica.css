@@ -36,17 +36,11 @@ h2 {
   color: var(--primary-color);
 }
 
-.container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1em;
-    margin: 3em 10em 0em 10em;
-}
-
 .form-mnemonica {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1em;
+  margin: 3em 10em 0em 10em;
 }
 
 .info-resumo {

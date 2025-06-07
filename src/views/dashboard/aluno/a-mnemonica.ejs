@@ -33,7 +33,6 @@
   </header>
 
   <main class="container">
-    <section class="mnemonica">
       <form action="<%= mnemonica ? `/aluno/a-mnemonica/${mnemonica.COD_MNEMONICA}` : '/aluno/a-mnemonica' %>"
       method="POST" class="form-mnemonica" enctype="multipart/form-data">
         <section class="controlador">
@@ -57,24 +56,25 @@
             </button>
           </section>
         </section>
-      <label class="upload-area">
-        <span class="upload-text">SELECIONAR IMAGEM ASSOCIADA</span>
-        <img src="/images/upload-mnemonica.svg" class="upload-icon">
-        <input type="file" accept="image/*" hidden id="fileInput" name="imagem">
-        <img class="preview-img" src="" alt="Preview da imagem" style="display: none;">
-        <% if (mnemonica && mnemonica.IMAGEM) { %>
-          <img src="/aluno/mnemonica-imagem/<%= mnemonica.COD_MNEMONICA %>" alt="Imagem atual" style="max-width: 150px; margin-top: 10px;" />
-        <% } %>
-      </label>
-      <section class="organizacao-caixa">
-        <section class="caixa-texto">
-          <textarea id="texto_mnemonica" name="texto_mnemonica" rows="15" cols="90"
-            placeholder="Escreva a sua mnemônica aqui..."
-            required><%= mnemonica ? mnemonica.TEXTO_MNEMONICA : '' %></textarea>
-        </section>
+        <section>
+          <label class="upload-area">
+            <span class="upload-text">SELECIONAR IMAGEM ASSOCIADA</span>
+            <img src="/images/upload-mnemonica.svg" class="upload-icon">
+            <input type="file" accept="image/*" hidden id="fileInput" name="imagem">
+            <img class="preview-img" src="" alt="Preview da imagem" style="display: none;">
+            <% if (mnemonica && mnemonica.IMAGEM) { %>
+              <img src="/aluno/mnemonica-imagem/<%= mnemonica.COD_MNEMONICA %>" alt="Imagem atual" style="max-width: 150px; margin-top: 10px;" />
+            <% } %>
+          </label>
+          <section class="organizacao-caixa">
+            <section class="caixa-texto">
+              <textarea id="texto_mnemonica" name="texto_mnemonica" rows="15" cols="90"
+                placeholder="Escreva a sua mnemônica aqui..."
+                required><%= mnemonica ? mnemonica.TEXTO_MNEMONICA : '' %></textarea>
+            </section>
+          </section>
       </section>
       </form>
-    </section>
   </main>
   <script src="/js/icon-menu.js"></script>
   <script>
