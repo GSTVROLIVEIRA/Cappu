@@ -30,20 +30,24 @@
     </header>
     
     <main>
-        <h1>Título da Mnemônica</h1>
-        <h2>Categoria</h2>
+        <h1><%= mnemonica ? mnemonica.TITULO : 'Mnemônica não encontrada' %></h1>
+        <h2><%= mnemonica ? mnemonica.CATEGORIA : '' %></h2>
 
         <section class="conteudo">
             <section class="blank-box">
-                <p>   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
-                </p>
+                <div style="white-space: pre-line; font-size: 1.1em; color: #222;">
+  <%= mnemonica ? mnemonica.TEXTO_MNEMONICA : '' %>
+</div>
             </section>
-
-            <section class="gray-box">
-                <img src="ex-photo.svg" alt="Foto de exemplo">
-            </section>
+            <% if (mnemonica && mnemonica.IMAGEM) { %>
+  <section class="gray-box">
+    <img src="/aluno/mnemonica-imagem/<%= mnemonica.COD_MNEMONICA %>?v=<%= Date.now() %>" alt="Imagem da Mnemônica" style="max-width: 350px; border-radius: 8px;" />
+  </section>
+<% } else { %>
+  <section class="gray-box" style="text-align:center; color: #888; padding: 2em 0;">
+    <span>Nenhuma imagem enviada para esta mnemônica.</span>
+  </section>
+<% } %>
         </section>
         
     </main>
