@@ -44,10 +44,21 @@ router.post("/excluir-conta", async (req, res) => {
         return res.redirect('/aluno/a-config');
     }
     console.log('Tentando excluir usuário:', req.user.ID_USUARIO);
+    // Deleta dependências em FEYNMAN
+    await db.query('DELETE FROM FEYNMAN WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
     // Deleta dependências em QUEST_ANALISE
     await db.query('DELETE FROM QUEST_ANALISE WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
     // Deleta dependências em ANALISE_APRENDIZAGEM
     await db.query('DELETE FROM ANALISE_APRENDIZAGEM WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    // Deleta dependências em MNEMONICAS
+    await db.query('DELETE FROM MNEMONICAS WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    // Deleta dependências em RESUMOS
+    await db.query('DELETE FROM RESUMOS WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+
+
+
+    // Deleta dependências em FOTO_PERFIL (seta NULL)
+    await db.query('UPDATE USUARIO SET FOTO_PERFIL = NULL WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
     // Deleta o usuário do banco
     const [result] = await db.query('DELETE FROM USUARIO WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
     console.log('Resultado da exclusão:', result);
@@ -398,20 +409,132 @@ router.get('/mnemonica-imagem/:id', async (req, res) => {
 router.get("/a-feynman", (req, res) => {
   res.render("dashboard/aluno/a-feynman", {
     user: req.user,
+    feynman: null, // Corrige ReferenceError no EJS
     title: "Feynman",
     timestamp: Date.now()
   });
 });
 
+// Visualizar Feynman específico
+router.get('/a-page-feynman/:id', async (req, res) => {
+  if (!req.user || !req.user.ID_USUARIO) {
+    req.flash('error', 'Usuário não autenticado.');
+    return res.redirect('/auth/cl-login');
+  }
+  try {
+    const [rows] = await db.query('SELECT * FROM FEYNMAN WHERE COD_FEYNMAN = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+    if (rows.length === 0) {
+      req.flash('error', 'Feynman não encontrado.');
+      return res.redirect('/aluno/a-bd_feynman');
+    }
+    res.render('dashboard/aluno/a-page-feynman', {
+      user: req.user,
+      feynman: rows[0],
+      title: 'Página do Feynman',
+      timestamp: Date.now()
+    });
+  } catch (err) {
+    console.error("Erro ao buscar Feynman:", err);
+    req.flash('error', 'Erro ao carregar Feynman.');
+    res.redirect('/aluno/a-bd_feynman');
+  }
+});
+
+// Formulário para editar Feynman existente
+router.get('/a-feynman/:id', async (req, res) => {
+  if (!req.user || !req.user.ID_USUARIO) {
+    req.flash('error', 'Usuário não autenticado.');
+    return res.redirect('/auth/cl-login');
+  }
+  try {
+    const [rows] = await db.query('SELECT * FROM FEYNMAN WHERE COD_FEYNMAN = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+    if (rows.length === 0) {
+      req.flash('error', 'Feynman não encontrado.');
+      return res.redirect('/aluno/a-bd_feynman');
+    }
+    res.render('dashboard/aluno/a-feynman', {
+      user: req.user,
+      feynman: rows[0],
+      title: 'Editar Feynman',
+      timestamp: Date.now()
+    });
+  } catch (err) {
+    console.error("Erro ao buscar Feynman para edição:", err);
+    req.flash('error', 'Erro ao carregar Feynman para edição.');
+    res.redirect('/aluno/a-bd_feynman');
+  }
+});
+
+// Deletar Feynman
+router.post('/a-feynman/:id/delete', async (req, res) => {
+  if (!req.user || !req.user.ID_USUARIO) {
+    req.flash('error', 'Usuário não autenticado.');
+    return res.redirect('/auth/cl-login');
+  }
+  try {
+    await db.query('DELETE FROM FEYNMAN WHERE COD_FEYNMAN = ? AND ID_USUARIO = ?', [req.params.id, req.user.ID_USUARIO]);
+    req.flash('success', 'Feynman deletado com sucesso!');
+    res.redirect('/aluno/a-bd_feynman');
+  } catch (err) {
+    console.error("Erro ao deletar Feynman:", err);
+    req.flash('error', 'Erro ao deletar Feynman.');
+    res.redirect('/aluno/a-bd_feynman');
+  }
+});
+
+// Salvar novo Feynman ou atualizar existente
+router.post('/a-feynman', async (req, res) => {
+  if (!req.user || !req.user.ID_USUARIO) {
+    req.flash('error', 'Usuário não autenticado.');
+    return res.status(403).redirect('/auth/cl-login');
+  }
+  const { titulo, texto_feynman, cod_feynman } = req.body;
+  const userId = req.user.ID_USUARIO;
+
+  try {
+    if (cod_feynman) {
+      // Atualizar existente
+      await db.query(
+        'UPDATE FEYNMAN SET TITULO = ?, TEXTO_FEYNMAN = ?, DATA_FEYNMAN = NOW() WHERE COD_FEYNMAN = ? AND ID_USUARIO = ?',
+        [titulo, texto_feynman, cod_feynman, userId]
+      );
+      req.flash('success', 'Feynman atualizado com sucesso!');
+      res.redirect('/aluno/a-bd_feynman');
+    } else {
+      // Criar novo
+      await db.query(
+        'INSERT INTO FEYNMAN (ID_USUARIO, TITULO, TEXTO_FEYNMAN, DATA_FEYNMAN) VALUES (?, ?, ?, NOW())',
+        [userId, titulo, texto_feynman]
+      );
+      req.flash('success', 'Feynman criado com sucesso!');
+      res.redirect('/aluno/a-bd_feynman');
+    }
+  } catch (err) {
+    console.error("Erro ao salvar Feynman:", err);
+    req.flash('error', 'Erro ao salvar Feynman.');
+    res.redirect(cod_feynman ? `/aluno/a-feynman/${cod_feynman}` : '/aluno/a-feynman');
+  }
+});
+
 // Rota Banco de Dados Feynman
-router.get("/a-bd_feynman", (req, res) => {
-  // Lógica para buscar dados do Feynman se necessário
-  res.render("dashboard/aluno/a-bd_feynman", {
-    user: req.user,
-    title: "Feynman - Salvos",
-    timestamp: Date.now()
-    // Passar dados do Feynman aqui, ex: feynmans: resultadosDoBanco
-  });
+router.get("/a-bd_feynman", async (req, res) => {
+  if (!req.user || !req.user.ID_USUARIO) {
+    req.flash('error', 'Usuário não autenticado.');
+    return res.redirect('/auth/cl-login');
+  }
+  try {
+    const [feynmans] = await db.query('SELECT * FROM FEYNMAN WHERE ID_USUARIO = ?', [req.user.ID_USUARIO]);
+    res.render("dashboard/aluno/a-bd_feynman", {
+      user: req.user,
+      feynmans: feynmans || [],
+      title: "Feynman - Salvos",
+      timestamp: Date.now()
+    });
+  } catch (err) {
+    console.error("Erro ao buscar Feynmans:", err);
+    req.flash('error', 'Erro ao carregar Feynmans.');
+    res.redirect('/aluno/a-perfil');
+  }
 });
 
 // Listar todas as mnemônicas do usuário

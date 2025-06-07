@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/bd-telas.css">
     <link rel="stylesheet" href="/css/header2.css">
     <link rel="shortcut icon" href="../../Images/favicon.ico" type="image/x-icon">
-    <title>Meus Feynmans</title>
+    <title>Meus Feynman</title>
 </head>
 <body>
     <header>
@@ -29,10 +29,10 @@
       </header>
       <main>
         <section class="caixa">
-            <h1>MEUS FEYNMANS</h1>
+            <h1>MEUS FEYNMAN</h1>
             <section class="quadrado2">
                 <section class="caixa-cinza">
-                    <input type="text" class="search-box" placeholder="Buscar mnemônicas...">
+                    <input type="text" class="search-box" placeholder="Buscar feynman...">
                 </section>
                 <table class="gerenciamento">
                     <thead>
@@ -44,77 +44,30 @@
                         </tr>
                     </thead> 
                     <tbody>
-                        <tr>
-                            <td>CELULAS EUCARIONTES</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>CELULAS PROCARIONTES</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>MESOPOTÂMIA</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1º QUERRA MUNDIAL</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1º REVOLUÇÃO INDUSTRIAL</td>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                            </td>
-                            <td>
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
+                        <% if (feynmans && feynmans.length > 0) { feynmans.forEach(function(feynman) { %>
+                            <tr>
+                                <td><%= feynman.TITULO %></td>
+                                <td>
+                                    <a href="/aluno/a-page-feynman/<%= feynman.COD_FEYNMAN %>">
+                                        <img src="/images/find_in_page.svg" alt="Visualizar">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/aluno/a-feynman/<%= feynman.COD_FEYNMAN %>">
+                                        <img src="/images/border color.svg" alt="Editar">
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="/aluno/a-feynman/<%= feynman.COD_FEYNMAN %>/delete" method="POST" style="display:inline;">
+                                        <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
+                                            <img src="/images/delete.svg" alt="Lixeira">
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) } else { %>
+                            <tr><td colspan="4">Nenhum Feynman encontrado.</td></tr>
+                        <% } %>
                     </tbody>
                 </table>
             </section>

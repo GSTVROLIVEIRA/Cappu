@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="/css/page-metodos.css">
     <link rel="stylesheet" href="/css/header2.css">
     <link rel="shortcut icon" href="/Images/favicon.ico" type="image/x-icon">
-    <title>Meus resumos</title>
+    <title>Meus Feynmans</title>
 </head>
 <body>
     <header>
-        <a href="/aluno/a-bd_resumos"><img src="/images/voltar.svg" alt=""></a>
+        <a href="/aluno/a-bd_feynman"><img src="/images/voltar.svg" alt=""></a>
         <p>MÉTODOS DE ESTUDO</p>
         <div>
             <p><%= user.NOME_USU || 'Aluno' %></p>
@@ -29,10 +29,9 @@
     </header>
     
     <main>
-        <h1><%= resumo ? resumo.TITULO : 'Resumo não encontrado' %></h1>
-        <h2><%= resumo ? resumo.CATEGORIA : '' %></h2>
+        <h1><%= feynman ? feynman.TITULO : 'Feynman não encontrado' %></h1>
         <section class="blank-box">
-            <p><%= resumo ? resumo.TEXTO_RESUMO : 'Nenhum conteúdo disponível.' %></p>
+            <p><%= feynman ? feynman.TEXTO_FEYNMAN : 'Nenhum conteúdo disponível.' %></p>
         </section>
     </main>
     <script src="/js/icon-menu.js"></script>
