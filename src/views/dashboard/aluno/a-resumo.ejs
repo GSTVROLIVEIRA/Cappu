@@ -29,7 +29,7 @@
     <h1>RESUMOS</h1>
     <main class="container">
         <section class="resumo">
-            <form action="<%= resumo ? '/aluno/a-resumos/' + resumo.COD_RESUMO : '/aluno/a-resumos' %>" method="POST">
+            <form action="/aluno/a-resumo" method="POST">
                 <section class="controlador">
                     <section class="info-resumo">
                         <h2 class="subtitle">TÍTULO</h2>
@@ -60,12 +60,13 @@
                         cols="90"
                         placeholder="Escreva o seu resumo aqui..."
                     ><%= resumo ? resumo.TEXTO_RESUMO : '' %></textarea>
+                    <% if (resumo && resumo.COD_RESUMO) { %>
+                        <input type="hidden" name="cod_resumo" value="<%= resumo.COD_RESUMO %>">
+                    <% } %>
                 </section>
                 <section class="btns-salvar-deletar">
                     <button type="submit" class="save-button">SALVAR <img src="/images/salvar.svg" alt=""></button>
-                    <% if (resumo) { %>
-                        <button type="submit" formaction="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" formmethod="POST" class="delete-button"><img src="/images/delete.svg" alt=""></button>
-                    <% } %>
+                    
                 </section>
             </form>
         </section>

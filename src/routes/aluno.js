@@ -276,7 +276,7 @@ router.get('/a-mnemonica', (req, res) => {
 });
 
 // Salvar nova mnemônica ou atualizar existente
-router.post('/a-mnemonica', async (req, res) => { // Rota unificada
+router.post('/a-mnemonica', require('../middleware/multer').single('imagem'), async (req, res) => { // Rota unificada
     if (!req.user || !req.user.ID_USUARIO) {
         req.flash('error', 'Usuário não autenticado.');
         return res.status(403).redirect('/auth/cl-login');
@@ -286,16 +286,21 @@ router.post('/a-mnemonica', async (req, res) => { // Rota unificada
 
     try {
         if (cod_mnemonica) { // Atualização
-            await db.query(
-                'UPDATE MNEMONICAS SET TEXTO_MNEMONICA = ?, TITULO = ?, CATEGORIA = ?, DATA_MNEMONICA = NOW() WHERE COD_MNEMONICA = ? AND ID_USUARIO = ?',
-                [texto_mnemonica, titulo, categoria, cod_mnemonica, userId]
-            );
+            let updateQuery = 'UPDATE MNEMONICAS SET TEXTO_MNEMONICA = ?, TITULO = ?, CATEGORIA = ?, DATA_MNEMONICA = NOW()';
+            let params = [texto_mnemonica, titulo, categoria];
+            if (req.file) {
+                updateQuery += ', IMAGEM = ?';
+                params.push(req.file.buffer);
+            }
+            updateQuery += ' WHERE COD_MNEMONICA = ? AND ID_USUARIO = ?';
+            params.push(cod_mnemonica, userId);
+            await db.query(updateQuery, params);
             req.flash('success', 'Mnemônica atualizada com sucesso!');
             res.redirect(`/aluno/a-page-mnemonica/${cod_mnemonica}`);
         } else { // Criação
             const [result] = await db.query(
-                'INSERT INTO MNEMONICAS (ID_USUARIO, DATA_MNEMONICA, TEXTO_MNEMONICA, TITULO, CATEGORIA) VALUES (?, NOW(), ?, ?, ?)',
-                [userId, texto_mnemonica, titulo, categoria]
+                'INSERT INTO MNEMONICAS (ID_USUARIO, DATA_MNEMONICA, TEXTO_MNEMONICA, TITULO, CATEGORIA, IMAGEM) VALUES (?, NOW(), ?, ?, ?, ?)',
+                [userId, texto_mnemonica, titulo, categoria, req.file ? req.file.buffer : null]
             );
             req.flash('success', 'Mnemônica criada com sucesso!');
             res.redirect(`/aluno/a-page-mnemonica/${result.insertId}`);
@@ -371,6 +376,21 @@ router.get('/a-page-mnemonica/:id', async (req, res) => {
     console.error("Erro ao buscar mnemônica:", err);
     req.flash('error', 'Erro ao carregar mnemônica.');
     res.redirect('/aluno/a-bd_mnemonicas');
+  }
+});
+
+// Rota para servir imagem da mnemônica
+router.get('/mnemonica-imagem/:id', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT IMAGEM FROM MNEMONICAS WHERE COD_MNEMONICA = ?', [req.params.id]);
+    if (rows.length && rows[0].IMAGEM) {
+      res.set('Content-Type', 'image/jpeg');
+      res.send(rows[0].IMAGEM);
+    } else {
+      res.status(404).send('Imagem não encontrada');
+    }
+  } catch (err) {
+    res.status(500).send('Erro ao carregar imagem');
   }
 });
 
