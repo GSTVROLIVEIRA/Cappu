@@ -88,4 +88,7 @@ router.post('/p-criar_aula', professorController.criarAula);
 // Rota para exclusão de curso
 router.post('/excluir_curso/:id', professorController.excluirCurso);
 
+// Rota para atualização completa de curso, módulos e aulas (sem AJAX)
+router.post('/p_gere_curso_completo/:id', professorController.atualizarCursoCompleto);
+
 module.exports = router;
