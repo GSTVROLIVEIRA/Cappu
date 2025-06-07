@@ -307,14 +307,62 @@ exports.atualizarCursoCompleto = async (req, res) => {
       for (const aula of (modulo.aulas || [])) {
         if (aula.ID_AULA) {
           await connection.query(
-            'UPDATE AULA SET NOME = ?, DURACAO = ?, ORDEM = ? WHERE ID_AULA = ?',
-            [aula.NOME, aula.DURACAO, aula.ORDEM, aula.ID_AULA]
+            `UPDATE AULA SET 
+              TITULO = ?, 
+              DESCRICAO = ?, 
+              DURACAO = ?, 
+              ORDEM = ?,
+              TIPO_CONTEUDO = ?,
+              VIDEO_URL = ?
+              ${aula.ARQUIVO ? ', ARQUIVO = ?' : ''}
+              ${aula.TAMANHO_ARQUIVO ? ', TAMANHO_ARQUIVO = ?' : ''}
+              ${aula.TIPO_ARQUIVO ? ', TIPO_ARQUIVO = ?' : ''}
+              WHERE ID_AULA = ?`,
+            [
+              aula.titulo || aula.TITULO || '',
+              aula.descricao || aula.DESCRICAO || '',
+              aula.duracao || aula.DURACAO || '00:00:00',
+              aula.ordem || aula.ORDEM || 1,
+              aula.tipo_conteudo || 'video',
+              aula.video_url || '',
+              ...(aula.ARQUIVO ? [aula.ARQUIVO] : []),
+              ...(aula.TAMANHO_ARQUIVO ? [aula.TAMANHO_ARQUIVO] : []),
+              ...(aula.TIPO_ARQUIVO ? [aula.TIPO_ARQUIVO] : []),
+              aula.ID_AULA
+            ].filter(Boolean)
           );
         } else {
-          await connection.query(
-            'INSERT INTO AULA (ID_MODULO, NOME, DURACAO, ORDEM) VALUES (?, ?, ?, ?)',
-            [modulo.ID_MODULO, aula.NOME, aula.DURACAO, aula.ORDEM]
+          const [result] = await connection.query(
+            `INSERT INTO AULA (
+              ID_MODULO, 
+              TITULO, 
+              DESCRICAO, 
+              DURACAO, 
+              ORDEM,
+              TIPO_CONTEUDO,
+              VIDEO_URL
+              ${aula.ARQUIVO ? ', ARQUIVO' : ''}
+              ${aula.TAMANHO_ARQUIVO ? ', TAMANHO_ARQUIVO' : ''}
+              ${aula.TIPO_ARQUIVO ? ', TIPO_ARQUIVO' : ''}
+            ) VALUES (?, ?, ?, ?, ?, ?, ?
+              ${aula.ARQUIVO ? ', ?' : ''}
+              ${aula.TAMANHO_ARQUIVO ? ', ?' : ''}
+              ${aula.TIPO_ARQUIVO ? ', ?' : ''}
+            )`,
+            [
+              modulo.ID_MODULO,
+              aula.titulo || '',
+              aula.descricao || '',
+              aula.duracao || '00:00:00',
+              aula.ordem || 1,
+              aula.tipo_conteudo || 'video',
+              aula.video_url || '',
+              ...(aula.ARQUIVO ? [aula.ARQUIVO] : []),
+              ...(aula.TAMANHO_ARQUIVO ? [aula.TAMANHO_ARQUIVO] : []),
+              ...(aula.TIPO_ARQUIVO ? [aula.TIPO_ARQUIVO] : [])
+            ].filter(Boolean)
           );
+          aula.ID_AULA = result.insertId;
         }
       }
     }

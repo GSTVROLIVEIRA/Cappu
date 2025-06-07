@@ -20,41 +20,78 @@ const CursoManager = {
       const moduloDiv = document.createElement('div');
       moduloDiv.className = 'modulo-bloco';
       moduloDiv.innerHTML = `
-        <h3>Módulo ${i + 1}</h3>
-        <input id="modulo-titulo-${i}" type="text" placeholder="Título do módulo" 
-               value="${modulo.titulo || ''}" 
-               onchange="CursoManager.updateModuloTitulo(${i}, this.value)" required />
-        <textarea id="modulo-desc-${i}" placeholder="Descrição do módulo" 
-                  onchange="CursoManager.updateModuloDescricao(${i}, this.value)" 
-                  required>${modulo.descricao || ''}</textarea>
-        <button type="button" onclick="CursoManager.removeModulo(${i})">Remover módulo</button>
-        <div class="aulas">
-          <h4>Aulas</h4>
-          ${(modulo.aulas || []).map((aula, j) => `
-            <div class="aula-bloco">
-              <input id="aula-titulo-${i}-${j}" type="text" placeholder="Título da aula" 
-                     value="${aula.titulo || ''}" 
-                     onchange="CursoManager.updateAulaTitulo(${i},${j},this.value)" required />
-              <textarea id="aula-desc-${i}-${j}" placeholder="Descrição da aula" 
-                        onchange="CursoManager.updateAulaDescricao(${i},${j},this.value)" 
-                        required>${aula.descricao || ''}</textarea>
-              <button type="button" onclick="CursoManager.removeAula(${i},${j})">Remover aula</button>
-            </div>
-          `).join('')}
-          <button type="button" onclick="CursoManager.addAula(${i})">Adicionar aula</button>
+        <div class="modulo-header">
+          <h3>Módulo ${i + 1}: ${modulo.titulo || 'Sem título'}</h3>
+          <div class="modulo-actions">
+            <button type="button" class="btn btn-sm btn-outline-primary" 
+                    onclick="CursoManager.openAulaModal(${i})">
+              <i class="fas fa-plus"></i> Adicionar Aula
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger" 
+                    onclick="CursoManager.removeModulo(${i})">
+              <i class="fas fa-trash"></i> Remover
+            </button>
+          </div>
+        </div>
+        <div class="modulo-body">
+          <div class="form-group">
+            <label for="modulo-titulo-${i}">Título do Módulo</label>
+            <input id="modulo-titulo-${i}" type="text" class="form-control" 
+                   placeholder="Título do módulo" 
+                   value="${modulo.titulo || ''}" 
+                   onchange="CursoManager.updateModuloTitulo(${i}, this.value)" required />
+          </div>
+          <div class="form-group">
+            <label for="modulo-desc-${i}">Descrição do Módulo</label>
+            <textarea id="modulo-desc-${i}" class="form-control" 
+                      placeholder="Descrição do módulo" 
+                      onchange="CursoManager.updateModuloDescricao(${i}, this.value)" 
+                      rows="3">${modulo.descricao || ''}</textarea>
+          </div>
+          
+          <div class="aulas">
+            <h5>Aulas</h5>
+            ${(modulo.aulas || []).length > 0 ? `
+              <div class="list-group">
+                ${(modulo.aulas || []).map((aula, j) => `
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-1">${aula.titulo || 'Aula sem título'}</h6>
+                        <small class="text-muted">
+                          ${aula.tipo_conteudo === 'video' ? '🎥 Vídeo' : '📝 Texto'} 
+                          ${aula.duracao ? `• ${aula.duracao}` : ''}
+                        </small>
+                      </div>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                onclick="CursoManager.openAulaModal(${i}, ${j}); event.stopPropagation();">
+                          <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" 
+                                onclick="CursoManager.removeAula(${i}, ${j}); event.stopPropagation();">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : `
+              <div class="alert alert-info">
+                Nenhuma aula adicionada a este módulo. Clique em "Adicionar Aula" para começar.
+              </div>
+            `}
+          </div>
         </div>
       `;
       modulosContainer.appendChild(moduloDiv);
     });
     
-    // Adiciona o botão de adicionar módulo se não existir
-    if (!document.getElementById('addModuloBtn')) {
-      const addBtn = document.createElement('button');
-      addBtn.id = 'addModuloBtn';
-      addBtn.type = 'button';
-      addBtn.textContent = 'Adicionar Módulo';
-      addBtn.onclick = () => this.addModulo();
-      modulosContainer.appendChild(addBtn);
+    // Garante que o botão de adicionar módulo existe e tem o evento configurado corretamente
+    const addModuloBtn = document.getElementById('addModuloBtn');
+    if (addModuloBtn) {
+      addModuloBtn.onclick = () => this.addModulo();
     }
   },
   
@@ -87,9 +124,158 @@ const CursoManager = {
   addAula(moduloIndex) {
     if (this.modulos[moduloIndex]) {
       this.modulos[moduloIndex].aulas = this.modulos[moduloIndex].aulas || [];
-      this.modulos[moduloIndex].aulas.push({ titulo: '', descricao: '' });
+      this.modulos[moduloIndex].aulas.push({
+        titulo: '',
+        descricao: '',
+        tipo_conteudo: 'video',
+        video_url: '',
+        duracao: '00:10:00',
+        ordem: (this.modulos[moduloIndex].aulas.length + 1),
+        ID_AULA: null
+      });
       this.renderModulos();
       this.showNotify('success', 'Aula adicionada!');
+    }
+  },
+  
+  // Abre o modal de adicionar/editar aula
+  openAulaModal(moduloIndex, aulaIndex = null) {
+    const modal = document.getElementById('aulaModal');
+    const form = document.getElementById('aulaForm');
+    const modalTitle = document.getElementById('aulaModalLabel');
+    
+    // Se for edição, preenche os campos
+    if (aulaIndex !== null && this.modulos[moduloIndex]?.aulas?.[aulaIndex]) {
+      const aula = this.modulos[moduloIndex].aulas[aulaIndex];
+      modalTitle.textContent = 'Editar Aula';
+      form.elements['titulo'].value = aula.titulo || '';
+      form.elements['descricao'].value = aula.descricao || '';
+      form.elements['tipo_conteudo'].value = aula.tipo_conteudo || 'video';
+      form.elements['video_url'].value = aula.video_url || '';
+      form.elements['duracao'].value = aula.duracao || '00:10:00';
+      form.elements['ordem'].value = aula.ordem || (this.modulos[moduloIndex].aulas.length + 1);
+      form.dataset.moduloIndex = moduloIndex;
+      form.dataset.aulaIndex = aulaIndex;
+      
+      // Atualiza a visualização do tipo de conteúdo
+      this.toggleVideoFields();
+    } else {
+      // Nova aula
+      modalTitle.textContent = 'Nova Aula';
+      form.reset();
+      form.elements['tipo_conteudo'].value = 'video';
+      form.elements['duracao'].value = '00:10:00';
+      form.elements['ordem'].value = this.modulos[moduloIndex]?.aulas?.length + 1 || 1;
+      form.dataset.moduloIndex = moduloIndex;
+      form.dataset.aulaIndex = '';
+      
+      // Atualiza a visualização do tipo de conteúdo
+      this.toggleVideoFields();
+    }
+    
+    // Mostra o modal
+    new bootstrap.Modal(modal).show();
+  },
+  
+  // Salva os dados da aula do modal
+  saveAulaFromModal() {
+    const form = document.getElementById('aulaForm');
+    const moduloIndex = parseInt(form.dataset.moduloIndex);
+    const aulaIndex = form.dataset.aulaIndex !== '' ? parseInt(form.dataset.aulaIndex) : null;
+    const fileInput = document.getElementById('video_arquivo');
+    
+    if (moduloIndex === undefined || isNaN(moduloIndex)) {
+      this.showNotify('error', 'Erro ao identificar o módulo da aula.');
+      return;
+    }
+    
+    const formData = new FormData(form);
+    const aulaData = {
+      titulo: formData.get('titulo') || '',
+      descricao: formData.get('descricao') || '',
+      tipo_conteudo: formData.get('tipo_conteudo') || 'video',
+      video_url: formData.get('video_url') || '',
+      duracao: formData.get('duracao') || '00:10:00',
+      ordem: parseInt(formData.get('ordem')) || 1,
+      ID_AULA: null
+    };
+    
+    // Validação básica
+    if (!aulaData.titulo) {
+      this.showNotify('error', 'O título da aula é obrigatório.');
+      return false;
+    }
+    
+    // Verifica se há um arquivo para upload
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      if (file.size > 500 * 1024 * 1024) { // 500MB
+        this.showNotify('error', 'O arquivo é muito grande. O tamanho máximo permitido é 500MB.');
+        return false;
+      }
+      
+      // Adiciona informações do arquivo
+      aulaData.ARQUIVO = file.name;
+      aulaData.TAMANHO_ARQUIVO = file.size;
+      aulaData.TIPO_ARQUIVO = file.type;
+      
+      // Aqui você pode adicionar o upload do arquivo para o servidor
+      // Por enquanto, apenas simulamos que o arquivo foi salvo
+      this.showNotify('info', 'Fazendo upload do arquivo...');
+      
+      // Simulando upload (substitua por chamada real para o servidor)
+      setTimeout(() => {
+        this.finalizarSalvamentoAula(moduloIndex, aulaIndex, aulaData);
+      }, 1000);
+      
+      return true;
+    } else if (aulaData.tipo_conteudo === 'video' && !aulaData.video_url) {
+      this.showNotify('error', 'Para conteúdo de vídeo, é necessário informar uma URL ou enviar um arquivo.');
+      return false;
+    } else {
+      // Se não houver arquivo para upload, salva diretamente
+      return this.finalizarSalvamentoAula(moduloIndex, aulaIndex, aulaData);
+    }
+  },
+  
+  // Finaliza o salvamento da aula após o upload do arquivo (se houver)
+  finalizarSalvamentoAula(moduloIndex, aulaIndex, aulaData) {
+    // Atualiza ou adiciona a aula
+    if (aulaIndex !== null && !isNaN(aulaIndex) && this.modulos[moduloIndex]?.aulas?.[aulaIndex]) {
+      // Mantém o ID se estiver editando
+      aulaData.ID_AULA = this.modulos[moduloIndex].aulas[aulaIndex].ID_AULA;
+      this.modulos[moduloIndex].aulas[aulaIndex] = { ...this.modulos[moduloIndex].aulas[aulaIndex], ...aulaData };
+    } else {
+      // Adiciona nova aula
+      this.modulos[moduloIndex].aulas = this.modulos[moduloIndex].aulas || [];
+      this.modulos[moduloIndex].aulas.push(aulaData);
+    }
+    
+    // Reorganiza as aulas pela ordem
+    this.modulos[moduloIndex].aulas.sort((a, b) => a.ordem - b.ordem);
+    
+    // Atualiza a interface
+    this.renderModulos();
+    
+    // Fecha o modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('aulaModal'));
+    if (modal) modal.hide();
+    
+    this.showNotify('success', 'Aula salva com sucesso!');
+    return true;
+  },
+  
+  // Alterna a visibilidade dos campos de vídeo
+  toggleVideoFields() {
+    const tipoConteudo = document.querySelector('#aulaForm select[name="tipo_conteudo"]');
+    const videoUrlGroup = document.querySelector('#videoUrlGroup');
+    
+    if (tipoConteudo && videoUrlGroup) {
+      if (tipoConteudo.value === 'video') {
+        videoUrlGroup.style.display = 'block';
+      } else {
+        videoUrlGroup.style.display = 'none';
+      }
     }
   },
   
