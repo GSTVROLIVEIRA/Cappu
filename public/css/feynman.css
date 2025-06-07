@@ -13,144 +13,201 @@
     --button-color: #00549D;
 }
 
-main {
-    font-family: 'Fira Sans', sans-serif;
-    width: 100%;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.conteudo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1 {
-    text-transform: uppercase;
-    color: var(--primary-color);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: 900;
-    text-align: center;
-    padding: 1rem;
-    line-height: 1.3;
-}
-
-img {
-    width: 100%;
-    max-width: 600px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.question {
-    padding: 1.5rem;
-    background-color: white;
-    box-shadow: 0 2px 8px var(--second-color);
-    border-radius: 2rem;
-    width: 100%;
-    max-width: 800px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-h2 {
-    text-transform: uppercase;
-    color: var(--primary-color);
-    font-weight: 800;
-    font-size: clamp(1.1rem, 3vw, 1.5rem);
-}
-
-p {
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    line-height: 1.5;
-}
-
-.respostas {
+/* Container principal que divide a tela em dois */
+main.conteiner {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    width: 100%;
-}
-
-.opcao {
-    padding: 1rem;
-    width: 100%;
-    text-align: center;
-    border-radius: 5rem;
-    box-shadow: 0 2px 8px var(--second-color);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.opcao:hover {
-    transform: scale(1.03);
-}
-
-.opcao:active {
-    transform: scale(0.98);
-}
-
-.opcao p {
-    font-weight: 500;
+    grid-template-columns: 1fr 1fr;
+    gap: 4em;
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-family: "Fira Sans", sans-serif;
+  }
+  
+  .how-to h2 {
     font-style: italic;
-}
-
-.button {
-    padding: 0.8rem 1.5rem;
-    background-color: var(--button-color);
-    color: white;
-    border-radius: 5rem;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 0.8em;
+  }
+  
+  .how-to > p {
+    font-size: 0.9rem;
+    margin-bottom: 2em;
+  }
+  
+  .passos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* duas colunas */
+    gap: 3em;
+    margin-top: 2em;
+  }
+  
+  .passos div {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8em;
+  }
+  
+  .passos span {
+    font-size: 2.5rem;
     font-weight: 800;
-    text-transform: uppercase;
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    cursor: pointer;
+    color: var(--primary-color);
+    font-style: italic;
+  }
+  
+  .passos h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    font-style: italic;
+    color: black;
+  }
+  
+  .passos p {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  .btns-salvar-deletar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 5em;
+  }
+  
+  .btns-salvar-deletar button {
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    width: 10em;
+    background-color: var(--primary-color);
+    padding: 0.5em 1em;
+    color: white;
     border: none;
+    border-radius: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    position: relative;
+  }
+  
+  .btns-salvar-deletar button img {
+    width: 20px;
+    height: 20px;
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .btns-salvar-deletar button:hover img {
+    opacity: 0;
+  }
+  
+  .btns-salvar-deletar button::after {
+    content: '';
+    position: absolute;
+    left: 6.4em;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('/images/salvar2.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .btns-salvar-deletar button:hover::after {
+    opacity: 1;
+  }
+  
+  .btns-salvar-deletar button:hover {
+    cursor: pointer;
+    background-color: var(--second-color);
+    color: var(--primary-color);
+    transition: all 0.2s ease-in-out;
+    transform: scale(0.95) translateY(5px);
+  }
+  
+  .aplicacao-do-metodo {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+  
+  .resumo-form label {
+    font-style: italic;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  
+  .resumo-form input {
     width: 100%;
-    max-width: 300px;
-    margin-top: 2rem;
-    align-self: center;
-    transition: all 0.3s ease;
-}
+    padding: 0.5em;
+    border: none;
+    border-bottom: 1px solid #333;
+    font-family: "Fira Sans", sans-serif;
+    margin-bottom: 1.5em;
+  }
+  
+  .resumo-form input::placeholder {
+    color: #777;
+  }
+  
+  .resumo-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+  
+  textarea {
+    width: 100%;
+    height: 15em;
+    border: none;
+    resize: none;
+    padding: 1em;
+    font-family: "Fira Sans", sans-serif;
+    font-size: 1rem;
+    font-style: italic;
+    box-shadow: 0 0 20px rgba(104, 74, 67, 0.1);
+  }
+  
+  textarea:focus {
+    outline: none;
+  }
 
-.button:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
+  textarea:hover {
+    box-shadow: 0 0 25px rgba(104, 74, 67, 0.3);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  
+  @media (max-width: 1024px) {
+    .btns-salvar-deletar {
+      margin-bottom: 2em;
+    }
 
-/* Media Queries para telas maiores */
-@media (min-width: 768px) {
-    .conteudo {
-        padding: 40px 20px;
+    .passos {
+        gap: 2em 1em 2em 0em;
     }
-    
-    .respostas {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
+    .main.conteiner {
+        margin: 0%;
     }
-    
-    .button {
-        align-self: flex-end;
-    }
-    
-    .question {
-        padding: 2rem;
-    }
-}
+  }
 
-@media (min-width: 1024px) {
-    .conteudo {
-        gap: 3rem;
+  @media (max-width: 768px) {
+
+    main.conteiner {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 2em;
+        grid-template-columns: none;
     }
-    
-    h1 {
-        padding: 2rem 0;
+
+    .passos {
+      grid-template-columns: none;
     }
-}
+  }
+  
