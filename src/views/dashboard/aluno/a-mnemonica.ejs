@@ -31,57 +31,74 @@
       </button>
     </div>
   </header>
+
   <h1>MNEMÔNICA</h1>
+
   <main class="container">
     <section class="mnemonica">
       <form action="<%= mnemonica ? `/aluno/a-mnemonica/${mnemonica.COD_MNEMONICA}` : '/aluno/a-mnemonica' %>"
-        method="POST" class="form-mnemonica">
+      method="POST" class="form-mnemonica">
         <section class="controlador">
           <section class="info-resumo">
             <h2 class="subtitle">TÍTULO</h2>
             <input type="text" name="titulo" class="descricao" placeholder="Escreva o título da sua mnemônica aqui"
-              value="<%= mnemonica ? mnemonica.TITULO : '' %>">
+            value="<%= mnemonica ? mnemonica.TITULO : '' %>">
           </section>
+
           <section class="info-resumo">
             <h2 class="subtitle">CATEGORIA</h2>
             <input type="text" name="categoria" class="descricao" placeholder="Categoria da mnemônica"
-              value="<%= mnemonica ? mnemonica.CATEGORIA : '' %>">
+            value="<%= mnemonica ? mnemonica.CATEGORIA : '' %>">
+          </section>
 
+          <section class="btns-salvar-deletar">
+            <button type="submit" class="save-button">
+              SALVAR <img src="/images/salvar.svg" alt="Salvar"
+            />
+            </button>
           </section>
-        </section>
-        <section class="organizacao-caixa">
-          <section class="caixa-texto">
-            <textarea id="texto_mnemonica" name="texto_mnemonica" rows="15" cols="90"
-              placeholder="Escreva a sua mnemônica aqui..."
-              required><%= mnemonica ? mnemonica.TEXTO_MNEMONICA : '' %></textarea>
-          </section>
-        </section>
-        <section style="margin-top: 20px; text-align: right;">
-          <button type="submit" class="save-button">
-            SALVAR <img src="/images/salvar.svg" alt="Salvar" />
-          </button>
         </section>
       </form>
     </section>
-    </section>
+
     <section class="caixa-selecao">
       <form action="/enviar-resumo" method="POST" enctype="multipart/form-data">
-        <div class="upload-container"
-          style="position: relative; width: 630px; height: 300px; border: 2px solid #ccc; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;">
-          <!-- Input de upload (escondido visualmente) -->
-          <input type="file" id="imagem-upload" name="imagem" accept="image/*"
-            style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;" />
-
-          <!-- Placeholder visual -->
-          <img src="/images/upload-mnemonica.svg" alt="Ícone de upload">
-          <h3>Selecionar imagem associada</h3>
-          <p style="color: #999; font-size: 12px; margin-top: 5px;">Formatos suportados: JPG, PNG, GIF</p>
-        </div>
+        <label class="upload-area">
+          <span class="upload-text">SELECIONAR IMAGEM ASSOCIADA</span>
+          <img src="/images/upload-mnemonica.svg" class="upload-icon">
+          <input type="file" accept="image/*" hidden id="fileInput" name="imagem">
+          <img class="preview-img" src="" alt="Preview da imagem" style="display: none;">
+        </label>
       </form>
-    </section>
+      <section class="organizacao-caixa">
+        <section class="caixa-texto">
+          <textarea id="texto_mnemonica" name="texto_mnemonica" rows="15" cols="90"
+            placeholder="Escreva a sua mnemônica aqui..."
+            required><%= mnemonica ? mnemonica.TEXTO_MNEMONICA : '' %></textarea>
+        </section>
+      </section>
     </section>
   </main>
   <script src="/js/icon-menu.js"></script>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementsByClassName('preview-img')[0];
+    const uploadText = document.querySelector('.upload-text');
+    const uploadIcon = document.querySelector('.upload-icon'); // agora podemos acessar
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        preview.src = imageUrl;
+        preview.style.display = 'block';
+
+        // Esconde os elementos antigos
+        uploadText.style.display = 'none';
+        uploadIcon.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 
 </html>

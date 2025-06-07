@@ -9,225 +9,218 @@
 
 :root {
   --primary-color: #684a43;
+  --second-color: #BFAC95;
 }
 
 body {
-  font-size: 16px;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
-}
-
-body::-webkit-scrollbar {
-  display: none;
-}
-
-button {
-  background-color: #fff;
-  border: none;
+    font-family: "Fira Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8%;
 }
 
 h1 {
-  font-family: Fira Sans;
-  font-weight: 700;
-  font-style: italic;
-  font-size: clamp(1.8rem, 5vw, 2.5rem);
-  text-align: center;
-  color: var(--primary-color);
-  margin-top: clamp(3rem, 10vh, 9rem);
-  padding: 0 1rem;
-}
-
-.container {
-  display: flex;
-  width: 90%;
-  min-height: 60vh;
-  flex-direction: row;
-  margin: 2rem auto;
-  gap: 2rem;
+    font-family: 'Fira Sans', sans-serif;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 1.7em;
+    font-weight: 800;
 }
 
 h2 {
-  font-family: Fira Sans;
   font-weight: 700;
   font-style: italic;
-  font-size: 2rem;
+  font-size: 1.5rem;
   letter-spacing: 0%;
   color: var(--primary-color);
 }
 
-.descricao {
-  font-family: Fira Sans;
-  font-weight: 400;
-  font-style: italic;
-  font-size: 1.25rem;
-  letter-spacing: 0%;
-  color: #000000;
-  border-bottom: 2px solid black;
-  width: 40%;
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+    margin: 3em 10em 0em 10em;
 }
 
-.descricao{
-  width: 70%;
+.form-mnemonica {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }
 
 .info-resumo {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 }
 
-.mnemonica {
-  display: flex;
-  width: 50%;
-  flex-direction: column;
-  justify-content: space-between;
+.info-resumo input {
+  width: 20em;
+  height: auto;
+  border: none;
+  padding: 0.5em 1em;
+  border-bottom: 1px solid black;
+}
+
+.info-resumo input::placeholder {
+    color: #999;
+}
+
+.info-resumo input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.info-resumo input::placeholder {
+    color: #999;
 }
 
 .controlador {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 1em;
 }
 
-.info-mnemonica {
+.upload-area {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.save-button {
-  font-family: Fira Sans;
-  font-weight: 700;
-  background-color: var(--primary-color);
-  display: flex;
-  justify-content: center;
   align-items: center;
-  width: clamp(10rem, 100%, 12rem);
-  height: 3rem;
-  border-radius: 3rem;
-  text-decoration: none;
-  color: #ffffff;
-  gap: 0.5rem;
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  transition: transform 0.2s;
+  justify-content: center;
+  width: 30em;
+  height: 10em;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(104, 74, 67, 0.2); /* cor marrom suave */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+  text-align: center;
 }
 
-.save-button:hover {
+.upload-area:hover {
+  box-shadow: 0 0 25px rgba(104, 74, 67, 0.3);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
   transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
 
-.save-button a {
-  text-decoration: none;
-  color: inherit;
+.upload-text {
+  font-weight: bold;
+  font-style: italic;
+  color: #684a43;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.upload-icon {
+  font-size: 2rem;
+  color: #684a43;
+}
+
+.preview-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+  pointer-events: none;
+  padding: 1em;
 }
 
 .organizacao-caixa {
   display: flex;
   flex-direction: column;
-  width: 50%;
-  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  width: 30em;
+  height: 15em;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(104, 74, 67, 0.2); /* cor marrom suave */
+  cursor: pointer;
+  text-align: center;
+  margin-top: 3em;
+}
+
+.organizacao-caixa:hover {
+  box-shadow: 0 0 25px rgba(104, 74, 67, 0.3);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
 
 textarea {
-  width: 100%;
-  height: 50vh;
-  min-height: 300px;
-  box-shadow: 0px 0px 20px 0px rgba(191, 172, 149, 0.7) inset;
-  font-family: Fira Sans;
-  font-weight: 300;
-  font-style: italic;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  line-height: 1.5;
-  padding: 1.25rem;
-  resize: vertical;
+    width: 480px;
+    height: 235px;
+    border: none;
+    padding: 2em;
+    resize: none;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 400;
+    font-style: italic;
 }
 
-h3 {
-  font-family: Fira Sans;
+.btns-salvar-deletar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 5em;
+}
+
+.btns-salvar-deletar button {
+  font-family: "Fira Sans", sans-serif;
   font-weight: 700;
-  font-style: italic;
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-size: 1rem;
+  width: 10em;
+  background-color: var(--primary-color);
+  padding: 0.5em 1em;
+  color: white;
+  border: none;
+  border-radius: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  position: relative;
+}
+
+.btns-salvar-deletar button img {
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btns-salvar-deletar button:hover img {
+  opacity: 0;
+}
+
+.btns-salvar-deletar button::after {
+  content: '';
+  position: absolute;
+  left: 6.4em;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url('/images/salvar2.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.btns-salvar-deletar button:hover::after {
+  opacity: 1;
+}
+
+.btns-salvar-deletar button:hover {
+  cursor: pointer;
+  background-color: var(--second-color);
   color: var(--primary-color);
-  text-align: center;
-}
-
-.placeholder {
-  font-family: Fira Sans;
-  font-weight: 300;
-  font-style: italic;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  line-height: 1.5;
-  color: rgba(0, 0, 0, 1);
-  margin: 1rem;
-}
-
-@media (max-width: 1200px) {
-  .container {
-    width: 95%;
-    margin: 1.5rem auto;
-  }
-
-  .mnemonica,
-  .organizacao-caixa {
-    width: 48%;
-  }
-}
-
-@media (max-width: 800px) {
-  .container {
-    flex-direction: column;
-    width: 95%;
-    min-height: auto;
-  }
-
-  .mnemonica,
-  .organizacao-caixa {
-    width: 100%;
-  }
-
-  .mnemonica {
-    order: 1;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .organizacao-caixa {
-    order: 2;
-  }
-
-  textarea {
-    height: 40vh;
-  }
-}
-
-@media (max-width: 450px) {
-  h1 {
-    margin-top: 2rem;
-  }
-
-  .container {
-    margin: 1rem auto;
-    width: 100%;
-    padding: 0 1rem;
-  }
-
-  .descricao {
-    width: 80%;
-  }
-
-  .save-button {
-    width: 100%;
-    max-width: 12rem;
-    height: 2.8rem;
-  }
-
-  textarea {
-    height: 50vh;
-    min-height: 250px;
-  }
+  transition: all 0.2s ease-in-out;
+  transform: scale(0.95) translateY(5px);
 }

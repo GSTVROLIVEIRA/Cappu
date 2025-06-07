@@ -136,6 +136,14 @@ textarea {
   max-width: 40em;
 }
 
+textarea:hover {
+  box-shadow: 0 0 25px rgba(104, 74, 67, 0.3);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
 @media (max-width: 1024px) {
     form {
         gap: 0.5em;
