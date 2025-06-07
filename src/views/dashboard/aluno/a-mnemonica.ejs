@@ -32,6 +32,8 @@
     </div>
   </header>
 
+  <h1>MNEMÔNICA</h1>
+
   <main class="container">
     <section class="mnemonica">
       <form action="<%= mnemonica ? `/aluno/a-mnemonica/${mnemonica.COD_MNEMONICA}` : '/aluno/a-mnemonica' %>"
@@ -49,7 +51,6 @@
             value="<%= mnemonica ? mnemonica.CATEGORIA : '' %>">
           </section>
 
-
           <section class="btns-salvar-deletar">
             <button type="submit" class="save-button">
               SALVAR <img src="/images/salvar.svg" alt="Salvar"
@@ -57,15 +58,21 @@
             </button>
           </section>
         </section>
-      <label class="upload-area">
-        <span class="upload-text">SELECIONAR IMAGEM ASSOCIADA</span>
-        <img src="/images/upload-mnemonica.svg" class="upload-icon">
-        <input type="file" accept="image/*" hidden id="fileInput" name="imagem">
-        <img class="preview-img" src="" alt="Preview da imagem" style="display: none;">
-        <% if (mnemonica && mnemonica.IMAGEM) { %>
-          <img src="/aluno/mnemonica-imagem/<%= mnemonica.COD_MNEMONICA %>" alt="Imagem atual" style="max-width: 150px; margin-top: 10px;" />
-        <% } %>
-      </label>
+      </form>
+    </section>
+
+    <section class="caixa-selecao">
+      <form action="/enviar-resumo" method="POST" enctype="multipart/form-data">
+        <label class="upload-area">
+          <span class="upload-text">SELECIONAR IMAGEM ASSOCIADA</span>
+          <img src="/images/upload-mnemonica.svg" class="upload-icon">
+          <input type="file" accept="image/*" hidden id="fileInput" name="imagem">
+          <img class="preview-img" src="" alt="Preview da imagem" style="display: none;">
+          <% if (mnemonica && mnemonica.IMAGEM) { %>
+            <img src="/aluno/mnemonica-imagem/<%= mnemonica.COD_MNEMONICA %>" alt="Imagem atual" style="max-width: 150px; margin-top: 10px;" />
+          <% } %>
+        </label>
+      </form>
       <section class="organizacao-caixa">
         <section class="caixa-texto">
           <textarea id="texto_mnemonica" name="texto_mnemonica" rows="15" cols="90"
@@ -73,7 +80,6 @@
             required><%= mnemonica ? mnemonica.TEXTO_MNEMONICA : '' %></textarea>
         </section>
       </section>
-      </form>
     </section>
   </main>
   <script src="/js/icon-menu.js"></script>
@@ -97,5 +103,4 @@
     });
   </script>
 </body>
-
 </html>
