@@ -56,6 +56,8 @@ app.use("/aluno", require("./src/routes/aluno"));
 app.use("/professor", require("./src/routes/professor"));
 app.use("/admin", require("./src/routes/admin"));
 
+app.js = app.use("/dashboard/professor", require("./src/routes/professor"));
+
 
 app.get("/login", (req, res) => res.redirect("/auth/login"));
 app.get("/cadastro", (req, res) => res.redirect("/auth/register"));
