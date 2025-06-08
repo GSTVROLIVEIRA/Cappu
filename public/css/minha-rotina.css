@@ -220,6 +220,8 @@ h3 {
     font-weight: 800;
     font-style: italic;
     text-transform: uppercase;
+    width: 5em;
+    text-align: start;
 }
 
 .desc-metodo {
@@ -242,6 +244,46 @@ h3 {
     width: 30px;
     height: auto;
 }
+
+.tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  #tooltip-target {
+    cursor: help;
+  }
+  
+  .tooltip-box {
+    box-shadow: 0px 2px 8px var(--second-color);
+    font-family: "Fira Sans", serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.8rem;
+    position: absolute;
+    bottom: 125%; /* ou top: 125% se quiser pra cima */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    color: black;
+    padding: 0.8em;
+    border-radius: 0.5em;
+    white-space: normal; /* permite quebrar linha */
+    word-wrap: break-word;
+    max-width: 300px;
+    width: max-content;
+    z-index: 10;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .tooltip-wrapper:hover .tooltip-box {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  
 
 @media (max-width: 1350px) {
     #atualizar-plano {

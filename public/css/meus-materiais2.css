@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@100;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #684a43;
+    --second-color: #BFAC95;
+    --button-color: #00549D;
+}
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+  }
+
+main {
+  margin-top: 10em;
+}
+
+.conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--primary-color);
+}
+
+  table {
+    width: 400px;
+    border-collapse: collapse;
+    margin: 40px auto;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 8px;
+  }
+
+  th {
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+  }
+
+  td {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .download-icon {
+    text-align: center;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .download-btn {
+    border: 2px solid black;
+    border-radius: 50%;
+    padding: 4px 6px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  .download-btn:hover {
+    background-color: #000;
+    color: #fff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button {
+    color: var(--primary-color);
+    border: 3px solid var(--primary-color);
+    background-color: white;
+    border-radius: 5em;
+    padding: 0.5em 3em;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    transition: 0.2s ease-in-out;
+}

@@ -141,12 +141,17 @@ input:not(:placeholder-shown) + label {
 
 /* FOOTER */
 footer {
-  padding: 1.25rem; /* 20px */
-  text-align: center;
-  width: 100%;
+  position: relative;
+  height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: relative;
 }
 
 .cafe {
+  background-image: url(CAPPUCINO.png);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -154,6 +159,7 @@ footer {
   height: auto;
   background-size: contain;
   background-repeat: no-repeat;
+  padding-right: 2rem;
 }
 
 footer p {

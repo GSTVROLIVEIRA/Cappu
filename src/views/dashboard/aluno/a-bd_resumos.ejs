@@ -38,45 +38,36 @@
                     <thead>
                         <tr>
                             <th>TÍTULO</th>
-                            <th>CATEGORIA</th>
-                            <th></th>
-                            <th></th>
+                            <th>VER</th>
+                            <th>EDITAR</th>
+                            <th>EXCLUIR</th>
                         </tr>
                     </thead> 
                     <tbody>
-<% if (resumos && resumos.length > 0) { %>
-  <% resumos.forEach(function(resumo) { %>
-    <tr>
-      <td><%= resumo.TITULO %></td>
-      <td><%= resumo.CATEGORIA %></td>
-      <td>
-        <button onclick="window.location.href='/aluno/a-resumos/<%= resumo.COD_RESUMO %>'" title="Editar">
-          <img src="/images/border color.svg" alt="Editar">
-        </button>
-      </td>
-      <td>
-        <form action="/aluno/a-resumos/<%= resumo.COD_RESUMO %>/delete" method="POST" style="display:inline;">
-          <button type="submit" title="Excluir" style="background:none;border:none;padding:0;">
-            <img src="/images/delete.svg" alt="Lixeira">
-          </button>
-        </form>
-      </td>
-    </tr>
-  <% }); %>
-<% } else { %>
-  <tr><td colspan="4">Nenhum resumo cadastrado.</td></tr>
-<% } %>
-</tbody>
-                            <td>
-                                <a href="https://docs.google.com/document/d/1ZiRFy86bQjbeSW5df45Kl34bRXQt6Cug_Hcmo-3LrRY/edit?usp=sharing" target="_blank">
-                                    <img src="/images/find_in_page.svg" alt="Infos">
-                                </a>
-                            </td>
-                            <td>
-                                <img src="/images/border color.svg" alt="Editar">
-                                <img src="/images/delete.svg" alt="Lixeira">
-                            </td>
-                        </tr>
+                        <% if (resumos && resumos.length > 0) { resumos.forEach(function(resumo) { %>
+                            <tr>
+                                <td><%= resumo.TITULO %></td>
+                                <td>
+                                    <a href="/aluno/a-page-resumo/<%= resumo.COD_RESUMO %>">
+                                        <img src="/images/find_in_page.svg" alt="Visualizar">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/aluno/a-resumo/<%= resumo.COD_RESUMO %>">
+                                        <img src="/images/border color.svg" alt="Editar">
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="/aluno/a-resumo/<%= resumo.COD_RESUMO %>/delete" method="POST" style="display:inline;">
+                                        <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
+                                            <img src="/images/delete.svg" alt="Lixeira">
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) } else { %>
+                            <tr><td colspan="4">Nenhum resumo encontrado.</td></tr>
+                        <% } %>
                     </tbody>
                 </table>
             </section>

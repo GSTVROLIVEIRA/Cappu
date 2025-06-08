@@ -104,6 +104,24 @@
               required
             ><%= curso.OBJETIVOS %></textarea>
           </div>
+
+          <div class="form-group">
+            <label for="imagem">IMAGEM DE CAPA</label>
+            <% if (curso.IMAGEM) { %>
+              <div class="current-image mb-2">
+                <img src="data:image/jpeg;base64,<%= curso.IMAGEM.toString('base64') %>" alt="Capa atual" style="max-width: 200px; max-height: 200px;" />
+                <p class="text-muted">Imagem atual</p>
+              </div>
+            <% } %>
+            <input
+              type="file"
+              id="imagem"
+              name="imagem"
+              accept="image/*"
+              class="form-control"
+            />
+            <small class="form-text text-muted">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB</small>
+          </div>
         </div>
 
         <section class="right">

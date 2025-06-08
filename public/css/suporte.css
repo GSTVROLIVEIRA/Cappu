@@ -88,3 +88,46 @@ footer {
     height: auto;
     border-radius: 5rem;
 }
+
+/* Tornar container mais flexível em telas menores */
+@media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      gap: 1.5em;
+      margin-top: 10%;
+      align-items: center;
+    }
+  
+    #contat {
+      width: 90%;
+      max-width: 35rem;
+    }
+  
+    .input-1, #msg {
+      width: 100%;
+      max-width: 35rem;
+    }
+  
+    footer {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      margin-top: 3em;
+      text-align: center;
+    }
+  }
+  
+  /* Para telas ainda menores, ajustar fontes e botões */
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1em;
+    }
+  
+    #enviar {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+    }
+  }
+  

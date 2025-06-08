@@ -40,31 +40,37 @@
             <span class="info-value" id="email"><%= user.EMAIL %></span>
           </p>
         </section>
-        <a class="redefinir" href="#">REDEFINIR SENHA</a>
-        <a class="redefinir" href="#">REDEFINIR E-MAIL</a>
-        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-          <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="Foto do perfil" style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc;" />
-          <form action="/aluno/upload-foto" method="POST" enctype="multipart/form-data" style="display:inline-block;" id="upload-foto-form">
-  <input type="file" name="foto_perfil" accept="image/*" required id="foto_perfil_input" />
-  <button type="submit">Adicionar/Alterar Foto</button>
-</form>
-<img id="preview-img" src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" alt="Preview da nova foto" style="width: 96px; height: 96px; object-fit: cover; border-radius: 50%; border: 2px solid #ccc; display:none; margin-left:10px;" />
-          <form action="/aluno/excluir-foto" method="POST" style="display:inline-block;">
-            <button type="submit" onclick="return confirm('Tem certeza que deseja excluir a foto?')">Excluir Foto</button>
-          </form>
-        </div>
-      </section>
-      <h3>COOKIES</h3>
-      <section class="caixa-das-info">
-        <form id="meuFormulario">
-          <section class="form-group">
-            <label for="metas" class="info-key">UTILIZAÇÃO DE COOKIES </label>
-            <select class="info-value-form" id="cookies" name="cookies" required>
-              <option value="Permitir">Permitir</option>
-              <option value="Não Permitir">Não Permitir</option>
-            </select>
-          </section>
-        </form>
+          <div class="profile-card">
+            <div class="profile-preview-container">
+                <div id="current-profile-container" class="current-profile">
+                    <img src="/aluno/foto-perfil/<%= user.ID_USUARIO %>?v=<%= timestamp %>" 
+                         alt="Foto atual" 
+                         class="profile-current-img"
+                         onload="this.style.opacity=1">
+                </div>
+                <div class="image-preview">
+                    <p class="preview-label">Nova foto</p>
+                    <img id="preview-img" src="#" alt="Pré-visualização" class="preview-img">
+                </div>
+            </div>
+        
+            <form action="/aluno/upload-foto" method="POST" enctype="multipart/form-data" class="upload-form">
+                <label class="file-upload-box">
+                    <input type="file" name="foto_perfil" id="foto_perfil_input" accept="image/*" required class="file-input">
+                    <span class="upload-instruction">Clique para selecionar uma foto</span>
+                    <span class="upload-icon">+</span>
+                </label>
+                
+                <div class="profile-actions">
+                    <button type="submit" class="action-button upload-btn">
+                        <span>Salvar Foto</span>
+                    </button>
+                    <button type="submit" formaction="/aluno/excluir-foto" class="action-button delete-btn" onclick="return confirm('Tem certeza?')">
+                        <span>Remover Foto</span>
+                    </button>
+                </div>
+            </form>
+          </div>
       </section>
       <form action="/aluno/excluir-conta" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir sua conta? Esta ação é irreversível.');" style="display: flex; justify-content: center; margin-top: 40px;">
         <button type="submit" style="margin-top: 100px; background: #cc5555; color: #fff; border: none; border-radius: 20px; padding: 12px 48px; font-weight: bold; font-size: 16px; letter-spacing: 1px; cursor: pointer; transition: background 0.2s;">EXCLUIR CONTA</button>
@@ -99,6 +105,64 @@
           reader.readAsDataURL(file);
         }
       });
+
+      document.addEventListener('DOMContentLoaded', function() {
+            // Garante que a imagem fique redonda mesmo ao recarregar
+            const profileImg = document.querySelector('.profile-current-img');
+            if (profileImg.complete && profileImg.naturalWidth !== 0) {
+                profileImg.style.opacity = 1;
+                const placeholder = profileImg.parentNode.querySelector('.no-image-placeholder');
+                if (placeholder) placeholder.remove();
+            } else if (!profileImg.src || profileImg.src.includes('default') || profileImg.src === window.location.href) {
+                // Mostra placeholder se não houver imagem
+                profileImg.style.display = 'none';
+            }
+
+            // Configura o preview da imagem
+            document.getElementById('foto_perfil_input').addEventListener('change', function(e) {
+                const previewImg = document.getElementById('preview-img');
+                const currentProfileContainer = document.getElementById('current-profile-container');
+                const previewContainer = document.querySelector('.image-preview');
+                
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        // Esconde a imagem atual e mostra o placeholder
+                        currentProfileContainer.style.display = 'none';
+                        
+                        // Mostra a pré-visualização
+                        previewImg.src = e.target.result;
+                        previewContainer.style.display = 'flex';
+                        
+                        // Efeito de fade-in para a nova imagem
+                        setTimeout(() => {
+                            previewImg.style.opacity = 1;
+                        }, 10);
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                } else {
+                    // Se cancelar a seleção, mostra a imagem atual novamente
+                    currentProfileContainer.style.display = 'flex';
+                    previewContainer.style.display = 'none';
+                }
+            });
+
+            // Verifica se há erro no carregamento da imagem
+            document.querySelector('.profile-current-img').addEventListener('error', function() {
+                this.style.display = 'none';
+                const placeholder = this.parentNode.querySelector('.no-image-placeholder');
+                if (placeholder) placeholder.style.display = 'flex';
+            });
+        });
+
+        // Função para resetar o formulário se necessário
+        function resetUploadForm() {
+            document.getElementById('foto_perfil_input').value = '';
+            document.querySelector('.image-preview').style.display = 'none';
+            document.getElementById('current-profile-container').style.display = 'flex';
+        }
     </script>
   </body>
 </html>

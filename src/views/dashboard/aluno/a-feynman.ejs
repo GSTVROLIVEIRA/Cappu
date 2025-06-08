@@ -32,77 +32,71 @@
         <h2>COMO APLICAR?</h2>
         <p>A técnica de Feynman consiste em 4 etapas simples, sendo:</p>
         <section class="passos">
-          <div class="primeira-coluna">
-            <div class="um">
-              <span>1</span>
-              <div>
-                <h3>DEFINA UM TÓPICO</h3>
-                <p>Defina um tópico principal do qual você irá estudar.</p>
-              </div>
-            </div>
-            <div class="tres">
-              <span>3</span>
-              <div>
-                <h3>REVISE</h3>
-                <p>
-                  Revise o que disse ou escreveu para garantir que não há
-                  nenhuma informação falsa ou errônea.
-                </p>
-              </div>
+          <div class="passo um">
+            <span>1</span>
+            <div>
+              <h3>DEFINA UM TÓPICO</h3>
+              <p>Defina um tópico principal do qual você irá estudar.</p>
             </div>
           </div>
-          <div class="segunda-coluna">
-            <div class="dois">
-              <span>2</span>
-              <div>
-                <h3>EXPLIQUE-O</h3>
-                <p>
-                  Explique-o como se estivesse ensinando a uma criança, da forma
-                  mais simples que conseguir, pode ser tanto verbalmente quanto
-                  escrevendo-o.
-                </p>
-              </div>
-            </div>
-            <div class="quatro">
-              <span>4</span>
-              <div>
-                <h3>REFINE E SIMPLIFIQUE</h3>
-                <p>
-                  Refine seu resumo com informações verdadeiras e o simplifique
-                  para completar seu ciclo de estudo.
-                </p>
-              </div>
+          <div class="passo dois">
+            <span>2</span>
+            <div>
+              <h3>EXPLIQUE</h3>
+              <p>Explique-o como se estivesse ensinando a uma criança...</p>
             </div>
           </div>
-        </section>
-        <section>
-          <a class="save-button" href="#"
-            >SALVAR
-            <img
-              src="/images/salvar.svg"
-              alt="imagem de um disquete, indicando a acao de salvar"
-          /></a>
+          <div class="passo tres">
+            <span>3</span>
+            <div>
+              <h3>REVISE</h3>
+              <p>Revise o que disse ou escreveu para garantir que não há erros...</p>
+            </div>
+          </div>
+          <div class="passo quatro">
+            <span>4</span>
+            <div>
+              <h3>REFINE E SIMPLIFIQUE</h3>
+              <p>Refine seu resumo com informações verdadeiras e o simplifique...</p>
+            </div>
+          </div>
+        </section>                
+        <section class="btns-salvar-deletar">
+          <button type="submit" class="save-button">
+            SALVAR <img src="/images/salvar.svg" alt="Salvar"
+          />
+          </button>
         </section>
       </section>
       <section class="aplicacao-do-metodo">
         <section class="resumo-form">
-          <form action="/enviar-resumo" method="POST">
-            <label for="titulo">TÍTULO</label><br />
-            <input
-              type="text"
-              id="titulo"
-              name="titulo"
-              placeholder="Escreva o título do seu resumo feynman aqui..."
-              required
-            />
-            <textarea
-              id="mensagem"
-              name="mensagem"
-              rows="15"
-              cols="90"
-              placeholder="Escreva o seu resumo aqui..."
-            ></textarea>
-          </form>
+          <form action="/aluno/a-feynman" method="POST">
+  <label for="titulo">TÍTULO</label><br />
+  <input
+    type="text"
+    id="titulo"
+    name="titulo"
+    placeholder="Escreva o título do seu resumo feynman aqui..."
+    required
+    value="<%= feynman ? feynman.TITULO : '' %>"
+  />
+  <% if (feynman && feynman.COD_FEYNMAN) { %>
+    <input type="hidden" name="cod_feynman" value="<%= feynman.COD_FEYNMAN %>">
+  <% } %>
+  <textarea
+    id="texto_feynman"
+    name="texto_feynman"
+    rows="15"
+    cols="90"
+    placeholder="Escreva o seu resumo aqui..."
+    required
+  ><%= feynman ? feynman.TEXTO_FEYNMAN : '' %></textarea>
+  <section class="btns-salvar-deletar">
+    <button type="submit" class="save-button">
+      SALVAR <img src="/images/salvar.svg" alt="Salvar" />
+    </button>
+  </section>
+</form>
         </section>
       </section>
     </main>

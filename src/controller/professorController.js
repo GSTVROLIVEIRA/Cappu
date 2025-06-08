@@ -66,7 +66,14 @@ exports.criarCurso = async (req, res) => {
       objetivos,
       modulos,
     } = req.body;
-    const professorId = req.user.ID_USUARIO || req.user.id; // compatível com diferentes auths
+
+    // Processa a imagem se foi enviada
+    let imagemBuffer = null;
+    if (req.file) {
+      imagemBuffer = req.file.buffer;
+    }
+
+    const professorId = req.user.ID_USUARIO || req.user.id;
     if (
       !titulo ||
       !descricao ||
@@ -78,11 +85,13 @@ exports.criarCurso = async (req, res) => {
       req.flash("error", "Preencha todos os campos obrigatórios!");
       return res.redirect("/dashboard/professor/p_criar_curso");
     }
+
     // Busca o próximo ID_CURSO manualmente
     const [rows] = await db.query("SELECT MAX(ID_CURSO) as maxId FROM CURSOS");
     const nextId = (rows[0].maxId || 0) + 1;
+
     await db.query(
-      "INSERT INTO CURSOS (ID_CURSO, TITULO, DESCRICAO, ID_CATEGORIA, ID_USUARIO, PRECO, DURACAO_TOTAL, OBJETIVOS, DATA_CRIACAO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())",
+      "INSERT INTO CURSOS (ID_CURSO, TITULO, DESCRICAO, ID_CATEGORIA, ID_USUARIO, PRECO, DURACAO_TOTAL, OBJETIVOS, DATA_CRIACAO, IMAGEM) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)",
       [
         nextId,
         titulo,
@@ -92,6 +101,7 @@ exports.criarCurso = async (req, res) => {
         preco,
         duracao_total,
         objetivos,
+        imagemBuffer,
       ]
     );
 
@@ -187,10 +197,35 @@ exports.updateCursoById = async (req, res) => {
     const cursoId = req.params.id;
     const { titulo, descricao, categoria, preco, duracao_total, objetivos } =
       req.body;
-    await db.query(
-      `UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, ID_CATEGORIA = ?, PRECO = ?, DURACAO_TOTAL = ?, OBJETIVOS = ? WHERE ID_CURSO = ?`,
-      [titulo, descricao, categoria, preco, duracao_total, objetivos, cursoId]
-    );
+
+    // Processa a imagem se foi enviada
+    let imagemBuffer = null;
+    if (req.file) {
+      imagemBuffer = req.file.buffer;
+    }
+
+    // Se não houver nova imagem, mantém a imagem existente
+    if (imagemBuffer) {
+      await db.query(
+        `UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, ID_CATEGORIA = ?, PRECO = ?, DURACAO_TOTAL = ?, OBJETIVOS = ?, IMAGEM = ? WHERE ID_CURSO = ?`,
+        [
+          titulo,
+          descricao,
+          categoria,
+          preco,
+          duracao_total,
+          objetivos,
+          imagemBuffer,
+          cursoId,
+        ]
+      );
+    } else {
+      await db.query(
+        `UPDATE CURSOS SET TITULO = ?, DESCRICAO = ?, ID_CATEGORIA = ?, PRECO = ?, DURACAO_TOTAL = ?, OBJETIVOS = ? WHERE ID_CURSO = ?`,
+        [titulo, descricao, categoria, preco, duracao_total, objetivos, cursoId]
+      );
+    }
+
     req.flash("success", "Curso atualizado com sucesso!");
     res.redirect("/dashboard/professor/p_gere_curso/" + cursoId);
   } catch (err) {

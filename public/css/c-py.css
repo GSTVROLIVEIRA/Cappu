@@ -204,3 +204,110 @@ p.reg{
     color: #684A43;
 }
 
+/* Responsivo para telas até 1024px */
+@media (max-width: 1024px) {
+    main {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+  
+    .esquerda,
+    .direita {
+      max-width: 100%;
+      width: 100%;
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 48px;
+      text-align: center;
+      white-space: normal;
+    }
+  
+    h3 {
+      margin-left: 0;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 28px;
+    }
+  
+    p.estrelas {
+      font-size: 36px;
+      margin-right: 0;
+      text-align: center;
+    }
+  
+    .matricula {
+      margin-left: 0;
+      margin-top: 60px;
+      font-size: 20px;
+      padding: 10px 20px;
+    }
+  
+    .direita img {
+      width: 100%;
+      height: auto;
+    }
+  
+    .linha-info {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-right: 0;
+      gap: 5px;
+    }
+  }
+  
+  /* Responsivo para telas até 600px */
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 36px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    h3 {
+      font-size: 22px;
+    }
+  
+    p.curso,
+    p.estrelas,
+    p.ju,
+    p.ric,
+    p.reg,
+    p.bold {
+      font-size: 16px;
+    }
+  
+    p.aprender {
+      font-size: 16px;
+      padding: 8px 16px;
+    }
+  
+    .matricula {
+      font-size: 18px;
+      padding: 8px 20px;
+    }
+  
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+    }
+  
+    .logo {
+      position: static;
+      transform: none;
+      font-size: 1rem;
+      margin-top: 1rem;
+      text-align: left;
+    }
+  
+    .direita img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  

@@ -252,3 +252,82 @@ footer > h4{
 #mod {
     font-style: italic;
 }
+
+/* Responsividade para tablets e telas médias */
+@media (max-width: 900px) {
+    .conteudo {
+      flex-direction: column;
+      gap: 2em;
+      padding: 0 1em;
+    }
+  
+    .montagem {
+      margin-top: 1em;
+    }
+  
+    h1 {
+      font-size: 1.4em;
+    }
+  
+    h2 {
+      font-size: 1em;
+    }
+  
+    .aula {
+      flex-direction: column;
+      gap: 1em;
+      padding: 0.5em;
+    }
+  
+    .aula > img,
+    .edit > img,
+    .add > img {
+      width: 1.2em;
+    }
+  
+    #save {
+      width: 100%;
+      margin-top: 2em;
+    }
+  }
+  
+  /* Responsividade para smartphones */
+  @media (max-width: 480px) {
+    .conteudo {
+      gap: 1.5em;
+    }
+  
+    h1 {
+      font-size: 1.2em;
+    }
+  
+    h2 {
+      font-size: 0.9em;
+    }
+  
+    label {
+      font-size: 1em;
+    }
+  
+    .aula {
+      padding: 0.3em;
+    }
+  
+    .aula > img,
+    .edit > img,
+    .add > img {
+      width: 1em;
+    }
+  
+    #save {
+      width: 100%;
+      font-size: 0.7em;
+      padding: 0.4em;
+      margin-top: 1.5em;
+    }
+  
+    #save > img {
+      width: 1em;
+    }
+  }
+  

@@ -7,25 +7,63 @@
     box-sizing: border-box;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 20%;
+    flex: 1;
+    padding: 20px;
+    margin-top: 5vh; /* Reduzi a margem superior para mobile */
 }
 
 p {
     font-family: 'Fira Sans', sans-serif;
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 4vw, 1.2rem); /* Tamanho responsivo */
     text-align: center;
     font-weight: 350;
     font-style: italic;
-    max-width: 40%;
+    max-width: 90%; /* Aumentei para mobile */
+    width: 100%;
+    padding: 0 20px;
+    margin: 0 auto;
 }
 
 img {
-    margin: 20px;
-    width: 80px;
-    height: 80px;
+    margin: 20px 0;
+    width: clamp(60px, 20vw, 80px); /* Tamanho responsivo */
+    height: clamp(60px, 20vw, 80px); /* Tamanho responsivo */
+}
+
+/* Media Queries para ajustes específicos */
+@media (min-width: 600px) {
+    main {
+        margin-top: 10%;
+    }
+    
+    p {
+        max-width: 70%;
+    }
+}
+
+@media (min-width: 900px) {
+    main {
+        margin-top: 15%;
+    }
+    
+    p {
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 1200px) {
+    p {
+        max-width: 40%; /* Mantém o valor original para desktop */
+    }
 }

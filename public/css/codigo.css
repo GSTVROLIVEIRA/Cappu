@@ -131,11 +131,13 @@ img {
 }
 
 footer {
-  height: 6.25rem;
+  position: relative;
+  height: 100px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  padding: 0 1.25rem;
+  padding: 0 20px;
+  position: relative;
 }
 
 .cafe {

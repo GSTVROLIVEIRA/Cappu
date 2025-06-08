@@ -17,7 +17,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 8%;
+    margin-top: 10%;
 }
 
 h1 {
@@ -28,7 +28,7 @@ h1 {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin-top: 5%;
+    margin-top: 3%;
     width: 100%;
     padding-bottom: 100px;
 }
@@ -36,7 +36,7 @@ h1 {
 label {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 1em;
     font-family: "Fira Sans", sans-serif;
     text-transform: uppercase;
     font-weight: 700;
@@ -48,7 +48,7 @@ label {
 .pt-1 {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.2em;
 }
 
 .pt-2 {
@@ -60,8 +60,8 @@ label {
 .visu {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    margin-top: 20px;
+    gap: 1em;
+    margin-top: 1em;
 }
 
 .box1 {
@@ -71,7 +71,7 @@ label {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 20px;
+    gap: 5em;
     padding: 5px;
     align-items: center;
     background-image: url("mente.svg"); /*Mudar o direcionamento dessa imagem...*/
@@ -87,7 +87,7 @@ label {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 20px;
+    gap: 5em;
     padding: 5px;
     align-items: center;
     background-image: url("cama.svg"); /*Mudar o direcionamento dessa imagem...*/
@@ -103,7 +103,7 @@ label {
 .visu > section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 0.8em;
 }
 
 h2 {
@@ -151,7 +151,7 @@ select {
     width: 160px;
     height: 30px;
     padding: 0px;
-    margin-top: 50%;
+    margin-top: 3em;
 }
 
 #iniciar:hover {
@@ -162,7 +162,7 @@ select {
 }
 
 .opc {
-    margin: 20px 0px;
+    margin: 0.8em 0px;
 }
 
 #janela-flutuante {
@@ -184,14 +184,22 @@ select {
     .box1, .box2 {
         width: 150px;
     }
+
+    main {
+        margin-top: 20%;
+    }
 }
 
 @media  (max-width: 650px) {
     .visu {
         display: flex;
         flex-direction: column;
-        gap: 25px;
-        margin-top: 20px;
+        gap: 0.2em;
+        margin-top: 10%;
+    }
+
+    main {
+        margin-top: 40%;
     }
 }
 

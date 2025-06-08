@@ -23,7 +23,7 @@ body {
     align-items: center;
     justify-content: center;
     max-width: 1200px;
-    margin: 40px 0;
+    margin: 40px 0px 0px 0px;
     flex: 1;
 }
 
@@ -31,7 +31,7 @@ body {
     background-color: var(--azul-vark);
     border-radius: 64px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    padding: 25px;
+    padding: 25px 0px 0px 0px;
     width: 380px;
     height: 500px;
     border: none;
@@ -94,6 +94,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 2em;
 }
 
 .vark-image {
@@ -108,7 +109,7 @@ body {
     font-weight: 700;
     font-style: italic;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: var(--primary-color);
     font-size: 2.5rem;
 }
@@ -129,6 +130,32 @@ body {
 
 .ok-button:hover {
     background-color: #004080;
+}
+
+h2 {
+    color: var(--azul-vark);
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+h3 {
+    color: black;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.result {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    text-align: left;
+    gap: 1em;
+    margin: 5% 10% 10% 10%;
 }
 
 @media (max-width: 600px) {
